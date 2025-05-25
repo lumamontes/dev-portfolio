@@ -32,7 +32,6 @@ const postsByYear = posts.reduce((acc, post) => {
   title={`${t('nav.blog')} - Luma Montes`} 
   description="Explore my latest thoughts on web development, design, technology, and creative coding."
 >
-  <!-- Background Effects -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none">
     <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"></div>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(34,197,94,0.05),transparent_50%)]"></div>
@@ -40,7 +39,6 @@ const postsByYear = posts.reduce((acc, post) => {
   </div>
 
   <div class="relative z-10">
-    <!-- Header Section -->
     <header class="pb-12 border-b border-zinc-800/50">
       <div class="flex flex-col lg:flex-row items-start gap-8">
         <div class="flex-1">
@@ -59,7 +57,6 @@ const postsByYear = posts.reduce((acc, post) => {
       </div>
     </header>
 
-    <!-- Posts Content -->
     <section class="py-8 space-y-12">
       {Object.entries(postsByYear)
         .sort(([a], [b]) => parseInt(b) - parseInt(a))
@@ -75,18 +72,15 @@ const postsByYear = posts.reduce((acc, post) => {
               </div>
             </div>
 
-            <!-- Posts Grid -->
             <div class="space-y-6">
               {yearPosts.map((post, index) => (
                 <article 
                   class="post-item group relative"
-                  data-tags={JSON.stringify(post.data.tags || [])}
                 >
                   <a
                     href={`/${lang}/posts/${getSlugFromUrl(post.slug)}`}
                     class="block p-6 bg-zinc-900/30 rounded-lg border border-zinc-800/50 backdrop-blur-sm transition-all duration-300 hover:bg-zinc-900/50 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-400/5"
                   >
-                    <!-- Post Header -->
                     <div class="flex items-start justify-between mb-4">
                       <div class="flex-1">
                         <h3 class="text-lg font-medium text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
@@ -117,19 +111,11 @@ const postsByYear = posts.reduce((acc, post) => {
           </div>
         ))
       }
-
-      <!-- Empty State -->
-      <div id="no-posts" class="hidden text-center py-12">
-        <div class="text-4xl mb-4">◉</div>
-        <h3 class="text-lg text-zinc-400 mb-2">No posts found</h3>
-        <p class="text-sm text-zinc-500">Try adjusting your filters or check back later.</p>
-      </div>
     </section>
   </div>
 </Layout>
 
 <style>
-  /* Background effects */
   .scanlines {
     position: absolute;
     top: 0;
@@ -147,7 +133,6 @@ const postsByYear = posts.reduce((acc, post) => {
     opacity: 0.5;
   }
 
-  /* Tag filter styles */
   .tag-filter {
     background: rgba(39, 39, 42, 0.5);
     border-color: rgba(113, 113, 122, 0.3);
@@ -166,7 +151,6 @@ const postsByYear = posts.reduce((acc, post) => {
     color: rgba(52, 211, 153, 1);
   }
 
-  /* Line clamp utility */
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -174,12 +158,10 @@ const postsByYear = posts.reduce((acc, post) => {
     overflow: hidden;
   }
 
-  /* Smooth transitions */
   .post-item {
     transition: all 0.3s ease;
   }
 
-  /* Custom scrollbar */
   :global(::-webkit-scrollbar) {
     width: 8px;
   }
@@ -197,7 +179,6 @@ const postsByYear = posts.reduce((acc, post) => {
     background: rgba(52, 211, 153, 0.5);
   }
 
-  /* Mobile optimizations */
   @media (max-width: 640px) {
     .post-item a {
       padding: 1rem;
@@ -208,7 +189,6 @@ const postsByYear = posts.reduce((acc, post) => {
     }
   }
 
-  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .scanlines {
       display: none;
@@ -220,77 +200,3 @@ const postsByYear = posts.reduce((acc, post) => {
     }
   }
 </style>
-
-<script>
-  // Enhanced filtering functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const tagFilters = document.querySelectorAll('.tag-filter');
-    const postItems = document.querySelectorAll('.post-item');
-    const yearSections = document.querySelectorAll('.year-section');
-    const noPostsMessage = document.getElementById('no-posts');
-
-    function filterPosts(selectedTag) {
-      let visiblePosts = 0;
-      const visibleYears = new Set();
-
-      postItems.forEach(item => {
-        const postTags = JSON.parse(item.dataset.tags || '[]');
-        const shouldShow = selectedTag === 'all' || postTags.includes(selectedTag);
-        
-        if (shouldShow) {
-          item.style.display = 'block';
-          visiblePosts++;
-          // Get the year of this post's parent section
-          const yearSection = item.closest('.year-section');
-          if (yearSection) {
-            visibleYears.add(yearSection.dataset.year);
-          }
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      // Show/hide year sections based on whether they have visible posts
-      yearSections.forEach(section => {
-        const year = section.dataset.year;
-        if (visibleYears.has(year)) {
-          section.style.display = 'block';
-        } else {
-          section.style.display = 'none';
-        }
-      });
-
-      // Show/hide no posts message
-      if (visiblePosts === 0) {
-        noPostsMessage?.classList.remove('hidden');
-      } else {
-        noPostsMessage?.classList.add('hidden');
-      }
-    }
-
-    // Add click handlers to filter buttons
-    tagFilters.forEach(button => {
-      button.addEventListener('click', function() {
-        // Update active state
-        tagFilters.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Filter posts
-        const selectedTag = this.dataset.tag;
-        filterPosts(selectedTag);
-      });
-    });
-
-    // Add smooth scroll for year sections
-    const yearHeaders = document.querySelectorAll('.year-section h2');
-    yearHeaders.forEach(header => {
-      header.style.cursor = 'pointer';
-      header.addEventListener('click', function() {
-        this.closest('.year-section').scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-      });
-    });
-  });
-</script>
