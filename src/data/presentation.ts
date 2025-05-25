@@ -14,7 +14,7 @@ const presentation: Presentation = {
   mail: "lumagoesmontes@gmail.com",
   title: "Hi, I’m Luma 👋",
   description:
-    "Hi! My name is Luma. I'm a software developer from Macapá - Amapá, Brazil. I work at Proesc, building solutions to helping improve educational needs from educational instituications in multi-disciplinary projects.",
+    "Hi! My name is Luma. I'm a software developer from Macapá - Amapá, Brazil.",
   socials: [
     {
       label: "Email",

@@ -1,7 +1,6 @@
 import type { Experience } from "./ui";
 
 type AboutTranslations = {
-  // Skills section - matches t('about.skills.X') pattern
   'skills.title': string;
   'skills.subtitle': string;
   'skills.frontend': string;
@@ -9,12 +8,10 @@ type AboutTranslations = {
   'frontend.skills': string[];
   'backend.skills': string[];
 
-  // Experience section - matches t('about.experience.X') pattern
   'experience.title': string;
   'experience.subtitle': string;
   'experience.junior.learning_and_growth': string;
 
-  // Connect section - matches t('about.connect.X') pattern
   'connect.title': string;
   'connect.subtitle': string;
   'connect.professional_network': string;
