@@ -1,4 +1,6 @@
-# Astro Starter Kit: Blog
+# Portfolio
+
+![image](https://github.com/user-attachments/assets/f11a960e-0ed6-42aa-a8f6-6f5e78bdcfc1)
 
 ```sh
 pnpm create astro@latest -- --template blog
@@ -9,8 +11,6 @@ pnpm create astro@latest -- --template blog
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
 
 Features:
 
