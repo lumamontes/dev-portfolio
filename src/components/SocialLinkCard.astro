@@ -1,0 +1,39 @@
+---
+
+type Props = {
+  link: string;
+  icon: string;
+  name: string;
+  index: number;
+}
+
+const { link, icon, name, index } = Astro.props;
+
+---
+
+<a
+  href={link}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group block p-6 bg-zinc-900/30 rounded-xl border border-zinc-800/50 hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-400/10 transition-all duration-300 backdrop-blur-sm"
+>
+  <div class="flex items-center gap-4">
+    <div class={`w-12 h-12 rounded-lg flex items-center justify-center ${
+      index === 0 ? 'bg-emerald-500/20' :
+      index === 1 ? 'bg-blue-500/20' :
+      'bg-purple-500/20'
+    }`}>
+      <span class="text-2xl">{icon}</span>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold text-white group-hover:text-emerald-300 transition-colors ">
+        {name}
+      </h3>
+     
+    </div>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-zinc-500 group-hover:text-emerald-400 transition-all group-hover:translate-x-1">
+      <path d="M7 17L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+</a>

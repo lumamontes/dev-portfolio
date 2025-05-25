@@ -1,0 +1,285 @@
+---
+import { getLangFromUrl } from '../utils/lang';
+import RadioPlayer from '../RadioPlayer.astro';
+
+interface BentoItem {
+  title: string;
+  description: string;
+  icon?: string;
+  link: string;
+  size?: 'small' | 'medium' | 'large';
+  theme?: 'terminal' | 'pixel' | 'crt' | 'default';
+  customContent?: string;
+}
+
+const { items } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+const getSizeClass = (size: string = 'medium') => {
+  switch (size) {
+    case 'small':
+      return 'col-span-1 row-span-1';
+    case 'large':
+      return 'col-span-2 row-span-3';
+    default:
+      return 'col-span-1 row-span-1';
+  }
+};
+
+const getThemeClass = (theme: string = 'default') => {
+  switch (theme) {
+    case 'terminal':
+      return 'bg-zinc-950/50 border-zinc-800 text-zinc-100';
+    case 'pixel':
+      return 'bg-zinc-950/50 border-zinc-800 text-zinc-100';
+    case 'crt':
+      return 'bg-zinc-950/50 border-zinc-800 text-zinc-100';
+    default:
+      return 'bg-zinc-950/50 border-zinc-800 text-zinc-100';
+  }
+};
+
+// Simplified grid calculation
+const calculateGridLayout = (items: BentoItem[]) => {
+  return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5';
+};
+---
+
+<section class="w-full max-w-6xl mx-auto px-4 py-6">
+  <div class={`grid ${calculateGridLayout(items)} gap-3 auto-rows-[minmax(140px,auto)]`}>
+    {items.map((item: BentoItem, index: number) => (
+      <article
+        class={`
+          bento-card ${getSizeClass(item.size)} ${getThemeClass(item.theme)}
+          border border-opacity-50 transition-all duration-300 ease-out
+          hover:border-zinc-600 hover:bg-zinc-950/70
+          ${item.link === '#' ? 'cursor-default' : 'cursor-pointer'}
+          flex flex-col relative overflow-hidden rounded-lg
+        `}
+      >
+        {item.link !== '#' ? (
+          <a
+            href={`/${lang}${item.link}`}
+            class="absolute inset-0 z-10"
+            aria-label={`Navigate to ${item.title}`}
+          />
+        ) : null}
+
+        {/* //Add a indicator if has a link that will open in a new tab */}
+              {/* External link indicator with proper external link icon */}
+      {item.link && item.link !== '#' && (
+        <a 
+          href={item.link} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="absolute top-2 right-2 bg-zinc-950/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:border-zinc-700/50 text-zinc-100 hover:text-white rounded-full p-1.5 transition-all duration-200 group"
+          aria-label={`Open ${item.title} in new tab`}
+        >
+          <svg 
+            class="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" 
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width={2} 
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+            />
+          </svg>
+        </a>
+      )}
+
+        {item.title === 'Radio' || item.title === 'Rádio' ? (
+          <div class="flex flex-col h-full p-4 relative z-0">
+             <header class="mb-3">
+              <h3 class="text-base font-medium leading-tight text-zinc-200">
+                {item.title}
+              </h3>
+            </header>
+            <RadioPlayer />
+          </div>
+        ) : 
+          <div class="flex flex-col h-full p-4 relative z-0">
+            {/* Header */}
+            <header class="mb-3">
+              <h3 class="text-base font-medium leading-tight text-zinc-200">
+                {item.title}
+              </h3>
+            </header>
+
+            {/* Content */}
+            <div class="flex-1 flex flex-col justify-center">
+              {item.customContent ? (
+                <div 
+                  class="text-sm leading-relaxed text-zinc-400"
+                  set:html={item.customContent}
+                />
+              ) : (
+                <p class="text-sm leading-relaxed text-zinc-400">
+                  {item.description}
+                </p>
+              )}
+            </div>
+          </div>
+        }
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .bento-card {
+    position: relative;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Subtle hover effect */
+  .bento-card:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Focus states for accessibility */
+  .bento-card:focus-within {
+    outline: 1px solid rgba(161, 161, 170, 0.5);
+    outline-offset: 1px;
+  }
+
+  /* Smooth transitions */
+  .bento-card * {
+    transition: inherit;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .bento-card {
+      min-height: 120px;
+    }
+    
+    .bento-card h3 {
+      font-size: 0.9rem;
+    }
+    
+    .bento-card p,
+    .bento-card div {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .bento-card {
+      transition: none;
+    }
+    
+    .bento-card:hover {
+      transform: none;
+    }
+  }
+
+  /* Clean scrollbar for custom content */
+  .bento-card :global(::-webkit-scrollbar) {
+    width: 2px;
+  }
+
+  .bento-card :global(::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  .bento-card :global(::-webkit-scrollbar-thumb) {
+    background: rgba(161, 161, 170, 0.3);
+    border-radius: 1px;
+  }
+
+  .bento-card :global(::-webkit-scrollbar-thumb:hover) {
+    background: rgba(161, 161, 170, 0.5);
+  }
+
+  /* Remove theme-specific decorations for minimalist approach */
+  .bento-card img {
+    border-radius: 4px;
+  }
+
+  /* Clean typography */
+  .bento-card h3 {
+    letter-spacing: -0.01em;
+  }
+
+  .bento-card p {
+    line-height: 1.4;
+  }
+
+  /* Simplified status indicators */
+  .bento-card .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Clean progress bars */
+  .bento-card .w-2.h-2.rounded-full {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* Simplified contact items */
+  .bento-card .hover\\:bg-fuchsia-400\\/10:hover {
+    background-color: rgba(161, 161, 170, 0.1);
+  }
+
+  /* Clean project stats */
+  .bento-card .bg-fuchsia-400\\/10 {
+    background-color: rgba(161, 161, 170, 0.05);
+    border-color: rgba(161, 161, 170, 0.1);
+  }
+
+  .bento-card .text-fuchsia-200 {
+    color: rgb(228, 228, 231);
+  }
+
+  .bento-card .text-fuchsia-300 {
+    color: rgb(212, 212, 216);
+  }
+
+  /* Simplified terminal styling */
+  .bento-card .font-mono {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+  }
+
+  /* Clean badges */
+  .bento-card .rounded-full {
+    background-color: rgba(161, 161, 170, 0.1);
+    border: 1px solid rgba(161, 161, 170, 0.2);
+    color: rgb(212, 212, 216);
+  }
+
+  .bento-card .bg-green-400\\/20 {
+    background-color: rgba(161, 161, 170, 0.1);
+  }
+
+  .bento-card .bg-blue-400\\/20 {
+    background-color: rgba(161, 161, 170, 0.1);
+  }
+
+  .bento-card .bg-purple-400\\/20 {
+    background-color: rgba(161, 161, 170, 0.1);
+  }
+
+  .bento-card .text-green-300,
+  .bento-card .text-blue-300,
+  .bento-card .text-purple-300 {
+    color: rgb(212, 212, 216);
+  }
+</style>

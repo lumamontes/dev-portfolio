@@ -1,0 +1,153 @@
+---
+import type { Experience } from '@/data/ui';
+
+type Props = Experience
+
+const { company, period, location, description, responsibilities, type, level, current, title } = Astro.props;
+
+const getExperienceConfig = (type: string, level: string, current?: boolean) => {
+  if (type === 'development') {
+    return {
+      bgColor: current ? 'bg-emerald-400' : level === 'junior' ? 'bg-blue-400' : 'bg-emerald-400',
+      borderColor: current ? 'border-emerald-400/50' : level === 'junior' ? 'border-blue-400/50' : 'border-emerald-400/50',
+      accentColor: current ? 'bg-emerald-400/20 text-emerald-300' : level === 'junior' ? 'bg-blue-400/20 text-blue-300' : 'bg-emerald-400/20 text-emerald-300',
+      iconBg: current ? 'bg-emerald-400' : level === 'junior' ? 'bg-blue-400' : 'bg-emerald-400',
+      icon: current ? '🚀' : level === 'junior' ? '👨‍💻' : '⚡',
+      arrowColor: current ? 'text-emerald-400' : level === 'junior' ? 'text-blue-400' : 'text-emerald-400'
+    };
+  } else if (type === 'support') {
+    return {
+      bgColor: level === 'support3' ? 'bg-purple-400' : level === 'support2' ? 'bg-indigo-400' : 'bg-cyan-400',
+      borderColor: level === 'support3' ? 'border-purple-400/50' : level === 'support2' ? 'border-indigo-400/50' : 'border-cyan-400/50',
+      accentColor: level === 'support3' ? 'bg-purple-400/20 text-purple-300' : level === 'support2' ? 'bg-indigo-400/20 text-indigo-300' : 'bg-cyan-400/20 text-cyan-300',
+      iconBg: level === 'support3' ? 'bg-purple-400' : level === 'support2' ? 'bg-indigo-400' : 'bg-cyan-400',
+      icon: level === 'support3' ? '🔧' : level === 'support2' ? '📞' : '💬',
+      arrowColor: level === 'support3' ? 'text-purple-400' : level === 'support2' ? 'text-indigo-400' : 'text-cyan-400'
+    };
+  } else {
+    return {
+      bgColor: 'bg-amber-400',
+      borderColor: 'border-amber-400/50',
+      accentColor: 'bg-amber-400/20 text-amber-300',
+      iconBg: 'bg-amber-400',
+      icon: '🎓',
+      arrowColor: 'text-amber-400'
+    };
+  }
+};
+
+const config = getExperienceConfig(type, level, current);
+
+---
+
+          <div 
+            class={`experience-item relative flex items-start gap-6 transition-all duration-300`}
+            data-type={type}
+          >
+            <!-- Timeline Icon -->
+            <div class={`relative z-10 w-16 h-16 ${config.iconBg} rounded-xl flex items-center justify-center shadow-lg`}>
+              <span class="text-2xl">{config.icon}</span>
+              {current && (
+                <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+              )}
+            </div>
+            
+            <!-- Experience Card -->
+            <div class={`flex-1 bg-zinc-900/30 rounded-xl border ${config.borderColor} p-6 backdrop-blur-sm hover:bg-zinc-900/40 transition-all duration-300`}>
+              <!-- Header -->
+              <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
+                <div class="mb-2 lg:mb-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3 class="text-xl font-semibold text-white">
+                      {title}
+                    </h3>
+                    {current && (
+                      <span class="px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded-full font-mono">
+                        CURRENT
+                      </span>
+                    )}
+                  </div>
+                  <p class="text-zinc-300 font-medium">{company}</p>
+                </div>
+                <div class="text-right">
+                  <div class={`inline-flex items-center gap-2 px-3 py-1 ${config.accentColor} rounded-full text-sm font-mono`}>
+                    📅 {period}
+                  </div>
+                  <p class="text-zinc-500 text-sm mt-1">{location}</p>
+                </div>
+              </div>
+              
+              <!-- Description -->
+              <p class="text-zinc-300 mb-4 leading-relaxed">
+                {description}
+              </p>
+              
+              <!-- Responsibilities -->
+              <div class="space-y-2">
+                <h4 class="text-sm font-medium text-zinc-400 mb-2">
+                  {type === 'education' ? 'Key Topics:' : 
+                   type === 'development' ? 'Key Achievements:' : 
+                   'Responsibilities:'}
+                </h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                  {responsibilities.map((responsibility, idx) => (
+                    <div class="flex items-start gap-2">
+                      <span class={`${config.arrowColor} text-sm mt-0.5`}>→</span>
+                      <span class="text-zinc-300 text-sm">{responsibility}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Experience Type Badge -->
+              <div class="mt-4 flex items-center justify-between">
+                <span class={`px-3 py-1 ${config.accentColor} rounded-full text-xs font-mono uppercase`}>
+                  {type}
+                </span>
+                {type === 'development' && (
+                  <div class="flex gap-1">
+                    {['React', 'Laravel', 'PHP', 'PostgreSQL'].slice(0, Math.floor(Math.random() * 3) + 2).map(tech => (
+                      <span class="px-2 py-1 bg-zinc-800/50 text-zinc-400 text-xs rounded border border-zinc-700/50">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+<style>
+  .experience-item {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .experience-item.filtered-out {
+    opacity: 0.3;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
+
+  /* Hover effects */
+  .experience-item:hover {
+    transform: translateX(4px);
+  }
+</style>
+
+<script>
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInFromLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+</script>

@@ -1,0 +1,341 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '../../utils/lang';
+import { languages } from '../../data/ui';
+import projects from '../../data/projects';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const featuredProjects = projects.filter(p => p.featured);
+const totalProjects = projects.length;
+---
+
+<Layout title={t('nav.projects')} description={t('projects.description')}>
+  <!-- Background Effects -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(168,85,247,0.05),transparent_50%)]"></div>
+    <div class="scanlines"></div>
+  </div>
+
+  <main class="relative z-10 min-h-screen">
+    <!-- Hero Header -->
+    <header class="px-4 py-12 border-b border-zinc-800/50">
+      <div class="max-w-7xl mx-auto text-center">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center">
+            <span class="text-white font-bold text-xl">◈</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">
+            {t('nav.projects')}
+          </h1>
+        </div>
+        
+        <p class="text-lg text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
+          {t('projects.description')}
+        </p>
+      </div>
+    </header>
+    <section class="px-4 py-12">
+      <div class="max-w-7xl mx-auto">
+       
+        <!-- All Projects -->
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <h2 class="text-2xl font-bold text-white">All Projects</h2>
+            <div class="flex-1 h-px bg-gradient-to-r from-zinc-600 to-transparent"></div>
+            <span class="text-xs text-zinc-500 font-mono" id="project-count">{totalProjects} projects</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
+            {projects.map((project) => (
+              <article class="project-card" data-category={project.category || 'Web'} data-techs={JSON.stringify(project.techs)}>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group block bg-zinc-900/30 rounded-lg border border-zinc-800/50 overflow-hidden backdrop-blur-sm transition-all duration-300 hover:border-zinc-600 hover:shadow-lg hover:shadow-black/20 hover:scale-[1.02]"
+                >
+                  <!-- Project Image -->
+                  <div class="relative aspect-video overflow-hidden bg-zinc-800">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    
+                    {project.featured && (
+                      <div class="absolute top-3 left-3">
+                        <span class="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></span>
+                      </div>
+                    )}
+
+                    <!-- Hover Overlay -->
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-white">
+                            <path d="M7 17L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="p-5">
+                    <div class="flex items-start justify-between mb-2">
+                      <h3 class="text-lg font-semibold text-white group-hover:text-zinc-200 transition-colors line-clamp-1">
+                        {project.title}
+                      </h3>
+                    </div>
+                    <p class="text-zinc-400 text-sm mb-4 leading-relaxed line-clamp-2">
+                      {project.description[lang as keyof typeof project.description]}
+                    </p>
+
+                    <div class="flex flex-wrap gap-1">
+                      {project.techs.slice(0, 3).map((tech) => (
+                        <span class="px-2 py-1 bg-zinc-800/50 text-zinc-400 text-xs rounded border border-zinc-700/50 font-mono">
+                          {tech}
+                        </span>
+                      ))}
+                      {project.techs.length > 3 && (
+                        <span class="px-2 py-1 text-zinc-500 text-xs font-mono">
+                          +{project.techs.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <!-- Empty State -->
+          <div id="no-projects" class="hidden text-center py-16">
+            <div class="text-4xl mb-4">◈</div>
+            <h3 class="text-lg text-zinc-400 mb-2">No projects found</h3>
+            <p class="text-sm text-zinc-500">Try adjusting your filters to see more projects.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* Background effects */
+  .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Filter button styles */
+  .category-filter, .tech-filter {
+    background: rgba(39, 39, 42, 0.5);
+    border-color: rgba(113, 113, 122, 0.3);
+    color: rgba(161, 161, 170, 1);
+    cursor: pointer;
+  }
+
+  .category-filter:hover, .tech-filter:hover {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    color: rgba(168, 85, 247, 1);
+  }
+
+  .category-filter.active, .tech-filter.active {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: rgba(168, 85, 247, 1);
+  }
+
+  /* Line clamp utility */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Featured card enhancements */
+  .featured-card {
+    position: relative;
+  }
+
+  .featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(168, 85, 247, 0.1), transparent);
+    border-radius: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .featured-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Pulse animation for featured indicator */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .featured-card {
+      grid-column: span 1;
+    }
+    
+    .project-card a {
+      padding: 1rem;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .scanlines {
+      display: none;
+    }
+    
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced filtering functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilters = document.querySelectorAll('.category-filter');
+    const techFilters = document.querySelectorAll('.tech-filter');
+    const projectCards = document.querySelectorAll('.project-card');
+    const noProjectsMessage = document.getElementById('no-projects');
+    const projectCount = document.getElementById('project-count');
+
+    let activeCategory = 'all';
+    let activeTech = 'all';
+
+    function filterProjects() {
+      let visibleCount = 0;
+
+      projectCards.forEach(card => {
+        const cardCategory = card.dataset.category;
+        const cardTechs = JSON.parse(card.dataset.techs || '[]');
+        
+        const categoryMatch = activeCategory === 'all' || cardCategory === activeCategory;
+        const techMatch = activeTech === 'all' || cardTechs.includes(activeTech);
+        
+        if (categoryMatch && techMatch) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Update project count
+      if (projectCount) {
+        projectCount.textContent = `${visibleCount} projects`;
+      }
+
+      // Show/hide no projects message
+      if (visibleCount === 0) {
+        noProjectsMessage?.classList.remove('hidden');
+      } else {
+        noProjectsMessage?.classList.add('hidden');
+      }
+    }
+
+    // Category filter handlers
+    categoryFilters.forEach(button => {
+      button.addEventListener('click', function() {
+        categoryFilters.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        activeCategory = this.dataset.category;
+        filterProjects();
+      });
+    });
+
+    // Tech filter handlers
+    techFilters.forEach(button => {
+      button.addEventListener('click', function() {
+        techFilters.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        activeTech = this.dataset.tech;
+        filterProjects();
+      });
+    });
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        // Reset all filters
+        categoryFilters.forEach(btn => btn.classList.remove('active'));
+        techFilters.forEach(btn => btn.classList.remove('active'));
+        categoryFilters[0]?.classList.add('active');
+        techFilters[0]?.classList.add('active');
+        activeCategory = 'all';
+        activeTech = 'all';
+        filterProjects();
+      }
+    });
+
+    // Add smooth scroll to projects section when filters change
+    let filterTimeout;
+    function smoothScrollToProjects() {
+      clearTimeout(filterTimeout);
+      filterTimeout = setTimeout(() => {
+        document.getElementById('projects-grid')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+
+    categoryFilters.forEach(button => {
+      button.addEventListener('click', smoothScrollToProjects);
+    });
+    
+    techFilters.forEach(button => {
+      button.addEventListener('click', smoothScrollToProjects);
+    });
+  });
+</script>

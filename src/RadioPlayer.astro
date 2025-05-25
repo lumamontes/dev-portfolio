@@ -1,0 +1,337 @@
+---
+// RadioPlayer.astro
+export interface Props {
+  title?: string;
+  description?: string;
+  size?: 'small' | 'medium' | 'large';
+  tracks?: Array<{
+    title: string;
+    src: string;
+    artist: string;
+    cover?: string;
+  }>;
+}
+
+const { 
+  size = 'large',
+  tracks = [
+    { title: 'Only you', src: '/songs/portishead-only-you.mp3', artist: 'Portishead' },
+    { title: 'Greatest Gift', src: '/songs/jorja-smith-greatest-gift.mp3', artist: 'Jorja Smith' },
+    { title: 'IGYEIH', src: '/songs/linkin-park-IGYEIH.mp3', artist: 'Linkin Park' },
+    { title: 'Free', src: '/songs/little-simz-free.mp3', artist: 'Little Simz' },
+  ]
+} = Astro.props;
+
+const containerHeight = {
+  small: 'h-48',
+  medium: 'h-64',
+  large: 'h-80'
+}[size];
+---
+
+<div class={`radio-container ${containerHeight} w-full`}>
+  <div class="bg-zinc-950/80 backdrop-blur-sm border border-zinc-800/50 rounded-xl p-6 h-full flex flex-col text-white">
+    <div class="flex-1 flex flex-col justify-center items-center mb-4">
+      <div class="text-center">
+        <div class="text-base font-medium text-white mb-1" id="current-track">Select a track to play</div>
+        <div class="text-zinc-400 text-sm" id="current-artist">No artist</div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div class="relative w-full bg-zinc-800/50 rounded-full h-1 cursor-pointer" id="progress-container">
+        <div class="bg-emerald-400/50 h-1 rounded-full transition-all duration-100" id="progress-bar" style="width: 0%"></div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <button id="back-btn" class="p-2 text-zinc-400 hover:text-emerald-400 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/>
+            </svg>
+          </button>
+          <button id="play-pause-btn" class="p-2 bg-emerald-500/20 hover:bg-emerald-500/30 rounded-lg transition-all duration-200">
+            <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+            </svg>
+            <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+          <button id="skip-btn" class="p-2 text-zinc-400 hover:text-emerald-400 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.63A1 1 0 003 14V6a1 1 0 011.555-.832L10 8.798V6a1 1 0 011.555-.832l6 4a1 1 0 010 1.664l-6 4z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {size !== 'small' && (
+      <div class="mt-4 flex-1 overflow-hidden">
+        <div class="space-y-1 overflow-y-auto max-h-24 custom-scrollbar" id="track-list">
+          {tracks.map((track, index) => (
+            <button 
+              class="w-full text-left p-2 hover:bg-zinc-800/50 rounded-lg text-sm transition-all duration-200 track-item group" 
+              data-index={index}
+              data-src={track.src}
+              data-title={track.title}
+              data-artist={track.artist}
+            >
+              <div class="flex items-center gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-white truncate group-hover:text-emerald-300 transition-colors">{track.title}</div>
+                  <div class="text-zinc-400 text-xs truncate">{track.artist}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  <audio id="audio-player" preload="none"></audio>
+</div>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(39, 39, 42, 0.3);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(161, 161, 170, 0.3);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(161, 161, 170, 0.5);
+  }
+
+  /* Track item active state */
+  .track-item.active {
+    background-color: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+  }
+
+  /* Soft retro animations */
+  @keyframes softPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  .animate-soft-pulse {
+    animation: softPulse 2s ease-in-out infinite;
+  }
+
+  /* Button hover effects */
+  button {
+    position: relative;
+    overflow: hidden;
+  }
+
+  button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  }
+
+  button:hover::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+  }
+</style>
+
+<script>
+  class MinimalRadioPlayer {
+    private audio: HTMLAudioElement;
+    private tracks: HTMLElement[];
+    private currentTrackIndex: number;
+    private isPlaying: boolean;
+    private volume: number;
+    private playPauseBtn: HTMLElement | null;
+    private playIcon: HTMLElement | null;
+    private pauseIcon: HTMLElement | null;
+    private progressContainer: HTMLElement | null;
+    private progressBar: HTMLElement | null;
+    private volumeContainer: HTMLElement | null;
+    private volumeBar: HTMLElement | null;
+    private currentTrackEl: HTMLElement | null;
+    private currentArtistEl: HTMLElement | null;
+    private backBtn: HTMLElement | null;
+    private skipBtn: HTMLElement | null;
+
+    constructor() {
+      this.audio = document.getElementById('audio-player') as HTMLAudioElement;
+      this.tracks = Array.from(document.querySelectorAll('.track-item'));
+      this.currentTrackIndex = -1;
+      this.isPlaying = false;
+      this.volume = 0.5;
+      this.playPauseBtn = null;
+      this.playIcon = null;
+      this.pauseIcon = null;
+      this.progressContainer = null;
+      this.progressBar = null;
+      this.volumeContainer = null;
+      this.volumeBar = null;
+      this.currentTrackEl = null;
+      this.currentArtistEl = null;
+      this.backBtn = null;
+      this.skipBtn = null;
+
+      this.initializeElements();
+      this.bindEvents();
+      this.initializePlayer();
+    }
+
+    initializeElements() {
+      this.playPauseBtn = document.getElementById('play-pause-btn');
+      this.playIcon = document.getElementById('play-icon');
+      this.pauseIcon = document.getElementById('pause-icon');
+      this.progressContainer = document.getElementById('progress-container');
+      this.progressBar = document.getElementById('progress-bar');
+      this.volumeContainer = document.getElementById('volume-container');
+      this.volumeBar = document.getElementById('volume-bar');
+      this.currentTrackEl = document.getElementById('current-track');
+      this.currentArtistEl = document.getElementById('current-artist');
+      this.backBtn = document.getElementById('back-btn');
+      this.skipBtn = document.getElementById('skip-btn');
+    }
+
+    bindEvents() {
+      this.playPauseBtn?.addEventListener('click', () => this.togglePlayPause());
+      this.backBtn?.addEventListener('click', () => this.previousTrack());
+      this.skipBtn?.addEventListener('click', () => this.nextTrack());
+      this.progressContainer?.addEventListener('click', (e: MouseEvent) => this.seek(e));
+      this.volumeContainer?.addEventListener('click', (e: MouseEvent) => this.setVolumeFromClick(e));
+      this.audio.addEventListener('timeupdate', () => this.updateProgress());
+      this.audio.addEventListener('ended', () => this.nextTrack());
+
+      this.tracks.forEach((track, index) => {
+        track.addEventListener('click', () => this.loadTrack(index));
+      });
+    }
+
+    initializePlayer() {
+      this.audio.volume = this.volume;
+      if (this.tracks.length > 0) {
+        this.loadTrack(0);
+      }
+    }
+
+    loadTrack(index: number) {
+      if (index < 0 || index >= this.tracks.length || !this.audio || !this.currentTrackEl || !this.currentArtistEl) return;
+
+      const wasPlaying = this.isPlaying;
+      this.pause();
+
+      this.currentTrackIndex = index;
+      const track = this.tracks[index];
+      
+      this.audio.src = track.dataset.src || '';
+      this.currentTrackEl.textContent = track.dataset.title || '';
+      this.currentArtistEl.textContent = track.dataset.artist || '';
+
+      this.tracks.forEach(t => t.classList.remove('active'));
+      track.classList.add('active');
+
+      this.audio.load();
+
+      if (wasPlaying) {
+        this.audio.addEventListener('canplay', () => this.play(), { once: true });
+      }
+    }
+
+    togglePlayPause() {
+      if (this.currentTrackIndex === -1 && this.tracks.length > 0) {
+        this.loadTrack(0);
+      }
+
+      if (this.isPlaying) {
+        this.pause();
+      } else {
+        this.play();
+      }
+    }
+
+    play() {
+      this.audio.play();
+      this.isPlaying = true;
+      this.updatePlayButton();
+    }
+
+    pause() {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.updatePlayButton();
+    }
+
+    updatePlayButton() {
+      if (!this.playIcon || !this.pauseIcon) return;
+      
+      if (this.isPlaying) {
+        this.playIcon.classList.add('hidden');
+        this.pauseIcon.classList.remove('hidden');
+      } else {
+        this.playIcon.classList.remove('hidden');
+        this.pauseIcon.classList.add('hidden');
+      }
+    }
+
+    nextTrack() {
+      const nextIndex = (this.currentTrackIndex + 1) % this.tracks.length;
+      this.loadTrack(nextIndex);
+      if (this.isPlaying) this.play();
+    }
+
+    previousTrack() {
+      const prevIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
+      this.loadTrack(prevIndex);
+      if (this.isPlaying) this.play();
+    }
+
+    setVolumeFromClick(e: MouseEvent) {
+      if (!this.volumeContainer || !this.volumeBar || !this.audio) return;
+      
+      const rect = this.volumeContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(1, x / rect.width));
+      
+      this.volume = percentage;
+      this.audio.volume = this.volume;
+      this.volumeBar.style.width = (percentage * 100) + '%';
+    }
+
+    seek(e: MouseEvent) {
+      if (!this.audio?.duration || !this.progressContainer) return;
+      
+      const rect = this.progressContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(1, x / rect.width));
+      
+      this.audio.currentTime = percentage * this.audio.duration;
+    }
+
+    updateProgress() {
+      if (!this.audio?.duration || !this.progressBar) return;
+      const progress = (this.audio.currentTime / this.audio.duration) * 100;
+      this.progressBar.style.width = progress + '%';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new MinimalRadioPlayer();
+  });
+</script>

@@ -1,0 +1,329 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import formatDate from "@/utils/formatDate";
+import { getLangFromUrl, getSlugFromUrl, useTranslations } from "@/utils/lang";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "br" } }];
+}
+
+const allPosts = await getCollection("posts", ({ id }) => {
+  return id.startsWith(`${lang}/`);
+});
+
+// Sort posts by date (newest first)
+const posts = allPosts.sort((a, b) => 
+  new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+
+// Get unique tags/categories for filtering
+const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+
+// Group posts by year for better organization
+const postsByYear = posts.reduce((acc, post) => {
+  const year = new Date(post.data.publishedAt).getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+
+const currentYear = new Date().getFullYear();
+const totalPosts = posts.length;
+---
+
+<Layout 
+  title={`${t('nav.blog')} - Luma Montes`} 
+  description="Explore my latest thoughts on web development, design, technology, and creative coding."
+>
+  <!-- Background Effects -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(34,197,94,0.05),transparent_50%)]"></div>
+    <div class="scanlines"></div>
+  </div>
+
+  <main class="relative z-10 min-h-screen">
+    <!-- Header Section -->
+    <header class="px-4 py-8 border-b border-zinc-800/50">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">
+              {t('nav.blog')} 🫡
+            </h1>
+            <p class="text-zinc-400 text-sm">
+              {t('blog.description')}
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-2xl font-bold text-emerald-400 font-mono">
+              {totalPosts.toString().padStart(2, '0')}
+            </div>
+            <div class="text-xs text-zinc-500 font-mono">
+              {t('blog.total_posts')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Posts Content -->
+    <section class="px-4 py-8">
+      <div class="max-w-4xl mx-auto space-y-12">
+        {Object.entries(postsByYear)
+          .sort(([a], [b]) => parseInt(b) - parseInt(a))
+          .map(([year, yearPosts]) => (
+            <div class="year-section" data-year={year}>
+              <div class="flex items-center gap-4 mb-8">
+                <div class="flex items-center gap-3">
+                  <h2 class="text-xl font-bold text-white font-mono">{year}</h2>
+                </div>
+                <div class="flex-1 h-px bg-gradient-to-r from-zinc-800 to-transparent"></div>
+                <div class="text-xs text-zinc-500 font-mono">
+                  {yearPosts.length} {yearPosts.length === 1 ? 'post' : 'posts'}
+                </div>
+              </div>
+
+              <!-- Posts Grid -->
+              <div class="space-y-6">
+                {yearPosts.map((post, index) => (
+                  <article 
+                    class="post-item group relative"
+                    data-tags={JSON.stringify(post.data.tags || [])}
+                  >
+                    <a
+                      href={`/${lang}/posts/${getSlugFromUrl(post.slug)}`}
+                      class="block p-6 bg-zinc-900/30 rounded-lg border border-zinc-800/50 backdrop-blur-sm transition-all duration-300 hover:bg-zinc-900/50 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-400/5"
+                    >
+                      <!-- Post Header -->
+                      <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                          <h3 class="text-lg font-medium text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
+                            {post.data.title}
+                          </h3>
+                          
+                          <div class="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                            <time class="font-mono">
+                              {formatDate(post.data.publishedAt)}
+                            </time>
+                          </div>
+                        </div>
+
+                        <!-- Read More Arrow -->
+                        <div class="ml-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-emerald-400">
+                            <path d="M7 17L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                      </div>
+
+                      <!-- Post Description -->
+                      <p class="text-sm text-zinc-400 leading-relaxed line-clamp-2 group-hover:text-zinc-300 transition-colors">
+                        {post.data.description}
+                      </p>
+
+                      <!-- Tags -->
+                      {post.data.tags && post.data.tags.length > 0 && (
+                        <div class="flex flex-wrap gap-2 mt-4">
+                          {post.data.tags.slice(0, 3).map(tag => (
+                            <span class="px-2 py-1 text-xs bg-zinc-800/50 text-zinc-400 rounded border border-zinc-700/50 font-mono">
+                              {tag}
+                            </span>
+                          ))}
+                          {post.data.tags.length > 3 && (
+                            <span class="px-2 py-1 text-xs text-zinc-500 font-mono">
+                              +{post.data.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </a>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+
+        <!-- Empty State -->
+        <div id="no-posts" class="hidden text-center py-12">
+          <div class="text-4xl mb-4">◉</div>
+          <h3 class="text-lg text-zinc-400 mb-2">No posts found</h3>
+          <p class="text-sm text-zinc-500">Try adjusting your filters or check back later.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* Background effects */
+  .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Tag filter styles */
+  .tag-filter {
+    background: rgba(39, 39, 42, 0.5);
+    border-color: rgba(113, 113, 122, 0.3);
+    color: rgba(161, 161, 170, 1);
+  }
+
+  .tag-filter:hover {
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+    color: rgba(52, 211, 153, 1);
+  }
+
+  .tag-filter.active {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: rgba(52, 211, 153, 0.5);
+    color: rgba(52, 211, 153, 1);
+  }
+
+  /* Line clamp utility */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions */
+  .post-item {
+    transition: all 0.3s ease;
+  }
+
+  /* Custom scrollbar */
+  :global(::-webkit-scrollbar) {
+    width: 8px;
+  }
+
+  :global(::-webkit-scrollbar-track) {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  :global(::-webkit-scrollbar-thumb) {
+    background: rgba(52, 211, 153, 0.3);
+    border-radius: 4px;
+  }
+
+  :global(::-webkit-scrollbar-thumb:hover) {
+    background: rgba(52, 211, 153, 0.5);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .post-item a {
+      padding: 1rem;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .scanlines {
+      display: none;
+    }
+    
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced filtering functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const tagFilters = document.querySelectorAll('.tag-filter');
+    const postItems = document.querySelectorAll('.post-item');
+    const yearSections = document.querySelectorAll('.year-section');
+    const noPostsMessage = document.getElementById('no-posts');
+
+    function filterPosts(selectedTag) {
+      let visiblePosts = 0;
+      const visibleYears = new Set();
+
+      postItems.forEach(item => {
+        const postTags = JSON.parse(item.dataset.tags || '[]');
+        const shouldShow = selectedTag === 'all' || postTags.includes(selectedTag);
+        
+        if (shouldShow) {
+          item.style.display = 'block';
+          visiblePosts++;
+          // Get the year of this post's parent section
+          const yearSection = item.closest('.year-section');
+          if (yearSection) {
+            visibleYears.add(yearSection.dataset.year);
+          }
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Show/hide year sections based on whether they have visible posts
+      yearSections.forEach(section => {
+        const year = section.dataset.year;
+        if (visibleYears.has(year)) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+
+      // Show/hide no posts message
+      if (visiblePosts === 0) {
+        noPostsMessage?.classList.remove('hidden');
+      } else {
+        noPostsMessage?.classList.add('hidden');
+      }
+    }
+
+    // Add click handlers to filter buttons
+    tagFilters.forEach(button => {
+      button.addEventListener('click', function() {
+        // Update active state
+        tagFilters.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter posts
+        const selectedTag = this.dataset.tag;
+        filterPosts(selectedTag);
+      });
+    });
+
+    // Add smooth scroll for year sections
+    const yearHeaders = document.querySelectorAll('.year-section h2');
+    yearHeaders.forEach(header => {
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', function() {
+        this.closest('.year-section').scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    });
+  });
+</script>
