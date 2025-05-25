@@ -36,14 +36,9 @@ const classes = colorClasses[color];
     <h3 class={`text-xl font-semibold ${classes.text}`}>{title}</h3>
   </div>
   <div class="space-y-3">
-    {skills.map((skill, index) => (
+    {skills.map((skill) => (
       <div class="flex items-center justify-between group/skill">
         <span class={`text-zinc-300 ${classes.hoverText} transition-colors`}>{skill}</span>
-        <div class="flex gap-1">
-          {Array.from({length: 5}, (_, i) => (
-            <div class={`w-2 h-2 rounded-full ${i < (index % 3 + 3) ? classes.dot : 'bg-zinc-700'}`}></div>
-          ))}
-        </div>
       </div>
     ))}
   </div>
