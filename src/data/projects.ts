@@ -13,9 +13,9 @@ export type Project = {
 const projectImages = {
   'expo-router-auth': '/1.gif',
   'photos-gallery': '/2.png',
-  'laravel-payments-api': '/3.png',
+  'laravel-payments-api': '/5.png',
   'biblioteca-de-zines': '/4.gif',
-  'caju': '/5.png',
+  'caju': '/3.png',
   'app-generator': '/6.png',
   'local-first': '/7.gif',
 };
