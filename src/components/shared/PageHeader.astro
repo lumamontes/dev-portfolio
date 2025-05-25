@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  emoji?: string;
+  centered?: boolean;
+  children?: any;
+}
+
+const { title, description, emoji = '', centered = false, children } = Astro.props;
+---
+
+<header class={`pb-12 border-b border-zinc-800/50 ${centered ? 'text-center' : ''}`}>
+  <div class={`flex flex-col lg:flex-row items-start gap-8 ${centered ? 'items-center' : ''}`}>
+    <div class="flex-1">
+      <div class={`flex items-center gap-4 mb-6 ${centered ? 'justify-center' : ''}`}>
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+            {title} {emoji}
+          </h1>
+        </div>
+      </div>
+      
+      <p class={`text-lg text-zinc-300 leading-relaxed ${centered ? 'max-w-3xl mx-auto mb-8' : 'max-w-3xl'}`}>
+        {description}
+      </p>
+    </div>
+  </div>
+  
+  <!-- Optional children content -->
+  {children && (
+    <div class={centered ? 'mt-8' : 'mt-6'}>
+      <slot />
+    </div>
+  )}
+</header> 

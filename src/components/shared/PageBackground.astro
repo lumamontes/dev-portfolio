@@ -1,0 +1,53 @@
+---
+interface Props {
+  variant?: 'default' | 'projects' | 'contact' | 'about';
+}
+
+const { variant = 'default' } = Astro.props;
+
+const getGradientClasses = (variant: string) => {
+  switch (variant) {
+    case 'projects':
+      return 'bg-[radial-gradient(circle_at_70%_30%,rgba(168,85,247,0.05),transparent_50%)]';
+    case 'contact':
+      return 'bg-[radial-gradient(circle_at_70%_30%,rgba(16,185,129,0.05),transparent_50%)] bg-[radial-gradient(circle_at_30%_70%,rgba(59,130,246,0.05),transparent_50%)]';
+    case 'about':
+      return 'bg-[radial-gradient(circle_at_20%_50%,rgba(34,197,94,0.05),transparent_50%)] bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.05),transparent_50%)]';
+    default:
+      return 'bg-[radial-gradient(circle_at_30%_80%,rgba(34,197,94,0.05),transparent_50%)] bg-[radial-gradient(circle_at_70%_20%,rgba(168,85,247,0.05),transparent_50%)]';
+  }
+};
+---
+
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"></div>
+  <div class={`absolute inset-0 ${getGradientClasses(variant)}`}></div>
+  <div class="scanlines"></div>
+</div>
+
+<style>
+  /* Background effects */
+  .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .scanlines {
+      display: none;
+    }
+  }
+</style> 

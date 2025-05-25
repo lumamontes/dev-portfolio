@@ -1,0 +1,47 @@
+---
+interface Props {
+  title: string;
+  locationLabel: string;
+  locationValue: string;
+  responseTimeLabel: string;
+  responseTime: string;
+  languagesLabel: string;
+  languagesValue: string;
+  availabilityLabel: string;
+  availabilityValue: string;
+}
+
+const { 
+  title, 
+  locationLabel, 
+  locationValue, 
+  responseTimeLabel, 
+  responseTime, 
+  languagesLabel, 
+  languagesValue, 
+  availabilityLabel, 
+  availabilityValue 
+} = Astro.props;
+---
+
+<div class="bg-zinc-900/30 rounded-xl border border-zinc-800/50 p-6 backdrop-blur-sm">
+  <h3 class="text-lg font-medium text-white mb-4">{title}</h3>
+  <div class="space-y-3 text-sm">
+    <div class="flex items-center justify-between">
+      <span class="text-zinc-400">{locationLabel}</span>
+      <span class="text-zinc-200">{locationValue}</span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="text-zinc-400">{responseTimeLabel}</span>
+      <span class="text-emerald-400">{responseTime}</span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="text-zinc-400">{languagesLabel}</span>
+      <span class="text-zinc-200">{languagesValue}</span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="text-zinc-400">{availabilityLabel}</span>
+      <span class="text-green-400">{availabilityValue}</span>
+    </div>
+  </div>
+</div> 

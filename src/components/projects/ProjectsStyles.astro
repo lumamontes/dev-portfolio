@@ -1,0 +1,53 @@
+<style>
+  .featured-card {
+    position: relative;
+  }
+
+  .featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(168, 85, 247, 0.1), transparent);
+    border-radius: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .featured-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Pulse animation for featured indicator */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .featured-card {
+      grid-column: span 1;
+    }
+    
+    .project-card a {
+      padding: 1rem;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>

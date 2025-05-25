@@ -8,7 +8,7 @@ import remarkToc from 'remark-toc';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://lumamontes.netlify.app',
 	markdown: {
 		rehypePlugins: [
 			[rehypeHeadingIds, {

@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  emoji: string;
+  skills: string[];
+  color: 'emerald' | 'blue';
+}
+
+const { title, emoji, skills, color } = Astro.props;
+
+const colorClasses = {
+  emerald: {
+    border: 'hover:border-emerald-400/30',
+    bg: 'bg-emerald-400/20',
+    text: 'text-emerald-400',
+    hoverText: 'group-hover/skill:text-emerald-300',
+    dot: 'bg-emerald-400'
+  },
+  blue: {
+    border: 'hover:border-blue-400/30',
+    bg: 'bg-blue-400/20',
+    text: 'text-blue-400',
+    hoverText: 'group-hover/skill:text-blue-300',
+    dot: 'bg-blue-400'
+  }
+};
+
+const classes = colorClasses[color];
+---
+
+<div class={`group bg-zinc-900/30 rounded-xl border border-zinc-800/50 p-6 backdrop-blur-sm ${classes.border} transition-all duration-300`}>
+  <div class="flex items-center gap-3 mb-4">
+    <div class={`w-10 h-10 ${classes.bg} rounded-lg flex items-center justify-center`}>
+      <span class={`${classes.text} text-lg`}>{emoji}</span>
+    </div>
+    <h3 class={`text-xl font-semibold ${classes.text}`}>{title}</h3>
+  </div>
+  <div class="space-y-3">
+    {skills.map((skill, index) => (
+      <div class="flex items-center justify-between group/skill">
+        <span class={`text-zinc-300 ${classes.hoverText} transition-colors`}>{skill}</span>
+        <div class="flex gap-1">
+          {Array.from({length: 5}, (_, i) => (
+            <div class={`w-2 h-2 rounded-full ${i < (index % 3 + 3) ? classes.dot : 'bg-zinc-700'}`}></div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div> 

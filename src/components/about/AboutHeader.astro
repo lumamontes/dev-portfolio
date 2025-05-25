@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  location: string;
+  experience: string;
+}
+
+const { title, description, location, experience } = Astro.props;
+---
+
+<header class="pb-12 border-b border-zinc-800/50">
+  <div class="flex flex-col lg:flex-row items-start gap-8">
+    <div class="flex-1">
+      <div class="flex items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+            {title}
+          </h1>
+          <div class="flex items-center gap-3 text-sm text-zinc-400">
+            <span>{location}</span>
+            <span>•</span>
+            <span>{experience}</span>
+          </div>
+        </div>
+      </div>
+      
+      <p class="text-lg text-zinc-300 leading-relaxed max-w-3xl">
+        {description}
+      </p>
+    </div>
+  </div>
+</header> 

@@ -1,6 +1,10 @@
 ---
 import { getLangFromUrl } from '../utils/lang';
 import RadioPlayer from '../RadioPlayer.astro';
+import HeroBentoItem from './bento/HeroBentoItem.astro';
+import AboutMeBentoItem from './bento/AboutMeBentoItem.astro';
+import CoffeeBentoItem from './bento/CoffeeBentoItem.astro';
+import LearningBentoItem from './bento/LearningBentoItem.astro';
 
 interface BentoItem {
   title: string;
@@ -10,9 +14,10 @@ interface BentoItem {
   size?: 'small' | 'medium' | 'large';
   theme?: 'terminal' | 'pixel' | 'crt' | 'default';
   customContent?: string;
+  component?: string;
 }
 
-const { items } = Astro.props;
+const { items, currentTime } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 
 const getSizeClass = (size: string = 'medium') => {
@@ -110,13 +115,25 @@ const calculateGridLayout = (items: BentoItem[]) => {
 
             {/* Content */}
             <div class="flex-1 flex flex-col justify-center">
-              {item.customContent ? (
+              {item.component === 'HeroBentoItem' ? (
+                <HeroBentoItem 
+                  title={item.title} 
+                  description={item.description} 
+                  currentTime={currentTime} 
+                />
+              ) : item.component === 'AboutMeBentoItem' ? (
+                <AboutMeBentoItem description={item.description} />
+              ) : item.component === 'CoffeeBentoItem' ? (
+                <CoffeeBentoItem />
+              ) : item.component === 'LearningBentoItem' ? (
+                <LearningBentoItem />
+              ) : item.customContent ? (
                 <div 
-                  class="text-sm leading-relaxed text-zinc-400"
+                  class="text-sm leading-relaxed text-zinc-200"
                   set:html={item.customContent}
                 />
               ) : (
-                <p class="text-sm leading-relaxed text-zinc-400">
+                <p class="text-sm leading-relaxed text-zinc-200">
                   {item.description}
                 </p>
               )}
