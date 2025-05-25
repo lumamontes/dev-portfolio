@@ -15,15 +15,10 @@ const allPosts = await getCollection("posts", ({ id }) => {
   return id.startsWith(`${lang}/`);
 });
 
-// Sort posts by date (newest first)
 const posts = allPosts.sort((a, b) => 
   new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
 );
 
-// Get unique tags/categories for filtering
-const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
-
-// Group posts by year for better organization
 const postsByYear = posts.reduce((acc, post) => {
   const year = new Date(post.data.publishedAt).getFullYear();
   if (!acc[year]) acc[year] = [];
@@ -31,8 +26,6 @@ const postsByYear = posts.reduce((acc, post) => {
   return acc;
 }, {} as Record<number, typeof posts>);
 
-const currentYear = new Date().getFullYear();
-const totalPosts = posts.length;
 ---
 
 <Layout 
@@ -46,119 +39,93 @@ const totalPosts = posts.length;
     <div class="scanlines"></div>
   </div>
 
-  <main class="relative z-10 min-h-screen">
+  <div class="relative z-10">
     <!-- Header Section -->
-    <header class="px-4 py-8 border-b border-zinc-800/50">
-      <div class="max-w-4xl mx-auto">
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">
-              {t('nav.blog')} 🫡
-            </h1>
-            <p class="text-zinc-400 text-sm">
-              {t('blog.description')}
-            </p>
-          </div>
-          <div class="text-right">
-            <div class="text-2xl font-bold text-emerald-400 font-mono">
-              {totalPosts.toString().padStart(2, '0')}
-            </div>
-            <div class="text-xs text-zinc-500 font-mono">
-              {t('blog.total_posts')}
+    <header class="pb-12 border-b border-zinc-800/50">
+      <div class="flex flex-col lg:flex-row items-start gap-8">
+        <div class="flex-1">
+          <div class="flex items-center gap-4 mb-6">
+            <div>
+              <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+                {t('nav.blog')}
+              </h1>
             </div>
           </div>
+          
+          <p class="text-lg text-zinc-300 leading-relaxed max-w-3xl">
+            {t('blog.description')}
+          </p>
         </div>
       </div>
     </header>
 
     <!-- Posts Content -->
-    <section class="px-4 py-8">
-      <div class="max-w-4xl mx-auto space-y-12">
-        {Object.entries(postsByYear)
-          .sort(([a], [b]) => parseInt(b) - parseInt(a))
-          .map(([year, yearPosts]) => (
-            <div class="year-section" data-year={year}>
-              <div class="flex items-center gap-4 mb-8">
-                <div class="flex items-center gap-3">
-                  <h2 class="text-xl font-bold text-white font-mono">{year}</h2>
-                </div>
-                <div class="flex-1 h-px bg-gradient-to-r from-zinc-800 to-transparent"></div>
-                <div class="text-xs text-zinc-500 font-mono">
-                  {yearPosts.length} {yearPosts.length === 1 ? 'post' : 'posts'}
-                </div>
+    <section class="py-8 space-y-12">
+      {Object.entries(postsByYear)
+        .sort(([a], [b]) => parseInt(b) - parseInt(a))
+        .map(([year, yearPosts]) => (
+          <div class="year-section" data-year={year}>
+            <div class="flex items-center gap-4 mb-8">
+              <div class="flex items-center gap-3">
+                <h2 class="text-xl font-bold text-white font-mono">{year}</h2>
               </div>
+              <div class="flex-1 h-px bg-gradient-to-r from-zinc-800 to-transparent"></div>
+              <div class="text-xs text-zinc-500 font-mono">
+                {yearPosts.length} {yearPosts.length === 1 ? 'post' : 'posts'}
+              </div>
+            </div>
 
-              <!-- Posts Grid -->
-              <div class="space-y-6">
-                {yearPosts.map((post, index) => (
-                  <article 
-                    class="post-item group relative"
-                    data-tags={JSON.stringify(post.data.tags || [])}
+            <!-- Posts Grid -->
+            <div class="space-y-6">
+              {yearPosts.map((post, index) => (
+                <article 
+                  class="post-item group relative"
+                  data-tags={JSON.stringify(post.data.tags || [])}
+                >
+                  <a
+                    href={`/${lang}/posts/${getSlugFromUrl(post.slug)}`}
+                    class="block p-6 bg-zinc-900/30 rounded-lg border border-zinc-800/50 backdrop-blur-sm transition-all duration-300 hover:bg-zinc-900/50 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-400/5"
                   >
-                    <a
-                      href={`/${lang}/posts/${getSlugFromUrl(post.slug)}`}
-                      class="block p-6 bg-zinc-900/30 rounded-lg border border-zinc-800/50 backdrop-blur-sm transition-all duration-300 hover:bg-zinc-900/50 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-400/5"
-                    >
-                      <!-- Post Header -->
-                      <div class="flex items-start justify-between mb-4">
-                        <div class="flex-1">
-                          <h3 class="text-lg font-medium text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
-                            {post.data.title}
-                          </h3>
-                          
-                          <div class="flex items-center gap-4 mt-2 text-xs text-zinc-500">
-                            <time class="font-mono">
-                              {formatDate(post.data.publishedAt)}
-                            </time>
-                          </div>
-                        </div>
-
-                        <!-- Read More Arrow -->
-                        <div class="ml-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-emerald-400">
-                            <path d="M7 17L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                          </svg>
+                    <!-- Post Header -->
+                    <div class="flex items-start justify-between mb-4">
+                      <div class="flex-1">
+                        <h3 class="text-lg font-medium text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
+                          {post.data.title}
+                        </h3>
+                        
+                        <div class="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                          <time class="font-mono">
+                            {formatDate(post.data.publishedAt)}
+                          </time>
                         </div>
                       </div>
 
-                      <!-- Post Description -->
-                      <p class="text-sm text-zinc-400 leading-relaxed line-clamp-2 group-hover:text-zinc-300 transition-colors">
-                        {post.data.description}
-                      </p>
-
-                      <!-- Tags -->
-                      {post.data.tags && post.data.tags.length > 0 && (
-                        <div class="flex flex-wrap gap-2 mt-4">
-                          {post.data.tags.slice(0, 3).map(tag => (
-                            <span class="px-2 py-1 text-xs bg-zinc-800/50 text-zinc-400 rounded border border-zinc-700/50 font-mono">
-                              {tag}
-                            </span>
-                          ))}
-                          {post.data.tags.length > 3 && (
-                            <span class="px-2 py-1 text-xs text-zinc-500 font-mono">
-                              +{post.data.tags.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </a>
-                  </article>
-                ))}
-              </div>
+                      <div class="ml-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-emerald-400">
+                          <path d="M7 17L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="text-sm text-zinc-400 leading-relaxed line-clamp-2 group-hover:text-zinc-300 transition-colors">
+                      {post.data.description}
+                    </p>
+                  </a>
+                </article>
+              ))}
             </div>
-          ))
-        }
+          </div>
+        ))
+      }
 
-        <!-- Empty State -->
-        <div id="no-posts" class="hidden text-center py-12">
-          <div class="text-4xl mb-4">◉</div>
-          <h3 class="text-lg text-zinc-400 mb-2">No posts found</h3>
-          <p class="text-sm text-zinc-500">Try adjusting your filters or check back later.</p>
-        </div>
+      <!-- Empty State -->
+      <div id="no-posts" class="hidden text-center py-12">
+        <div class="text-4xl mb-4">◉</div>
+        <h3 class="text-lg text-zinc-400 mb-2">No posts found</h3>
+        <p class="text-sm text-zinc-500">Try adjusting your filters or check back later.</p>
       </div>
     </section>
-  </main>
+  </div>
 </Layout>
 
 <style>

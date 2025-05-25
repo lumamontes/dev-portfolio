@@ -22,7 +22,7 @@ export const ui = {
   en: {
     // Main presentation
     'presentation.title': 'Hi, I\'m Luma 👋',
-    'presentation.description': "I'm a full-stack developer from Macapá, Brazil, passionate about creating awesome web and mobile experiences. Currently working at Proesc, building educational solutions that actually make a difference. When I'm not coding, you'll find me watching basketball or football! 🏀⚽",
+    'presentation.description': "I'm a full-stack developer from Macapá, Brazil, passionate about creating awesome web and mobile experiences. Currently working at Proesc, building educational solutions that actually make a difference",
     'presentation.subtitle': 'Full-stack Developer & Tech Enthusiast',
     'presentation.location': '📍 Macapá, Amapá, Brazil',
     'presentation.experience': '3+ years of experience',
@@ -42,6 +42,7 @@ export const ui = {
     'projects.viewCode': 'View code',
     'projects.viewLive': 'Live demo',
     'projects.technologies': 'Built with',
+    'projects.all': 'All projects',
     
     // Footer
     'footer.title': 'Get in touch',
@@ -58,6 +59,7 @@ export const ui = {
     'nav.home': 'Home',
     'nav.experience': 'Experience',
     'experience.small_description': 'A little bit about me and my experiences',
+    'experience.responsibilities': 'Responsibilities',
     // About page
     'about.title': 'About Me',
     'about.description': 'Full-stack developer who loves creating beautiful, functional applications that solve real problems.',
@@ -118,8 +120,8 @@ export const ui = {
     'resume.languages': 'Languages',
     'resume.current': 'Present',
 
-    'experience.title': 'My Professional Journey',
-    'experience.subtitle': 'my.journey',
+    'experience.title': 'My Experiences',
+    'experience.subtitle': '',
     
     'experience.timeline.title': 'My Professional Journey',
     'education.technologist.title': 'Technologist in Internet Systems',
@@ -176,24 +178,6 @@ export const ui = {
           'Linux',
           'CI/CD'
         ],
-    
-        // Philosophy section
-        'philosophy.title': 'Philosophy & Approach',
-        'philosophy.development': 'I believe in writing clean, maintainable code that solves real problems. Every line should have a purpose, and every feature should enhance the user experience.',
-        'philosophy.principles': [
-          'Clean Code',
-          'User-Centric',
-          'Performance First',
-          'Accessibility'
-        ],
-        'philosophy.what_drives_me.title': 'What Drives Me',
-        'philosophy.what_drives_me.description': 'The intersection of creativity and technology fascinates me. I love turning complex problems into elegant solutions and bringing ideas to life through code.',
-        'philosophy.what_drives_me.drivers': [
-          'Innovation',
-          'Problem Solving',
-          'Continuous Learning',
-          'Team Collaboration'
-        ],
         'coffe.title': 'A cup of coffee.',
         'coffe.description': 'A cup of coffee.',
         // Connect section
@@ -203,22 +187,18 @@ export const ui = {
         'connect.open_source_projects': 'Open source projects & code repositories',
         'connect.direct_contact': 'Direct contact for collaboration opportunities',
         'connect.connect_with_me': 'Connect with me',
-
-
         'radio.title': 'Radio',
         'radio.description': 'Songs i love'
   },
   br: {
     // Main presentation  
     'presentation.title': 'Oi, me chamo Luma 👋',
-    'presentation.description': "Sou desenvolvedora fullstack do Amapá com mais de 3 anos de experiência criando experiências web e mobile incríveis. Trabalho na Proesc desenvolvendo soluções educacionais que fazem diferença de verdade. Quando não tô codando, curto assistir basquete e futebol! 🏀⚽",
-    'presentation.subtitle': 'Desenvolvedora Full-stack & Entusiasta de Tech',
+    'presentation.description': "Sou uma desenvolvedora fullstack do Amapá com mais de 3 anos de experiência criando experiências web e mobile incríveis. Trabalho na Proesc desenvolvendo soluções para instituições de ensino em projetos multidisciplinares, contribuindo para a inovação na área.",
     'presentation.location': '📍 Macapá, Amapá, Brasil',
     'presentation.experience': '3+ anos de experiência',
     'presentation.currentRole': 'Desenvolvedora Mid-level na Proesc',
-
     'about.me': 'Eu.',
-    'about.me.description': 'Gosto de programar, mas também gosto de jogar, ver filmes, séries e esportes, e de coisas que envolvem tecnologia e educação.',
+    'about.me.description': 'Gosto de jogar videogames, ver séries com muuuitas temporadas, assistir basquete e de qualquer coisa envolvendo tecnologia e educação.',
 
     // Blog section
     'blog.latest': 'Últimos posts',
@@ -229,7 +209,6 @@ export const ui = {
     'currently.learning': 'Estudando atualmente',
     'currently.learning.description': 'Habilidades em progresso',
 
-    
     // Projects section
     'projects.title': 'Projetos selecionados',
     'projects.viewCode': 'Ver código',
@@ -247,16 +226,14 @@ export const ui = {
     'nav.projects': 'Projetos',
     'nav.blog': 'Blog',
     'nav.contact': 'Contato',
-    'nav.resume': 'Currículo',
     'nav.home': 'Início',
     'nav.experience': 'Experiência',
     'experience.small_description': 'Um pouco sobre mim e minhas experiências :)',
+    'experience.responsibilities': 'Responsabilidades',
     // About page
     'about.title': 'Sobre Mim',
-    'about.description': 'Desenvolvedora fullstack apaixonada por criar aplicações bonitas e funcionais que resolvem problemas reais.',
+    'about.description': 'Desenvolvedora fullstack apaixonada por criar aplicações funcionais que resolvem problemas reais. Comecei minha carreira na Proesc em 2021 como dev júnior e venho crescendo desde então! Também gosto bastante de trabalhar em equipe e ajudar a comunidade de tecnologia :) ',
     'about.intro': 'E aí! Eu sou a Luma, uma dev que fica empolgada com código limpo, experiências de usuário incríveis e aprender tecnologias novas. Trabalho tanto com frontend quanto backend, atualmente me especializando em React Native, Next.js e Laravel.',
-    'about.journey': 'Minha Jornada',
-    'about.journey.description': 'Comecei minha carreira na Proesc em 2021 como desenvolvedora júnior e venho crescendo desde então. Adoro compartilhar conhecimento através de workshops, code reviews e posts no blog. Atualmente fazendo MBA em Desenvolvimento Fullstack enquanto trabalho em projetos desafiadores.',
     'about.skills.title': 'Tecnologias que trabalho',
     'about.skills.frontend': 'Frontend',
     'about.skills.backend': 'Backend',
@@ -274,6 +251,7 @@ export const ui = {
     'about.values.impact.desc': 'Construindo soluções que realmente ajudam pessoas e organizações',
 
     'skills.title': 'Arsenal Técnico',
+    'experience.title': 'Minhas Experiências',
     'skills.subtitle': 'sempre.aprendendo',
     'skills.frontend': 'Frontend',
     'skills.backend': 'Backend',
@@ -306,24 +284,6 @@ export const ui = {
     ],
 
     // Philosophy section
-    'about.philosophy.title': 'Filosofia & Abordagem',
-    'about.philosophy.development': 'Acredito em escrever código limpo e sustentável que resolve problemas reais. Cada linha deve ter um propósito, e cada funcionalidade deve melhorar a experiência do usuário.',
-    'about.philosophy.principles': [
-      'Código Limpo',
-      'Foco no Usuário',
-      'Performance Primeiro',
-      'Acessibilidade'
-    ],
-    'about.philosophy.what_drives_me.title': 'O que Me Motiva',
-    'about.philosophy.what_drives_me.description': 'A intersecção entre criatividade e tecnologia me fascina. Adoro transformar problemas complexos em soluções elegantes e dar vida às ideias através do código.',
-    'about.philosophy.what_drives_me.drivers': [
-      'Inovação',
-      'Resolução de Problemas',
-      'Aprendizado Contínuo',
-      'Colaboração em Equipe'
-    ],
-
-    // Connect section
     // 'about.connect.title': 'Vamos nos Conectar',
     'about.connect.subtitle': 'vamos.colaborar',
     'about.connect.professional_network': 'Rede profissional e atualizações de carreira',
@@ -336,9 +296,10 @@ export const ui = {
     'projects.featured': 'Projetos em Destaque',
     'projects.others': 'Outros Projetos',
     'projects.inProgress': 'Em Desenvolvimento',
+    'projects.all': 'Todos os projetos',
     
     // Blog page  
-    'blog.description': 'Gosto de escrever um pouquinho conforme vou aprendendo coisas novas, aqui tem alguns dos meus posts.',
+    'blog.description': 'Gosto de escrever um pouco conforme vou aprendendo coisas novas, aqui tem alguns dos meus posts.',
     'blog.total_posts': 'total de posts',
     'blog.topics': 'Assuntos que escrevo sobre',
     'blog.react': 'React & React Native',

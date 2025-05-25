@@ -1,6 +1,6 @@
 ---
 title: "Optimistic UI updates with React Native and React Query"
-publishedAt: 2025-12-31
+publishedAt: 2025-02-31
 description: "About optmistic updates using a React Native app as example"
 isPublish: true
 lang: "en"

@@ -20,7 +20,7 @@ const getSizeClass = (size: string = 'medium') => {
     case 'small':
       return 'col-span-1 row-span-1';
     case 'large':
-      return 'col-span-2 row-span-3';
+      return 'col-span-1 row-span-2 lg:col-span-2 lg:row-span-3';
     default:
       return 'col-span-1 row-span-1';
   }
@@ -45,7 +45,7 @@ const calculateGridLayout = (items: BentoItem[]) => {
 };
 ---
 
-<section class="w-full max-w-6xl mx-auto px-4 py-6">
+<section class="w-full">
   <div class={`grid ${calculateGridLayout(items)} gap-3 auto-rows-[minmax(140px,auto)]`}>
     {items.map((item: BentoItem, index: number) => (
       <article
@@ -65,32 +65,30 @@ const calculateGridLayout = (items: BentoItem[]) => {
           />
         ) : null}
 
-        {/* //Add a indicator if has a link that will open in a new tab */}
-              {/* External link indicator with proper external link icon */}
-      {item.link && item.link !== '#' && (
-        <a 
-          href={item.link} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="absolute top-2 right-2 bg-zinc-950/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:border-zinc-700/50 text-zinc-100 hover:text-white rounded-full p-1.5 transition-all duration-200 group"
-          aria-label={`Open ${item.title} in new tab`}
-        >
-          <svg 
-            class="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" 
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
+        {item.link && item.link !== '#' && (
+          <a 
+            href={item.link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="absolute top-2 right-2 bg-zinc-950/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:border-zinc-700/50 text-zinc-100 hover:text-white rounded-full p-1.5 transition-all duration-200 group"
+            aria-label={`Open ${item.title} in new tab`}
           >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width={2} 
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-            />
-          </svg>
-        </a>
-      )}
+            <svg 
+              class="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" 
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width={2} 
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+              />
+            </svg>
+          </a>
+        )}
 
         {item.title === 'Radio' || item.title === 'Rádio' ? (
           <div class="flex flex-col h-full p-4 relative z-0">

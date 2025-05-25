@@ -7,8 +7,8 @@ import { getLangFromUrl } from "../utils/lang";
 const pathname = removeTrailingSlash(Astro.url.pathname);
 const lang = getLangFromUrl(Astro.url);
 ---
-<header class="sticky top-0 z-50 w-full backdrop-blur-[2px]">
-  <div class="max-w-6xl mx-auto px-4 py-4">
+<header class="sticky top-0 z-50 w-full backdrop-blur-[2px] border-b border-zinc-800/50">
+  <nav class="container flex items-center h-14 py-12">
     <div class="flex w-full flex-col gap-2 md:flex-row md:justify-between md:items-center">
       <LanguagePicker />
 
@@ -36,5 +36,5 @@ const lang = getLangFromUrl(Astro.url);
         </ul>
       </nav>
     </div>
-  </div>
+  </nav>
 </header>

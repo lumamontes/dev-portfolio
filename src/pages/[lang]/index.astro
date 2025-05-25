@@ -190,26 +190,9 @@ const bentoItems = [
     </div>
   </div>
 
-  <main class="relative z-10 min-h-screen">
-    <section class="px-4 pb-12">
-      <BentoGrid items={bentoItems} />
-    </section>
-
-    <!-- Footer -->
-    <footer class="px-4 py-6 border-t border-zinc-800/30">
-      <div class="max-w-6xl mx-auto">
-        <div class="flex items-center justify-between text-xs text-zinc-500">
-          <div class="font-mono">
-            © ${currentYear} Luma Montes • Built with ❤️ and ☕
-          </div>
-          <div class="flex items-center gap-4">
-            <a href="https://github.com" class="hover:text-zinc-300 transition-colors">GitHub</a>
-            <a href="https://linkedin.com" class="hover:text-zinc-300 transition-colors">LinkedIn</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </main>
+  <section class="relative z-10">
+    <BentoGrid items={bentoItems} />
+  </section>
 </Layout>
 
 <style>

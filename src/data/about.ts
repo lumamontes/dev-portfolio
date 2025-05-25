@@ -222,7 +222,8 @@ export const experiences: Record<'en' | 'br', {
         description: 'Promovido para função plena com responsabilidades expandidas em todo o ciclo de desenvolvimento. Liderando implementação de aplicativos móveis e gerenciando aplicações iOS e Android nas lojas.',
         responsibilities: [
           'Desenvolvendo e mantendo aplicações frontend, backend e mobile',
-          'Criando suítes de teste abrangentes e conduzindo revisões de código',
+          'Conduzindo revisões de código',
+          'Estudando e implementando ferramentas e tecnologias novas',
           'Gerenciando implementações nas lojas iOS e Android e controle de versão',
           'Criando documentação técnica e materiais educacionais',
           'Conduzindo workshops e sessões de compartilhamento de conhecimento',

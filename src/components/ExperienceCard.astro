@@ -1,5 +1,6 @@
 ---
 import type { Experience } from '@/data/ui';
+import { getLangFromUrl, useTranslations } from '@/utils/lang';
 
 type Props = Experience
 
@@ -37,6 +38,9 @@ const getExperienceConfig = (type: string, level: string, current?: boolean) => 
 };
 
 const config = getExperienceConfig(type, level, current);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 ---
 
@@ -85,9 +89,7 @@ const config = getExperienceConfig(type, level, current);
               <!-- Responsibilities -->
               <div class="space-y-2">
                 <h4 class="text-sm font-medium text-zinc-400 mb-2">
-                  {type === 'education' ? 'Key Topics:' : 
-                   type === 'development' ? 'Key Achievements:' : 
-                   'Responsibilities:'}
+                  {t('experience.responsibilities')}
                 </h4>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                   {responsibilities.map((responsibility, idx) => (
