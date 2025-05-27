@@ -3,12 +3,13 @@ title: "Local-First With Legend State"
 publishedAt: 2025-05-25
 description: "Learn how to implement a Local-First app with Legend State, a powerful state management library for React."
 isPublish: false
-lang: "br"
+lang: "en"
+tags: ["react-native", "state-management", "local-first", "legend-state", "offline", "sync", "tutorial"]
 ---
 
 ***If you want to jump straight to the code, this [repository here](https://github.com/lumamontes/local-first-legend-state) contains an API and an Expo app that implement everything discussed in this article:***
 
-Local-First is a very popular concept in modern app development that provides a great user experience. In practice, it’s pretty straightforward: all actions are "cached" locally before being synced with the backend, allowing the app to work even offline.
+Local-First is a very popular concept in modern app development that provides a great user experience. In practice, it's pretty straightforward: all actions are "cached" locally before being synced with the backend, allowing the app to work even offline.
 
 ## The Challenges of Local-First
 
@@ -18,22 +19,22 @@ Implementing Local-First brings some specific challenges:
 - How do you trigger synchronization with the backend when coming back online?
 - Do you need to build all this management from scratch in your project?
 
-Fortunately, there are several solutions that make Local-First implementation easier in different apps, but in this article, I’ll talk a bit about a newer and very cool library that offers an elegant solution to this problem: **Legend State**.
+Fortunately, there are several solutions that make Local-First implementation easier in different apps, but in this article, I'll talk a bit about a newer and very cool library that offers an elegant solution to this problem: **Legend State**.
 
 ## Why Legend State?
 
 Legend State is **extremely fast** ([check out the benchmarks](https://legendapp.com/open-source/state/v3/intro/introduction/#2-%EF%B8%8F-the-fastest-react-state-library)) and is a library for local and remote state management with a powerful sync system that works with any backend.
 
-But to be so fast, Legend State has a "reactivity" concept that’s a bit different from traditional React. I won’t go into too much detail here, but I recommend checking out the official documentation—there are some new concepts you’ll need to learn to use the library effectively.
+But to be so fast, Legend State has a "reactivity" concept that's a bit different from traditional React. I won't go into too much detail here, but I recommend checking out the official documentation—there are some new concepts you'll need to learn to use the library effectively.
 
 - [Introduction](https://legendapp.com/open-source/state/v3/intro/introduction/)
 - [Fine Grained Reactivity](https://legendapp.com/open-source/state/v3/concepts/fine-grained/)
 
-It’s also worth mentioning that the currently recommended version of Legend State is still in beta, but very close to an official release.
+It's also worth mentioning that the currently recommended version of Legend State is still in beta, but very close to an official release.
 
-## Let’s Get to the Code!
+## Let's Get to the Code!
 
-Let’s create a posts app that works offline-first, with automatic sync when online. First, let’s set up our store:
+Let's create a posts app that works offline-first, with automatic sync when online. First, let's set up our store:
 
 ```typescript
 // store/posts.ts
@@ -97,7 +98,7 @@ const deletePost = async (input: Post) => {
 export const postStore$ = observable(syncedCrud<CreatePostInput, CreatePostInput, 'array'>({
   initial: [] as Record<string, Post>[],
   as: 'array',
-  list: getPosts, // We use list here because our endpoint returns a set of data. If it returned only one item, we’d use get instead of list
+  list: getPosts, // We use list here because our endpoint returns a set of data. If it returned only one item, we'd use get instead of list
   create: createPost,
   update: updatePost,
   delete: deletePost,
@@ -206,7 +207,7 @@ export default App;
 The component above:
 
 1. Monitors connectivity status with NetInfo
-2. Shows a visual indicator to inform the user if they’re online or offline
+2. Shows a visual indicator to inform the user if they're online or offline
 3. Displays loading and error states as needed
 4. Renders the list of posts, already using our store!
 
@@ -259,9 +260,9 @@ const CreatePostForm = observer(() => {
 });
 ```
 
-Done! Our CRUD is ready, with offline data sync that automatically connects to our backend when the user’s connectivity status changes :)
+Done! Our CRUD is ready, with offline data sync that automatically connects to our backend when the user's connectivity status changes :)
 
-We’ve implemented:
+We've implemented:
 
 1. **Cross-Platform Persistence**: 
    - Web: LocalStorage

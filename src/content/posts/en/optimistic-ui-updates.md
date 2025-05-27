@@ -4,6 +4,7 @@ publishedAt: 2025-02-31
 description: "About optmistic updates using a React Native app as example"
 isPublish: true
 lang: "en"
+tags: ["react-native", "react-query", "optimistic-updates", "ui-ux", "sqlite", "performance", "tutorial"]
 ---
 
 Optimistic UI updates are a technique where changes are reflected in the user interface (UI) before being confirmed by the backend. This approach enhances the user experience by providing instant feedback, making the app feel more responsive and fluid.
@@ -18,7 +19,7 @@ This article demonstrates how to implement optimistic updates in a React Native 
 
 ## Implementation Walkthrough
 
-We’ll explore optimistic updates through a simple example: liking or unliking posts in a React Native app. The core idea is to update the UI as soon as the user interacts, then reconcile with the database asynchronously.
+We'll explore optimistic updates through a simple example: liking or unliking posts in a React Native app. The core idea is to update the UI as soon as the user interacts, then reconcile with the database asynchronously.
 
 **Github repository:**
 

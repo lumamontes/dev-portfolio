@@ -77,6 +77,14 @@ export const ui = {
     // Blog page  
     'blog.description': 'I like to write a bit as I learn new things, here are some of my posts.',
     'blog.total_posts': 'total posts',
+    'blog.filter.title': 'Filter by tags:',
+    'blog.filter.all': 'All Posts',
+    'blog.filter.clear': 'Clear all',
+    'blog.filter.showAll': 'Show all tags',
+    'blog.filter.hideAll': 'Hide tags',
+    'blog.filter.search': 'Search tags...',
+    'blog.filter.noResults.title': 'No posts found',
+    'blog.filter.noResults.description': 'Try selecting different tags or clear all filters.',
     
     'coffe.title': 'A simple cup of coffee.',
     'coffe.description': 'A simple cup of coffee.',
@@ -174,6 +182,14 @@ export const ui = {
     // Blog page  
     'blog.description': 'Gosto de escrever um pouco conforme vou aprendendo coisas novas, aqui tem alguns dos meus posts.',
     'blog.total_posts': 'total de posts',
+    'blog.filter.title': 'Filtrar por tags:',
+    'blog.filter.all': 'Todos os Posts',
+    'blog.filter.clear': 'Limpar tudo',
+    'blog.filter.showAll': 'Mostrar todas as tags',
+    'blog.filter.hideAll': 'Esconder tags',
+    'blog.filter.search': 'Pesquisar tags...',
+    'blog.filter.noResults.title': 'Nenhum post encontrado',
+    'blog.filter.noResults.description': 'Tente selecionar outras tags ou limpar todos os filtros.',
     
     'coffe.title': 'Um simples café.',
     'coffe.description': 'Um simples café.',

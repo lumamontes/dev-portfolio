@@ -4,6 +4,7 @@ publishedAt: 2024-04-16
 description: "How to test your Laravel APIs with PHPUnit and Pest, using Factory, Traits, and custom commands"
 isPublish: false
 lang: "en"
+tags: ["php", "laravel", "testing", "phpunit", "pest", "jwt", "api", "authentication", "tutorial"]
 ---
 
 # Testing APIs with PHPUnit and Pest in Laravel

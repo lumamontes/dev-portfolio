@@ -4,6 +4,7 @@ publishedAt: 2024-02-17
 description: "Aprenda a criar um fluxo de autenticação com Expo Router no seu app React Native."
 isPublish: false
 lang: "br"
+tags: ["react-native", "expo", "expo-router", "authentication", "navigation", "file-based-routing", "tutorial"]
 ---
 
 Quem já trabalhou com rotas com Expo ou React Native, sabe que o React Navigation é a forma padrão de lidar com navegação! No entanto, conforme mais telas você vai criando no seu app, o código utilizando pode ficar um pouco grande, e alguns processos podem ser um pouco manuais, precisando de muitas linhas de código para serem feitos. Logo, o time do Expo lançou uma novidade: Expo Router, uma alternativa ao React Navigation para roteamento e navegação com React Native. Esse post irá mostrar como criar um fluxo de autenticação com Expo Router no seu app React Native.

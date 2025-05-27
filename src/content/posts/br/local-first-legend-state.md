@@ -4,6 +4,7 @@ publishedAt: 2025-05-25
 description: "Aprenda a implementar um app Local-First com sincronização automática usando Legend State."
 isPublish: true
 lang: "br"
+tags: ["react-native", "state-management", "local-first", "legend-state", "offline", "sync", "tutorial"]
 ---
 
 ***Se você quiser ir direto para o código, esse [repositório aqui](https://github.com/lumamontes/local-first-legend-state) tá contendo uma API e um app com Expo que implementam tudo que falei nesse artigo:***

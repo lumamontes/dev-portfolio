@@ -19,6 +19,9 @@ const posts = allPosts.sort((a, b) =>
   new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
 );
 
+// Extract all unique tags from posts
+const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))].sort();
+
 const postsByYear = posts.reduce((acc, post) => {
   const year = new Date(post.data.publishedAt).getFullYear();
   if (!acc[year]) acc[year] = [];
@@ -50,14 +53,99 @@ const postsByYear = posts.reduce((acc, post) => {
             </div>
           </div>
           
-          <p class="text-lg text-zinc-300 leading-relaxed max-w-3xl">
+          <p class="text-lg text-zinc-300 leading-relaxed max-w-3xl mb-8">
             {t('blog.description')}
           </p>
+
+          <!-- Tag Filter Section -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-zinc-400 uppercase tracking-wider">{t('blog.filter.title')}</h3>
+              <div class="flex items-center gap-3">
+                <button 
+                  id="clear-filters" 
+                  class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors hidden"
+                >
+                  {t('blog.filter.clear')}
+                </button>
+                <button 
+                  id="toggle-filters" 
+                  class="text-xs text-zinc-400 hover:text-zinc-300 transition-colors flex items-center gap-1"
+                  data-show-text={t('blog.filter.showAll')}
+                  data-hide-text={t('blog.filter.hideAll')}
+                >
+                  <span>{t('blog.filter.showAll')}</span>
+                  <svg class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Quick filters (always visible) -->
+            <div class="flex flex-wrap gap-2" id="quick-filters">
+              <button 
+                class="tag-filter px-3 py-1 text-xs rounded-full border transition-all duration-200 active"
+                data-tag="all"
+              >
+                {t('blog.filter.all')} ({posts.length})
+              </button>
+              {allTags.slice(0, 6).map(tag => {
+                const tagCount = posts.filter(post => post.data.tags?.includes(tag)).length;
+                return (
+                  <button 
+                    class="tag-filter px-3 py-1 text-xs rounded-full border transition-all duration-200"
+                    data-tag={tag}
+                  >
+                    {tag} ({tagCount})
+                  </button>
+                );
+              })}
+              {allTags.length > 6 && (
+                <span class="px-3 py-1 text-xs text-zinc-500 flex items-center">
+                  +{allTags.length - 6} more
+                </span>
+              )}
+            </div>
+
+            <!-- Expandable filters section -->
+            <div id="expanded-filters" class="hidden space-y-4">
+              <!-- Search input -->
+              <div class="relative">
+                <input
+                  type="text"
+                  id="tag-search"
+                  placeholder={t('blog.filter.search')}
+                  class="w-full px-3 py-2 text-sm bg-zinc-900/50 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/20"
+                />
+                <svg class="absolute right-3 top-2.5 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+
+              <!-- All tags grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2" id="all-tags-grid">
+                {allTags.map(tag => {
+                  const tagCount = posts.filter(post => post.data.tags?.includes(tag)).length;
+                  return (
+                    <button 
+                      class="tag-filter-grid px-3 py-2 text-xs rounded-lg border transition-all duration-200 text-left"
+                      data-tag={tag}
+                      data-search-text={tag.toLowerCase()}
+                    >
+                      <div class="font-medium">{tag}</div>
+                      <div class="text-zinc-500">{tagCount} post{tagCount !== 1 ? 's' : ''}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>
 
-    <section class="py-8 space-y-12">
+    <section class="py-8 space-y-12" id="posts-container">
       {Object.entries(postsByYear)
         .sort(([a], [b]) => parseInt(b) - parseInt(a))
         .map(([year, yearPosts]) => (
@@ -67,7 +155,7 @@ const postsByYear = posts.reduce((acc, post) => {
                 <h2 class="text-xl font-bold text-white font-mono">{year}</h2>
               </div>
               <div class="flex-1 h-px bg-gradient-to-r from-zinc-800 to-transparent"></div>
-              <div class="text-xs text-zinc-500 font-mono">
+              <div class="text-xs text-zinc-500 font-mono year-count">
                 {yearPosts.length} {yearPosts.length === 1 ? 'post' : 'posts'}
               </div>
             </div>
@@ -76,6 +164,7 @@ const postsByYear = posts.reduce((acc, post) => {
               {yearPosts.map((post, index) => (
                 <article 
                   class="post-item group relative"
+                  data-tags={JSON.stringify(post.data.tags || [])}
                 >
                   <a
                     href={`/${lang}/posts/${getSlugFromUrl(post.slug)}`}
@@ -92,6 +181,22 @@ const postsByYear = posts.reduce((acc, post) => {
                             {formatDate(post.data.publishedAt)}
                           </time>
                         </div>
+
+                        <!-- Tags display -->
+                        {post.data.tags && post.data.tags.length > 0 && (
+                          <div class="flex flex-wrap gap-1 mt-3">
+                            {post.data.tags.slice(0, 3).map(tag => (
+                              <span class="px-2 py-1 text-xs bg-emerald-400/10 text-emerald-400 rounded border border-emerald-400/20">
+                                {tag}
+                              </span>
+                            ))}
+                            {post.data.tags.length > 3 && (
+                              <span class="px-2 py-1 text-xs bg-zinc-700/50 text-zinc-400 rounded">
+                                +{post.data.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       <div class="ml-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
@@ -112,8 +217,211 @@ const postsByYear = posts.reduce((acc, post) => {
         ))
       }
     </section>
+
+    <!-- No results message -->
+    <div id="no-results" class="hidden py-12 text-center">
+      <div class="space-y-4">
+        <div class="text-4xl">🔍</div>
+        <h3 class="text-xl font-medium text-white">{t('blog.filter.noResults.title')}</h3>
+        <p class="text-zinc-400">{t('blog.filter.noResults.description')}</p>
+      </div>
+    </div>
   </div>
 </Layout>
+
+<script>
+  // Tag filtering functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const quickFilters = document.querySelectorAll('#quick-filters .tag-filter') as NodeListOf<HTMLButtonElement>;
+    const gridFilters = document.querySelectorAll('#all-tags-grid .tag-filter-grid') as NodeListOf<HTMLButtonElement>;
+    const postItems = document.querySelectorAll('.post-item') as NodeListOf<HTMLElement>;
+    const yearSections = document.querySelectorAll('.year-section') as NodeListOf<HTMLElement>;
+    const clearButton = document.getElementById('clear-filters') as HTMLButtonElement | null;
+    const toggleButton = document.getElementById('toggle-filters') as HTMLButtonElement | null;
+    const expandedFilters = document.getElementById('expanded-filters') as HTMLElement | null;
+    const tagSearch = document.getElementById('tag-search') as HTMLInputElement | null;
+    const allTagsGrid = document.getElementById('all-tags-grid') as HTMLElement | null;
+    const noResults = document.getElementById('no-results') as HTMLElement | null;
+    const postsContainer = document.getElementById('posts-container') as HTMLElement | null;
+
+    let activeFilters = new Set(['all']);
+    let isExpanded = false;
+
+    function updateDisplay() {
+      let visiblePosts = 0;
+      const yearCounts: Record<string, number> = {};
+
+      // Show/hide posts based on active filters
+      postItems.forEach(post => {
+        const postTags = JSON.parse(post.dataset.tags || '[]');
+        const shouldShow = activeFilters.has('all') || 
+                          postTags.some((tag: string) => activeFilters.has(tag));
+        
+        if (shouldShow) {
+          post.style.display = 'block';
+          visiblePosts++;
+          
+          // Count posts per year
+          const yearSection = post.closest('.year-section') as HTMLElement | null;
+          const year = yearSection?.dataset.year;
+          if (year) {
+            yearCounts[year] = (yearCounts[year] || 0) + 1;
+          }
+        } else {
+          post.style.display = 'none';
+        }
+      });
+
+      // Show/hide year sections and update counts
+      yearSections.forEach(section => {
+        const year = section.dataset.year;
+        const count = yearCounts[year || ''] || 0;
+        const yearCountElement = section.querySelector('.year-count') as HTMLElement | null;
+        
+        if (count > 0) {
+          section.style.display = 'block';
+          if (yearCountElement) {
+            yearCountElement.textContent = `${count} ${count === 1 ? 'post' : 'posts'}`;
+          }
+        } else {
+          section.style.display = 'none';
+        }
+      });
+
+      // Show/hide no results message
+      if (visiblePosts === 0) {
+        noResults?.classList.remove('hidden');
+        postsContainer?.classList.add('hidden');
+      } else {
+        noResults?.classList.add('hidden');
+        postsContainer?.classList.remove('hidden');
+      }
+
+      // Show/hide clear button
+      if (activeFilters.has('all') || activeFilters.size === 0) {
+        clearButton?.classList.add('hidden');
+      } else {
+        clearButton?.classList.remove('hidden');
+      }
+    }
+
+    function updateFilterButtons() {
+      // Update quick filters
+      quickFilters.forEach(button => {
+        const tag = button.dataset.tag;
+        if (activeFilters.has(tag || '')) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+
+      // Update grid filters
+      gridFilters.forEach(button => {
+        const tag = button.dataset.tag;
+        if (activeFilters.has(tag || '')) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+    }
+
+    function toggleExpanded() {
+      isExpanded = !isExpanded;
+      
+      if (isExpanded) {
+        expandedFilters?.classList.remove('hidden');
+        if (toggleButton) {
+          const hideText = toggleButton.dataset.hideText || 'Hide tags';
+          toggleButton.querySelector('span')!.textContent = hideText;
+          toggleButton.querySelector('svg')?.classList.add('rotate-180');
+        }
+      } else {
+        expandedFilters?.classList.add('hidden');
+        if (toggleButton) {
+          const showText = toggleButton.dataset.showText || 'Show all tags';
+          toggleButton.querySelector('span')!.textContent = showText;
+          toggleButton.querySelector('svg')?.classList.remove('rotate-180');
+        }
+        // Clear search when collapsing
+        if (tagSearch) {
+          tagSearch.value = '';
+          filterTagsBySearch('');
+        }
+      }
+    }
+
+    function filterTagsBySearch(searchTerm: string) {
+      const term = searchTerm.toLowerCase();
+      
+      gridFilters.forEach(button => {
+        const searchText = button.dataset.searchText || '';
+        if (searchText.includes(term)) {
+          button.style.display = 'block';
+        } else {
+          button.style.display = 'none';
+        }
+      });
+    }
+
+    function handleTagClick(tag: string) {
+      if (tag === 'all') {
+        activeFilters.clear();
+        activeFilters.add('all');
+      } else if (tag) {
+        if (activeFilters.has(tag)) {
+          activeFilters.delete(tag);
+          if (activeFilters.size === 0) {
+            activeFilters.add('all');
+          }
+        } else {
+          activeFilters.delete('all');
+          activeFilters.add(tag);
+        }
+      }
+      
+      updateFilterButtons();
+      updateDisplay();
+    }
+
+    // Handle quick filter clicks
+    quickFilters.forEach(button => {
+      button.addEventListener('click', function(this: HTMLButtonElement) {
+        const tag = this.dataset.tag;
+        if (tag) handleTagClick(tag);
+      });
+    });
+
+    // Handle grid filter clicks
+    gridFilters.forEach(button => {
+      button.addEventListener('click', function(this: HTMLButtonElement) {
+        const tag = this.dataset.tag;
+        if (tag) handleTagClick(tag);
+      });
+    });
+
+    // Handle toggle button
+    toggleButton?.addEventListener('click', toggleExpanded);
+
+    // Handle search input
+    tagSearch?.addEventListener('input', function(this: HTMLInputElement) {
+      filterTagsBySearch(this.value);
+    });
+
+    // Handle clear filters
+    clearButton?.addEventListener('click', function() {
+      activeFilters.clear();
+      activeFilters.add('all');
+      updateFilterButtons();
+      updateDisplay();
+    });
+
+    // Initial setup
+    updateFilterButtons();
+    updateDisplay();
+  });
+</script>
 
 <style>
   .scanlines {
@@ -137,18 +445,81 @@ const postsByYear = posts.reduce((acc, post) => {
     background: rgba(39, 39, 42, 0.5);
     border-color: rgba(113, 113, 122, 0.3);
     color: rgba(161, 161, 170, 1);
+    cursor: pointer;
   }
 
   .tag-filter:hover {
     background: rgba(52, 211, 153, 0.1);
     border-color: rgba(52, 211, 153, 0.3);
     color: rgba(52, 211, 153, 1);
+    transform: translateY(-1px);
   }
 
   .tag-filter.active {
     background: rgba(52, 211, 153, 0.2);
     border-color: rgba(52, 211, 153, 0.5);
     color: rgba(52, 211, 153, 1);
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.2);
+  }
+
+  .tag-filter-grid {
+    background: rgba(39, 39, 42, 0.5);
+    border-color: rgba(113, 113, 122, 0.3);
+    color: rgba(161, 161, 170, 1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tag-filter-grid:hover {
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+    color: rgba(52, 211, 153, 1);
+    transform: translateY(-1px);
+  }
+
+  .tag-filter-grid.active {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: rgba(52, 211, 153, 0.5);
+    color: rgba(52, 211, 153, 1);
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.2);
+  }
+
+  .tag-filter-grid[style*="display: none"] {
+    display: none !important;
+  }
+
+  #expanded-filters {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  #expanded-filters.hidden {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  .rotate-180 {
+    transform: rotate(180deg);
   }
 
   .line-clamp-2 {
@@ -160,6 +531,21 @@ const postsByYear = posts.reduce((acc, post) => {
 
   .post-item {
     transition: all 0.3s ease;
+  }
+
+  .post-item[style*="display: none"] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .year-section {
+    transition: all 0.3s ease;
+  }
+
+  .year-section[style*="display: none"] {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
   }
 
   :global(::-webkit-scrollbar) {
@@ -186,6 +572,11 @@ const postsByYear = posts.reduce((acc, post) => {
     
     h1 {
       font-size: 1.75rem;
+    }
+
+    .tag-filter {
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
     }
   }
 

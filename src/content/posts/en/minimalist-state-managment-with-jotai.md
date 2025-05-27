@@ -4,6 +4,7 @@ publishedAt: 2024-03-09
 description: "In this article, I will talk about Jotai, a global state management library for React, explaining how it works and how to use it in a React Native project."
 isPublish: false
 lang: "en"
+tags: ["react-native", "state-management", "jotai", "react", "atomic", "minimalist", "tutorial"]
 ---
 
 In this article, I will talk about Jotai, a global state management library for React. I will explain what Jotai is, how it works, and how to use it in a React Native project.

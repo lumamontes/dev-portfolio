@@ -4,6 +4,7 @@ publishedAt: 2023-12-31
 description: "Aprenda a criar um projeto Node com Typescript e Express"
 isPublish: true
 lang: "br"
+tags: ["nodejs", "typescript", "express", "setup", "backend", "tutorial"]
 ---
 
 Apenas um simples post sobre como criar um projeto Node com Typescript e Express.

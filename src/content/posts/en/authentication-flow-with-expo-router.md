@@ -4,6 +4,7 @@ publishedAt: 2024-02-17
 description: "Learn how to create an authentication flow with Expo Router in your React Native app."
 isPublish: false
 lang: "en"
+tags: ["react-native", "expo", "expo-router", "authentication", "navigation", "file-based-routing", "tutorial"]
 ---
 
 Ever since I started working with React Native, I've been using React Navigation for navigation. It's a great library, but as the app grows, the code can get a bit long and some processes can be a bit manual, requiring a lot of lines of code to be done. So, the Expo team has launched a new feature: Expo Router, an alternative to React Navigation for routing and navigation with React Native.

@@ -4,6 +4,7 @@ publishedAt: 2025-02-31
 description: "Um pouco sobre atualizações otimistas de UI usando um app React Native como exemplo"
 isPublish: true
 lang: "br"
+tags: ["react-native", "react-query", "optimistic-updates", "ui-ux", "sqlite", "performance", "tutorial"]
 ---
 
 Optimistic updates de UI são uma técnica onde as mudanças são refletidas na UI antes de serem confirmadas pelo backend. Essa abordagem melhora a experiência do usuário ao fornecer feedback instantâneo, fazendo o app parecer mais responsivo e fluido.

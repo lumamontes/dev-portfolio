@@ -4,6 +4,7 @@ publishedAt: 2024-04-16
 description: "Como testar suas APIs Laravel usando PHPUnit e Pest, usando Factory, Traits e comandos personalizados para gerar tokens JWT."
 isPublish: false
 lang: "br"
+tags: ["php", "laravel", "testing", "phpunit", "pest", "jwt", "api", "authentication", "tutorial"]
 ---
 
 # Testando APIs com PHPUnit e Pest no Laravel

@@ -4,6 +4,7 @@ publishedAt: 2023-08-13
 description: "Discover the Astro framework: speed and modernity in website creation! ✨🚀"
 isPublish: true
 lang: "en"
+tags: ["astro", "web-development", "framework", "performance", "mpa", "static-site", "tutorial"]
 ---
 
 

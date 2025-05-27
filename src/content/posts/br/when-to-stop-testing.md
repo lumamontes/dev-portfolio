@@ -4,6 +4,7 @@ publishedAt: 2024-07-16
 description: "Falando um pouco sobre classes de equivalência e como elas podem ajudar a determinar o que testar e quando parar durante o desenvolvimento de software."
 isPublish: false
 lang: "br"
+tags: ["testing", "software-engineering", "equivalence-classes", "test-strategy", "quality-assurance", "theory"]
 ---
 
 # Classes de Equivalência: O que devo testar durante o desenvolvimento de software?
