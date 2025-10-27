@@ -114,10 +114,41 @@ export const experiences: Record<'en' | 'br', {
     subtitle: 'experience.timeline',
     items: [
       {
+        id: 'software-engineer-ii',
+        title: 'Software Engineer II',
+        company: 'Arcotech',
+        period: 'Dec 2023 - Present',
+        location: 'Remote, Brazil',
+        description: 'Working on the Backoffice squad with a focus on frontend development.',
+        responsibilities: [
+        ],
+        type: 'development',
+        level: 'senior',
+        current: true
+      },
+      {
+        id: 'senior-developer',
+        title: 'Senior Developer',
+        company: 'Proesc',
+        period: 'Oct 2023 - Dec 2023',
+        location: 'Remote, Brazil',
+        description: 'Advanced to senior position with leadership responsibilities. Leading technical initiatives and driving architectural improvements across multiple platforms.',
+        responsibilities: [
+          'Leading technical initiatives and architectural improvements',
+          'Mentoring mid-level and junior developers',
+          'Designing and implementing complex features across frontend, backend, and mobile',
+          'Leading technical workshops and knowledge sharing sessions',
+          'Optimizing database performance and application architecture',
+          'Collaborating with product team on feature planning and estimation'
+        ],
+        type: 'development',
+        level: 'senior'
+      },
+      {
         id: 'mid-developer',
         title: 'Mid-Level Developer',
         company: 'Proesc',
-        period: 'Oct 2022 - Present',
+        period: 'Oct 2022 - Oct 2023',
         location: 'Remote, Brazil',
         description: 'Advanced to mid-level role with expanded responsibilities across the full development lifecycle. Leading mobile app deployment and managing both iOS and Android applications in app stores.',
         responsibilities: [
@@ -129,8 +160,7 @@ export const experiences: Record<'en' | 'br', {
           'Mentoring junior developers and providing technical support'
         ],
         type: 'development',
-        level: 'mid',
-        current: true
+        level: 'mid'
       },
       {
         id: 'junior-developer',
@@ -203,7 +233,7 @@ export const experiences: Record<'en' | 'br', {
         ],
         type: 'support',
         level: 'support1'
-      },
+      }
     ]
   },
   br: {
@@ -211,10 +241,41 @@ export const experiences: Record<'en' | 'br', {
     subtitle: 'linha.do.tempo',
     items: [
       {
+        id: 'software-engineer-ii',
+        title: 'Engenheira de Software II',
+        company: 'Arcotech',
+        period: 'Dez 2023 - Presente',
+        location: 'Remoto, Brasil',
+        description: 'Atuo no squad de Backoffice com foco em desenvolvimento frontend',
+        responsibilities: [
+        ],
+        type: 'development',
+        level: 'senior',
+        current: true
+      },
+      {
+        id: 'senior-developer',
+        title: 'Desenvolvedora Sênior',
+        company: 'Proesc',
+        period: 'Out 2023 - Dez 2023',
+        location: 'Remoto, Brasil',
+        description: 'Promovida para posição sênior com responsabilidades de liderança. Liderando iniciativas técnicas e impulsionando melhorias arquiteturais em múltiplas plataformas.',
+        responsibilities: [
+          'Liderando iniciativas técnicas e melhorias arquiteturais',
+          'Mentorando desenvolvedores plenos e juniores',
+          'Projetando e implementando funcionalidades complexas em frontend, backend e mobile',
+          'Liderando workshops técnicos e sessões de compartilhamento de conhecimento',
+          'Otimizando performance de banco de dados e arquitetura de aplicações',
+          'Colaborando com equipe de produto em planejamento e estimativa de funcionalidades'
+        ],
+        type: 'development',
+        level: 'senior'
+      },
+      {
         id: 'mid-developer',
         title: 'Desenvolvedor Pleno',
         company: 'Proesc',
-        period: 'Out 2022 - Presente',
+        period: 'Out 2022 - Out 2023',
         location: 'Remoto, Brasil',
         description: 'Promovido para função plena com responsabilidades expandidas em todo o ciclo de desenvolvimento. Liderando implementação de aplicativos móveis e gerenciando aplicações iOS e Android nas lojas.',
         responsibilities: [
@@ -227,8 +288,7 @@ export const experiences: Record<'en' | 'br', {
           'Mentorando desenvolvedores juniores e fornecendo suporte técnico'
         ],
         type: 'development',
-        level: 'mid',
-        current: true
+        level: 'mid'
       },
       {
         id: 'junior-developer',
@@ -301,7 +361,7 @@ export const experiences: Record<'en' | 'br', {
         ],
         type: 'support',
         level: 'support1'
-      },
+      }
     ]
   }
 } as const;

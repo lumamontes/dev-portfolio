@@ -10,12 +10,10 @@ const { responseTimeLabel, responseTime, remoteWorldwideLabel } = Astro.props;
 
 <div class="flex items-center justify-center gap-6 text-sm">
   <div class="flex items-center gap-2">
-    <span class="text-emerald-400">⚡</span>
-    <span class="text-zinc-400">{responseTimeLabel}: {responseTime}</span>
+    <span class="text-white">{responseTimeLabel}: {responseTime}</span>
   </div>
   <span class="text-zinc-600">•</span>
   <div class="flex items-center gap-2">
-    <span class="text-blue-400">🌍</span>
     <span class="text-zinc-400">{remoteWorldwideLabel}</span>
   </div>
 </div> 

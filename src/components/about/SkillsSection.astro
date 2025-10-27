@@ -14,22 +14,18 @@ const { title, frontendTitle, backendTitle, frontendSkills, backendSkills } = As
 <div>
   <div class="flex items-center gap-3 mb-8">
     <h2 class="text-3xl font-bold text-white">{title}</h2>
-    <div class="flex-1 h-px bg-gradient-to-r from-emerald-500/50 to-transparent"></div>
+    <div class="flex-1 h-px bg-gradient-to-r from-white/50 to-transparent"></div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <SkillCard 
       title={frontendTitle}
-      emoji="🎨"
       skills={frontendSkills}
-      color="emerald"
     />
     
     <SkillCard 
       title={backendTitle}
-      emoji="⚙️"
       skills={backendSkills}
-      color="blue"
     />
   </div>
 </div> 
