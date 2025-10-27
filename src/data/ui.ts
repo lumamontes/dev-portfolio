@@ -21,11 +21,11 @@ export const defaultLang = 'en';
 export const ui = {
   en: {
     // Main presentation
-    'presentation.title': 'Hi, I\'m Luma 👋',
-    'presentation.description': "I'm a full-stack developer from Amapá with over 3 years of experience creating amazing web and mobile experiences. I work at Proesc developing solutions for educational institutions in multidisciplinary projects, contributing to innovation in the field.",
-    'presentation.location': '📍 Macapá, Amapá, Brazil',
-    'presentation.experience': '3+ years of experience',
-    'presentation.currentRole': 'Mid-level Developer at Proesc',
+    'presentation.title': 'Hi, I\'m Luma',
+    'presentation.description': "I'm a full-stack developer from Amapá with over 4 years of experience creating amazing web and mobile experiences. Currently working at Arcotech as a Software Engineer II, developing solutions for educational institutions. Previously worked as a Senior Developer at Proesc for 2 years, where I contributed to frontend, backend, and mobile projects using ReactJS, React Native, PHP, Laravel, and PostgreSQL.",
+    'presentation.location': 'Macapá, Amapá, Brazil',
+    'presentation.experience': '4+ years of experience',
+    'presentation.currentRole': 'Software Engineer II at Arcotech',
     'about.me': 'Me.',
     'about.me.description': 'I like to play videogames, watch tv shows with maaany seasons, basketball and anything involving technology and education.',
 
@@ -59,7 +59,7 @@ export const ui = {
 
     // About page
     'about.title': 'About Me',
-    'about.description': 'Full-stack developer passionate about creating functional applications that solve real problems. I started my career at Proesc in 2021 as a junior dev and have been growing ever since! I also really enjoy working in teams and helping the tech community :)',
+    'about.description': 'Full-stack developer passionate about creating functional applications that solve real problems. I started my career at Proesc in 2021 as a junior developer and grew to Senior Developer, where I worked on frontend, backend, and mobile projects. Currently working at Arcotech as a Software Engineer II, continuing to develop solutions for educational institutions. I also really enjoy working in teams and helping the tech community :)',
 
     'experience.title': 'My Experiences',
     'projects.description': 'Here are some little open source projects I made, mainly to learn new technologies.',
@@ -132,11 +132,11 @@ export const ui = {
   },
   br: {
     // Main presentation  
-    'presentation.title': 'Oi, me chamo Luma 👋',
-    'presentation.description': "Sou uma desenvolvedora fullstack do Amapá com mais de 3 anos de experiência criando experiências web e mobile incríveis. Trabalho na Proesc desenvolvendo soluções para instituições de ensino em projetos multidisciplinares, contribuindo para a inovação na área.",
-    'presentation.location': '📍 Macapá, Amapá, Brasil',
-    'presentation.experience': '3+ anos de experiência',
-    'presentation.currentRole': 'Desenvolvedora Mid-level na Proesc',
+    'presentation.title': 'Oi, me chamo Luma',
+    'presentation.description': "Sou uma desenvolvedora fullstack do Amapá com mais de 4 anos de experiência criando experiências web e mobile incríveis. Atualmente trabalho na Arcotech como Engenheira de Software II, desenvolvendo soluções para instituições de ensino. Anteriormente trabalhei como Desenvolvedora Sênior na Proesc por 2 anos, onde contribuí para projetos frontend, backend e mobile usando ReactJS, React Native, PHP, Laravel e PostgreSQL.",
+    'presentation.location': 'Macapá, Amapá, Brasil',
+    'presentation.experience': '4+ anos de experiência',
+    'presentation.currentRole': 'Engenheira de Software II na Arcotech',
     'about.me': 'Eu.',
     'about.me.description': 'Gosto de jogar videogames, ver séries com muuuitas temporadas, assistir basquete e de qualquer coisa envolvendo tecnologia e educação.',
 
@@ -170,7 +170,7 @@ export const ui = {
     // About page
     'about.title': 'Sobre Mim',
     'about.connect.title': 'Vamos nos conectar!',
-    'about.description': 'Desenvolvedora fullstack apaixonada por criar aplicações funcionais que resolvem problemas reais. Comecei minha carreira na Proesc em 2021 como dev júnior e venho crescendo desde então! Também gosto bastante de trabalhar em equipe e ajudar a comunidade de tecnologia :) ',
+    'about.description': 'Desenvolvedora fullstack apaixonada por criar aplicações funcionais que resolvem problemas reais. Comecei minha carreira na Proesc em 2021 como dev júnior e cresci até Desenvolvedora Sênior, onde trabalhei em projetos frontend, backend e mobile. Atualmente trabalho na Arcotech como Engenheira de Software II, continuando a desenvolver soluções para instituições de ensino. Também gosto bastante de trabalhar em equipe e ajudar a comunidade de tecnologia :) ',
 
     'experience.title': 'Minhas Experiências',
     'projects.description': 'Aqui estão alguns projetinhos de código aberto que fiz, principalmente para aprender novas tecnologias.',
