@@ -51,6 +51,12 @@ type CanonicalFieldInput = {
   tags: string[];
 };
 
+const optionalCanonicalFieldsSchema = z.object({
+  editorialState: editorialStateSchema.optional(),
+  visibility: visibilitySchema.optional(),
+  category: categorySchema.optional(),
+});
+
 function canonicalFields({
   type,
   lang,
@@ -78,11 +84,8 @@ const postFieldsSchema = z.object({
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
   lang: languageSchema,
-  editorialState: editorialStateSchema.optional(),
-  visibility: visibilitySchema.optional(),
-  category: categorySchema.optional(),
   tags: z.array(tagSchema).default([]),
-});
+}).merge(optionalCanonicalFieldsSchema);
 
 export const postSchema = postFieldsSchema.transform((entry) => {
   const fields = canonicalFields({
@@ -123,11 +126,8 @@ export const bookFieldsSchema = z.object({
   dateCompleted: z.date().optional(),
   progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
-  editorialState: editorialStateSchema.optional(),
-  visibility: visibilitySchema.optional(),
-  category: categorySchema.optional(),
   published: z.boolean().default(true),
-});
+}).merge(optionalCanonicalFieldsSchema);
 
 export const bookSchemaForLanguage = (lang: Language) =>
   bookFieldsSchema.transform((book) => {
