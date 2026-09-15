@@ -74,7 +74,23 @@ The Photo Gallery Demo exposes two albums:
 | 2024 album | `https://photo-gallery-12.vercel.app/5qeSZgqWT0Sdzlz2ffT3tk` | Not applicable | Migrate after image and metadata review. |
 | 2023 album | `https://photo-gallery-12.vercel.app/52otPfzso7wn41TUYeUFW5` | Not applicable | Migrate after image and metadata review. |
 
-The Quadrados gallery exposes 11 individual image items: `2_mnthlw`, `4_kfd820`, `3_dzwv4h`, `6_qplsbt`, `5_cquaaj`, `7_pgptnq`, `1_tnubou`, `0d46920e-4589-4680-a8ea-f7d70f956286`, `IMG_20201105_235627`, `1519b851-e80f-4360-ba79-41f1592725ad` and `20190116_155742_1`. They are served from the `quadrados` Cloudinary folder through `https://quadrados.netlify.app/`.
+The Quadrados gallery exposes 11 individual image items. Their current public routes are:
+
+| Item | Current route | Language | Disposition |
+| --- | --- | --- | --- |
+| `2_mnthlw` | `/image/quadrados%2F2_mnthlw` | Not applicable | Review for photo migration. |
+| `4_kfd820` | `/image/quadrados%2F4_kfd820` | Not applicable | Review for photo migration. |
+| `3_dzwv4h` | `/image/quadrados%2F3_dzwv4h` | Not applicable | Review for photo migration. |
+| `6_qplsbt` | `/image/quadrados%2F6_qplsbt` | Not applicable | Review for photo migration. |
+| `5_cquaaj` | `/image/quadrados%2F5_cquaaj` | Not applicable | Review for photo migration. |
+| `7_pgptnq` | `/image/quadrados%2F7_pgptnq` | Not applicable | Review for photo migration. |
+| `1_tnubou` | `/image/quadrados%2F1_tnubou` | Not applicable | Review for photo migration. |
+| `0d46920e-4589-4680-a8ea-f7d70f956286` | `/image/quadrados%2F0d46920e-4589-4680-a8ea-f7d70f956286` | Not applicable | Review for photo migration. |
+| `IMG_20201105_235627` | `/image/quadrados%2FIMG_20201105_235627` | Not applicable | Review for photo migration. |
+| `1519b851-e80f-4360-ba79-41f1592725ad` | `/image/quadrados%2F1519b851-e80f-4360-ba79-41f1592725ad` | Not applicable | Review for photo migration. |
+| `20190116_155742_1` | `/image/quadrados%2F20190116_155742_1` | Not applicable | Review for photo migration. |
+
+All routes are relative to `https://quadrados.netlify.app/`. The images are served from the `quadrados` Cloudinary folder; credits and ownership still require review.
 
 Disposition: preserve the Quadrados source while reviewing each image for migration as an individual `photo` entry or inclusion in an album. No language variants are currently identified.
 
@@ -82,8 +98,8 @@ Disposition: preserve the Quadrados source while reviewing each image for migrat
 
 - Local audio tracks are `portishead-only-you`, `jorja-smith-greatest-gift`, `linkin-park-IGYEIH` and `little-simz-free`, used by the existing radio player.
 - The authored music source is `https://tururu61.wordpress.com/`.
-- Authored entries currently include `inicio de um blog aleatório` (`2025-01-16`), `The Cranberries – Everybody Else Is Doing It, So Why Can’t We?` (`2025-01-16`), `Fleetwood Mac` (`2025-01-21`), `Warpaint` (`2025-06-27`), `Gritos femininos` (`2025-07-23`) and `Viciada em wolf alice` (`2025-07-23`). All are currently Brazilian Portuguese entries.
-- Automated entries currently include `Fevereiro de 2025` and `Março de 2025`, both generated from Last.fm and currently written in Brazilian Portuguese.
+- Authored entries currently include `inicio de um blog aleatório` (`2025-01-16`), `The Cranberries – Everybody Else Is Doing It, So Why Can’t We?` (`2025-01-16`), `Fletwood Mac` (`2025-01-21`), `Warpaint` (`2025-06-27`), `Gritos femininos` (`2025-07-23`) and `Viciada em wolf alice` (`2025-07-23`). Their current URLs are `/2025/01/16/inicio-de-um-blog-aleatorio/`, `/2025/01/16/the-cranberries-everybody-else-is-doing-it-so-why-cant-we/`, `/2025/01/21/fletwood-mac/`, `/2025/06/27/warpaint/`, `/2025/07/23/gritos-femininos/` and `/2025/07/23/viciada-em-wolf-alice/`. All are currently Brazilian Portuguese entries.
+- Automated entries currently include `Fevereiro de 2025` and `Março de 2025`, both generated from Last.fm, currently written in Brazilian Portuguese, and available at `/2026/01/17/fevereiro-de-2025/` and `/2026/01/17/marco-de-2025/`.
 - Local audio tracks are retained as existing site assets and are not automatically treated as authored music entries.
 - The photo sources are `https://quadrados.netlify.app/`, `https://photo-gallery-12.vercel.app/` and the 2023 album at `https://photo-gallery-12.vercel.app/52otPfzso7wn41TUYeUFW5`.
 - The TIL source is `https://github.com/lumamontes/today-i-learned`.
@@ -96,7 +112,7 @@ Disposition: migrate all authored music entries, migrate automated summaries as 
 - Existing posts have parallel `en` and `br` directories for most technical articles.
 - Existing books have parallel English and Brazilian Portuguese collections.
 - Projects have English and Brazilian Portuguese fields in shared data.
-- TIL language availability is not yet established; the current external source is treated as Brazilian Portuguese until item-level review.
+- The TIL repository is English-oriented based on its README and entry filenames; no Brazilian Portuguese variants are present in the repository. Individual entries should still be audited before migration.
 - Zine and photo entries have no identified language variants and should be treated as language-independent unless their descriptions contain prose.
 - All currently inventoried music-blog entries are Brazilian Portuguese; no English variants were found.
 - The canonical language values are `en` and `br`.
