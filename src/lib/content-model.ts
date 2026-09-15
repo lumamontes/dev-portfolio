@@ -40,11 +40,6 @@ export const canonicalEntrySchema = z.object({
   tags: z.array(tagSchema).default([]),
 });
 
-export const entrySchema = canonicalEntrySchema.extend({
-  title: z.string().trim().min(1),
-  description: z.string().trim().min(1).optional(),
-});
-
 type CanonicalFieldInput = {
   type: EntryType;
   lang: Language;
@@ -83,8 +78,6 @@ const postFieldsSchema = z.object({
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
   lang: languageSchema,
-  editorialState: editorialStateSchema.optional(),
-  visibility: visibilitySchema.optional(),
   category: categorySchema.optional(),
   tags: z.array(tagSchema).default([]),
 });
@@ -93,8 +86,6 @@ export const postSchema = postFieldsSchema.transform((entry) => {
   const fields = canonicalFields({
     type: 'text',
     lang: entry.lang,
-    editorialState: entry.editorialState,
-    visibility: entry.visibility,
     fallbackEditorialState:
       entry.isPublish && !entry.isDraft ? 'published-here' : 'draft',
     fallbackVisibility: entry.isPublish && !entry.isDraft ? 'public' : 'private',
@@ -123,8 +114,6 @@ export const bookFieldsSchema = z.object({
   dateCompleted: z.date().optional(),
   progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
-  editorialState: editorialStateSchema.optional(),
-  visibility: visibilitySchema.optional(),
   category: categorySchema.optional(),
   published: z.boolean().default(true),
 });
@@ -134,8 +123,6 @@ export const bookSchemaForLanguage = (lang: Language) =>
     const fields = canonicalFields({
       type: 'book',
       lang,
-      editorialState: book.editorialState,
-      visibility: book.visibility,
       fallbackEditorialState: book.published ? 'published-here' : 'draft',
       fallbackVisibility: book.published ? 'public' : 'private',
       category: book.category,
