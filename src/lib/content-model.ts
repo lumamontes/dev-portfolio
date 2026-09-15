@@ -156,19 +156,23 @@ export type EditorialState = z.infer<typeof editorialStateSchema>;
 export type Visibility = z.infer<typeof visibilitySchema>;
 export type Language = z.infer<typeof languageSchema>;
 
-type PublishedEntry = {
+type EntryWithPublicationMetadata = {
   data: {
     visibility: Visibility;
     lang: Language;
+    editorialState: EditorialState;
   };
 };
 
-export function isPublicEntry(entry: PublishedEntry) {
-  return entry.data.visibility === 'public';
+export function isPublicEntry(entry: EntryWithPublicationMetadata) {
+  return (
+    entry.data.visibility === 'public' &&
+    ['published-here', 'published-elsewhere'].includes(entry.data.editorialState)
+  );
 }
 
 export function isPublicEntryInLanguage(
-  entry: PublishedEntry,
+  entry: EntryWithPublicationMetadata,
   lang: Language,
 ) {
   return isPublicEntry(entry) && entry.data.lang === lang;
