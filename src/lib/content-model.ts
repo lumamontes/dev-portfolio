@@ -78,6 +78,8 @@ const postFieldsSchema = z.object({
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
   lang: languageSchema,
+  editorialState: editorialStateSchema.optional(),
+  visibility: visibilitySchema.optional(),
   category: categorySchema.optional(),
   tags: z.array(tagSchema).default([]),
 });
@@ -93,7 +95,12 @@ export const postSchema = postFieldsSchema.transform((entry) => {
     tags: entry.tags,
   });
 
-  return { ...entry, ...fields };
+  return {
+    ...entry,
+    ...fields,
+    isPublish: fields.visibility === 'public',
+    isDraft: fields.editorialState === 'draft',
+  };
 });
 
 export const bookStatusSchema = z.enum([
@@ -114,6 +121,8 @@ export const bookFieldsSchema = z.object({
   dateCompleted: z.date().optional(),
   progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
+  editorialState: editorialStateSchema.optional(),
+  visibility: visibilitySchema.optional(),
   category: categorySchema.optional(),
   published: z.boolean().default(true),
 });
@@ -129,7 +138,11 @@ export const bookSchemaForLanguage = (lang: Language) =>
       tags: book.genre,
     });
 
-    return { ...book, ...fields };
+    return {
+      ...book,
+      ...fields,
+      published: fields.visibility === 'public',
+    };
   });
 
 export type EntryType = z.infer<typeof entryTypeSchema>;
