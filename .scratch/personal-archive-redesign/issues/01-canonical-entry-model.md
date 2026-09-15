@@ -6,7 +6,7 @@
 
 **Status:** completed
 
-- [x] Entry types include text, learning note, book, zine, project, photo, photo album and music entry.
+- [x] Entry types include text, learning note, book, zine, project, photo (individual or album) and music entry.
 - [x] Editorial state is separate from public visibility.
 - [x] Language, category and tag rules are explicit and validated.
 - [x] Existing book and post data can be represented without losing required information.

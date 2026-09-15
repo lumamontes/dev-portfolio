@@ -14,7 +14,7 @@ An **entry** is the neutral structural term for an item in the archive. Visitors
 
 A **zine entry** documents a zine with its title, cover, context and related links. The complete zine may be read on an external publication such as Biblioteca de Zines.
 
-A **photo entry** documents one photograph or a photo album. It can include images, captions, dates, place and context without requiring every image to become a separate archive entry.
+A **photo entry** documents one photograph or a photo album. It can include images, captions, dates, place and context without requiring every image to become a separate archive entry. `photo` is the canonical type for both forms.
 
 A **music entry** documents a musical listening experience, artist, album, playlist, music blog post or listening log. Live listening data is optional and must respect Luma's privacy.
 

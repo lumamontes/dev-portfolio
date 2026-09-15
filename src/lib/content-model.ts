@@ -7,7 +7,6 @@ export const entryTypes = [
   'zine',
   'project',
   'photo',
-  'photo-album',
   'music',
 ] as const;
 
