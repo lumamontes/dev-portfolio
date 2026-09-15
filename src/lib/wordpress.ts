@@ -15,6 +15,22 @@ export type WordPressPage = {
   error: Error | null;
 };
 
+export type WordPressArchiveEntry = {
+  title: string;
+  description: string;
+  type: 'text' | 'learning-note' | 'book' | 'zine' | 'photo' | 'music';
+  lang: 'en' | 'br';
+  slug: string;
+  date: Date;
+  tags: string[];
+  category?: string;
+  html: string;
+};
+
+export const WORDPRESS_API_URL =
+  import.meta.env.WORDPRESS_API_URL ??
+  'https://public-api.wordpress.com/wp/v2/sites/tururu61.wordpress.com/posts';
+
 type WordPressPost = {
   id: number;
   slug: string;
@@ -88,5 +104,44 @@ export async function getWordPressPosts({
       nextPage: null,
       error: error instanceof Error ? error : new Error('WordPress request failed'),
     };
+  }
+}
+
+export async function getWordPressArchiveEntries(fetcher: typeof fetch = fetch) {
+  try {
+    const url = new URL(WORDPRESS_API_URL);
+    url.searchParams.set('status', 'publish');
+    url.searchParams.set('per_page', '100');
+    url.searchParams.set('_embed', '1');
+    const response = await fetcher(url);
+    if (!response.ok) throw new Error(`WordPress archive request failed with ${response.status}`);
+    const posts = (await response.json()) as Array<{
+      slug: string;
+      date: string;
+      title?: { rendered?: string };
+      excerpt?: { rendered?: string };
+      content?: { rendered?: string };
+      _embedded?: { 'wp:term'?: Array<Array<{ name?: string }>> };
+    }>;
+
+    return posts.flatMap((post) => {
+      const terms = (post._embedded?.['wp:term'] ?? []).flat().map((term) => term.name).filter(Boolean) as string[];
+      const typeTerm = terms.find((term) => term.startsWith('entry:'))?.slice(6);
+      const langTerm = terms.find((term) => term.startsWith('lang:'))?.slice(5);
+      if (!typeTerm || !['text', 'learning-note', 'book', 'zine', 'photo', 'music'].includes(typeTerm) || !['en', 'br'].includes(langTerm ?? '')) return [];
+      return [{
+        title: stripHtml(post.title?.rendered ?? post.slug),
+        description: stripHtml(post.excerpt?.rendered ?? ''),
+        type: typeTerm as WordPressArchiveEntry['type'],
+        lang: langTerm as WordPressArchiveEntry['lang'],
+        slug: post.slug,
+        date: new Date(post.date),
+        tags: terms.filter((term) => !term.startsWith('entry:') && !term.startsWith('lang:')),
+        category: terms.find((term) => !term.startsWith('entry:') && !term.startsWith('lang:')),
+        html: post.content?.rendered ?? '',
+      }];
+    });
+  } catch {
+    return [];
   }
 }

@@ -4,8 +4,10 @@ import Layout from '@/layouts/Layout.astro';
 import { getLangFromUrl } from '@/utils/lang';
 import { isPublicEntryInLanguage } from '@/lib/content-model';
 import projects from '@/data/projects';
+import { getWordPressArchiveEntries } from '@/lib/wordpress';
 
 const lang = getLangFromUrl(Astro.url);
+const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.lang === lang);
 
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'br' } }];
@@ -30,7 +32,7 @@ const projectEntries = projects.map((project) => ({
   external: true,
 }));
 
-const entries = [
+const localEntries = [
   ...projectEntries,
   ...posts
     .filter((entry) => isPublicEntryInLanguage(entry, lang))
@@ -105,6 +107,22 @@ const entries = [
       external: false,
     })),
 ].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
+
+const entries = wordpressEntries.length > 0
+  ? [
+      ...projectEntries,
+      ...wordpressEntries.map((entry) => ({
+        title: entry.title,
+        description: entry.description,
+        type: entry.type,
+        category: entry.category,
+        tags: entry.tags,
+        date: entry.date,
+        href: `/${lang}/archive/${entry.type}/${entry.slug.replace(/-en$/, '')}`,
+        external: false,
+      })),
+    ].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0))
+  : localEntries;
 
 const categories = [...new Set(entries.map((entry) => entry.category).filter(Boolean))].sort();
 const tags = [...new Set(entries.flatMap((entry) => entry.tags))].sort();
