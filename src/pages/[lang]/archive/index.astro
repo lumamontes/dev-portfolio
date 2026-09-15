@@ -1,0 +1,217 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import { getLangFromUrl } from '@/utils/lang';
+import { isPublicEntryInLanguage } from '@/lib/content-model';
+import projects from '@/data/projects';
+
+const lang = getLangFromUrl(Astro.url);
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'br' } }];
+}
+
+const [posts, books, learningNotes, zines, photos, music] = await Promise.all([
+  getCollection('posts'),
+  getCollection(lang === 'br' ? 'books-br' : 'books-en'),
+  getCollection('learning-notes'),
+  getCollection('zines'),
+  getCollection('photos'),
+  getCollection('music'),
+]);
+const projectEntries = projects.map((project) => ({
+  title: project.title,
+  description: project.description[lang],
+  type: 'project' as const,
+  category: 'Technology',
+  tags: project.techs,
+  date: undefined,
+  href: project.link,
+  external: true,
+}));
+
+const entries = [
+  ...projectEntries,
+  ...posts
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.description,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: entry.data.publishedAt,
+      href: `/${lang}/archive/text/${entry.slug.split('/').slice(1).join('/')}`,
+      external: false,
+    })),
+  ...books
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.author,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: undefined,
+      href: `/${lang}/archive/book/${entry.slug}`,
+      external: false,
+    })),
+  ...learningNotes
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.description,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: entry.data.publishedAt,
+      href: `/${lang}/archive/learning-note/${entry.slug}`,
+      external: false,
+    })),
+  ...zines
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.description,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: entry.data.date,
+      href: `/${lang}/archive/zine/${entry.slug}`,
+      external: false,
+    })),
+  ...photos
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.description,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: entry.data.date,
+      href: `/${lang}/archive/photo/${entry.slug}`,
+      external: false,
+    })),
+  ...music
+    .filter((entry) => isPublicEntryInLanguage(entry, lang))
+    .map((entry) => ({
+      title: entry.data.title,
+      description: entry.data.description,
+      type: entry.data.type,
+      category: entry.data.category,
+      tags: entry.data.tags,
+      date: entry.data.publishedAt,
+      href: `/${lang}/archive/music/${entry.slug}`,
+      external: false,
+    })),
+].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
+
+const categories = [...new Set(entries.map((entry) => entry.category).filter(Boolean))].sort();
+const tags = [...new Set(entries.flatMap((entry) => entry.tags))].sort();
+const labels = lang === 'br'
+  ? { title: 'Arquivo', description: 'Textos, leituras e tudo que estou construindo.', all: 'Tudo', type: 'Tipo', category: 'Categoria', tags: 'Tags', empty: 'Nenhuma entrada encontrada.' }
+  : { title: 'Archive', description: 'Writing, reading and everything I am making.', all: 'Everything', type: 'Type', category: 'Category', tags: 'Tags', empty: 'No entries found.' };
+---
+
+<Layout title={`${labels.title} - Luma Montes`} description={labels.description}>
+  <div class="mx-auto max-w-5xl space-y-10 py-8">
+    <header class="max-w-2xl space-y-4">
+      <p class="font-mono text-sm uppercase tracking-[0.3em] text-emerald-400">/ {lang}</p>
+      <h1 class="text-4xl font-bold tracking-tight text-white md:text-6xl">{labels.title}</h1>
+      <p class="text-lg leading-relaxed text-zinc-400">{labels.description}</p>
+    </header>
+
+    <section aria-label="Archive filters" class="flex flex-wrap items-center gap-3 border-y border-zinc-800/70 py-5">
+      <label class="sr-only" for="archive-type">{labels.type}</label>
+      <select id="archive-type" class="filter-control">
+        <option value="all">{labels.all}</option>
+        <option value="text">{lang === 'br' ? 'Textos' : 'Writing'}</option>
+        <option value="book">{lang === 'br' ? 'Livros' : 'Books'}</option>
+        <option value="learning-note">{lang === 'br' ? 'Aprendizados' : 'Learning notes'}</option>
+        <option value="project">{lang === 'br' ? 'Projetos' : 'Projects'}</option>
+        <option value="zine">Zines</option>
+        <option value="photo">{lang === 'br' ? 'Fotos' : 'Photos'}</option>
+        <option value="music">{lang === 'br' ? 'Música' : 'Music'}</option>
+      </select>
+      <label class="sr-only" for="archive-category">{labels.category}</label>
+      <select id="archive-category" class="filter-control">
+        <option value="all">{labels.category}: {labels.all}</option>
+        {categories.map((category) => <option value={category}>{category}</option>)}
+      </select>
+      <div class="flex flex-wrap gap-2" aria-label={labels.tags}>
+        {tags.map((tag) => <button type="button" class="tag-filter" data-tag={tag}>{tag}</button>)}
+      </div>
+    </section>
+
+    <p id="archive-empty" class="hidden py-16 text-center text-zinc-500">{labels.empty}</p>
+    <div id="archive-entries" class="grid gap-4 md:grid-cols-2">
+      {entries.map((entry) => (
+        <a href={entry.href} target={entry.external ? '_blank' : undefined} rel={entry.external ? 'noopener noreferrer' : undefined} class="archive-entry group rounded-lg border border-zinc-800 bg-zinc-900/40 p-6 transition hover:-translate-y-1 hover:border-emerald-400/50" data-type={entry.type} data-category={entry.category ?? ''} data-tags={entry.tags.join('|')}>
+          <div class="mb-8 flex items-start justify-between gap-4">
+            <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">{entry.type}</span>
+            {entry.date && <time class="text-xs text-zinc-500">{entry.date.toLocaleDateString(lang === 'br' ? 'pt-BR' : 'en-US', { year: 'numeric', month: 'short' })}</time>}
+          </div>
+          <h2 class="text-xl font-medium text-white group-hover:text-emerald-300">{entry.title}</h2>
+          <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
+          {entry.tags.length > 0 && <div class="mt-5 flex flex-wrap gap-2">{entry.tags.slice(0, 4).map((tag) => <span class="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-500">{tag}</span>)}</div>}
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const entries = [...document.querySelectorAll<HTMLElement>('.archive-entry')];
+  const type = document.querySelector<HTMLSelectElement>('#archive-type');
+  const category = document.querySelector<HTMLSelectElement>('#archive-category');
+  const tags = new Set<string>();
+  const empty = document.querySelector<HTMLElement>('#archive-empty');
+
+  function filterEntries() {
+    let visible = 0;
+    entries.forEach((entry) => {
+      const matchesType = !type?.value || type.value === 'all' || entry.dataset.type === type.value;
+      const matchesCategory = !category?.value || category.value === 'all' || entry.dataset.category === category.value;
+      const entryTags = (entry.dataset.tags ?? '').split('|');
+      const matchesTags = tags.size === 0 || [...tags].some((tag) => entryTags.includes(tag));
+      const show = matchesType && matchesCategory && matchesTags;
+      entry.hidden = !show;
+      if (show) visible += 1;
+    });
+    empty?.classList.toggle('hidden', visible > 0);
+  }
+
+  type?.addEventListener('change', filterEntries);
+  category?.addEventListener('change', filterEntries);
+  document.querySelectorAll<HTMLButtonElement>('.tag-filter').forEach((button) => {
+    button.addEventListener('click', () => {
+      const tag = button.dataset.tag;
+      if (!tag) return;
+      if (tags.has(tag)) {
+        tags.delete(tag);
+        button.classList.remove('active');
+      } else {
+        tags.add(tag);
+        button.classList.add('active');
+      }
+      filterEntries();
+    });
+  });
+</script>
+
+<style>
+  .filter-control, .tag-filter {
+    border: 1px solid rgb(63 63 70 / 0.8);
+    border-radius: 0.375rem;
+    background: rgb(24 24 27 / 0.8);
+    color: rgb(161 161 170);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  .filter-control:focus, .tag-filter:hover, .tag-filter.active {
+    border-color: rgb(52 211 153 / 0.7);
+    color: rgb(110 231 183);
+    outline: none;
+  }
+  .archive-entry[hidden] { display: none; }
+</style>

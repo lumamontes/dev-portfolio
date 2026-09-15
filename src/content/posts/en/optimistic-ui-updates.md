@@ -3,6 +3,9 @@ title: "Optimistic UI updates with React Native and React Query"
 publishedAt: 2025-02-28
 description: "About optmistic updates using a React Native app as example"
 isPublish: true
+editorialState: "published-here"
+visibility: "public"
+format: "long"
 lang: "en"
 tags: ["react-native", "react-query", "optimistic-updates", "ui-ux", "sqlite", "performance", "tutorial"]
 ---

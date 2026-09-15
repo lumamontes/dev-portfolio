@@ -1,11 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 import { getLangFromUrl, useTranslations } from '../../utils/lang';
 import { languages } from '../../data/ui';
-import BentoGrid from '../../components/BentoGrid.astro';
-import BackgroundEffects from '../../components/BackgroundEffects.astro';
-import GlobalStyles from '../../components/GlobalStyles.astro';
-import { getBentoItems } from '../../data/bentoItems';
+import projects from '../../data/projects';
+import presentation from '../../data/presentation';
+import { isPublicEntryInLanguage } from '../../lib/content-model';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -13,22 +13,652 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-// Get current time for dynamic content
-const currentTime = new Date().toLocaleTimeString('en-US', { 
-  hour12: false, 
-  hour: '2-digit', 
-  minute: '2-digit' 
-});
-
-const bentoItems = getBentoItems(t, currentTime);
+const featuredProjects = projects.slice(0, 4);
+const [posts, books] = await Promise.all([
+  getCollection('posts'),
+  getCollection(lang === 'br' ? 'books-br' : 'books-en'),
+]);
+const featuredArchive = [
+  ...posts.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({
+    title: entry.data.title,
+    description: entry.data.description,
+    type: entry.data.type,
+    href: `/${lang}/archive/text/${entry.slug.split('/').slice(1).join('/')}`,
+  })),
+  ...books.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({
+    title: entry.data.title,
+    description: entry.data.author,
+    type: entry.data.type,
+    href: `/${lang}/archive/book/${entry.slug}`,
+  })),
+].slice(0, 4);
 ---
 
-<Layout title={t('presentation.title')} description={t('presentation.description')}>
-  <BackgroundEffects />
-  <GlobalStyles />
+<Layout title={lang === 'br' ? 'Luma Montes' : 'Luma Montes'} description={t('presentation.description')}>
 
-  <section class="relative z-10">
-    <BentoGrid items={bentoItems} currentTime={currentTime} />
+<div class="homepage">
+  <!-- Geometric line accents -->
+  <div class="geo-lines" aria-hidden="true">
+    <div class="geo-line geo-line--v1"></div>
+    <div class="geo-line geo-line--v2"></div>
+    <div class="geo-line geo-line--h1"></div>
+    <div class="geo-line geo-line--accent"></div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__left">
+      <div class="hero__word-stack">
+        <span>code</span>
+        <span>forma</span>
+        <span>linha</span>
+        <span>reta</span>
+        <span>ponto</span>
+      </div>
+    </div>
+    <div class="hero__center">
+      <h1 class="hero__name">Luma<br/>Montes</h1>
+      <div class="hero__rule"></div>
+      <p class="hero__role">
+        {lang === 'br' ? 'engenheira de software' : 'software engineer'}
+      </p>
+      <p class="hero__creative">
+        {lang === 'br' ? 'escrevo, leio e construo coisas' : 'I write, read and make things'}
+      </p>
+      <p class="hero__location">
+        Macap&aacute;, Amap&aacute;
+      </p>
+    </div>
+    <div class="hero__right">
+      <div class="hero__links">
+        {presentation.socials.map((s) => (
+          <a href={s.link} target="_blank" rel="noopener noreferrer">{s.label}</a>
+        ))}
+      </div>
+    </div>
   </section>
+
+  <!-- About -->
+  <section class="about">
+    <div class="section-marker">
+      <span class="section-marker__number">01</span>
+      <div class="section-marker__line"></div>
+    </div>
+    <div class="about__content">
+      <p class="about__text">{t('about.description')}</p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects">
+    <div class="section-marker">
+      <span class="section-marker__number">02</span>
+      <div class="section-marker__line"></div>
+      <span class="section-marker__label">{lang === 'br' ? 'projetos' : 'projects'}</span>
+    </div>
+    <div class="projects__grid">
+      {featuredProjects.map((project, i) => (
+        <a href={project.link} target="_blank" rel="noopener noreferrer" class="project-item">
+          <div class="project-item__index">{String(i + 1).padStart(2, '0')}</div>
+          <div class="project-item__content">
+            <h3 class="project-item__title">{project.title}</h3>
+            <p class="project-item__desc">{lang === 'br' ? project.description.br : project.description.en}</p>
+            <div class="project-item__techs">
+              {project.techs.map((tech) => (
+                <span>{tech}</span>
+              ))}
+            </div>
+          </div>
+          <div class="project-item__arrow">&rarr;</div>
+        </a>
+      ))}
+    </div>
+    <a href={`/${lang}/projects`} class="projects__see-all">
+      {lang === 'br' ? 'ver todos' : 'see all'} &rarr;
+    </a>
+  </section>
+
+  <!-- Archive preview -->
+  <section class="projects archive-preview">
+    <div class="section-marker">
+      <span class="section-marker__number">03</span>
+      <div class="section-marker__line"></div>
+      <span class="section-marker__label">{lang === 'br' ? 'arquivo' : 'archive'}</span>
+    </div>
+    <div class="projects__grid">
+      {featuredArchive.map((entry, i) => (
+        <a href={entry.href} class="project-item">
+          <div class="project-item__index">{String(i + 1).padStart(2, '0')}</div>
+          <div class="project-item__content">
+            <span class="archive-type">{entry.type}</span>
+            <h3 class="project-item__title">{entry.title}</h3>
+            <p class="project-item__desc">{entry.description}</p>
+          </div>
+          <div class="project-item__arrow">&rarr;</div>
+        </a>
+      ))}
+    </div>
+    <a href={`/${lang}/archive`} class="projects__see-all">
+      {lang === 'br' ? 'explorar arquivo' : 'explore archive'} &rarr;
+    </a>
+  </section>
+
+  <!-- Now -->
+  <section class="now">
+    <div class="section-marker">
+      <span class="section-marker__number">04</span>
+      <div class="section-marker__line"></div>
+      <span class="section-marker__label">{lang === 'br' ? 'agora' : 'now'}</span>
+    </div>
+    <div class="now__grid">
+      <div class="now__card">
+        <span class="now__card-label">Arcotech</span>
+        <p class="now__card-role">Software Engineer II</p>
+        <p class="now__card-detail">{lang === 'br' ? 'Onboarding LMS &mdash; frontend, backend, migra\u00e7\u00e3o de dados' : 'Onboarding LMS &mdash; frontend, backend, data migration'}</p>
+      </div>
+      <div class="now__card">
+        <span class="now__card-label">Cuidaty</span>
+        <p class="now__card-role">{lang === 'br' ? 'Co-fundadora & Dev' : 'Co-founder & Dev'}</p>
+        <p class="now__card-detail">{lang === 'br' ? 'Plataforma de gest\u00e3o para cl\u00ednicas e profissionais de sa\u00fade' : 'Healthcare management platform for clinics and professionals'}</p>
+      </div>
+      <div class="now__card">
+        <span class="now__card-label">Pupunha Code</span>
+        <p class="now__card-role">{lang === 'br' ? 'Co-fundadora' : 'Co-founder'}</p>
+        <p class="now__card-detail">{lang === 'br' ? 'Comunidade de devs do Amap\u00e1 &mdash; eventos, meetups, open source' : 'Dev community in Amap\u00e1 &mdash; events, meetups, open source'}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connect -->
+  <section class="connect">
+    <div class="section-marker">
+      <span class="section-marker__number">05</span>
+      <div class="section-marker__line"></div>
+    </div>
+    <div class="connect__content">
+      <p class="connect__text">
+        {lang === 'br' ? 'Quer trocar ideia, colaborar ou s\u00f3 dar um al\u00f4?' : 'Want to chat, collaborate, or just say hi?'}
+      </p>
+      <div class="connect__links">
+        <a href={`mailto:${presentation.mail}`} class="connect__link">
+          {presentation.mail}
+        </a>
+        {presentation.socials.filter(s => s.label !== 'Email').map((s) => (
+          <a href={s.link} target="_blank" rel="noopener noreferrer" class="connect__link">
+            {s.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer mark -->
+  <footer class="footer-mark">
+    <div class="footer-mark__line"></div>
+    <span>quadrados s&atilde;o uma cidade</span>
+  </footer>
+</div>
+
 </Layout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500;600&display=swap');
+
+  .homepage {
+    font-family: 'Azeret Mono', monospace;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── Geometric lines ── */
+  .geo-lines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .geo-line {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .geo-line--v1 {
+    left: 8%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+
+  .geo-line--v2 {
+    right: 12%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+
+  .geo-line--h1 {
+    top: 45%;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .geo-line--accent {
+    top: 15%;
+    left: 4%;
+    width: 40px;
+    height: 3px;
+    background: #dc2626;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    min-height: 80vh;
+    align-items: center;
+    padding: 4rem 0;
+  }
+
+  .hero__left {
+    padding-left: 2rem;
+  }
+
+  .hero__word-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    text-transform: lowercase;
+    letter-spacing: 0.15em;
+    opacity: 0.35;
+    line-height: 1.6;
+  }
+
+  .hero__center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .hero__name {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .hero__rule {
+    width: 60px;
+    height: 3px;
+    background: #dc2626;
+  }
+
+  .hero__role {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.6;
+  }
+
+  .hero__location {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    opacity: 0.3;
+  }
+
+  .hero__creative {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    opacity: 0.45;
+  }
+
+  .hero__right {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 2rem;
+  }
+
+  .hero__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .hero__links a {
+    opacity: 0.4;
+    transition: opacity 0.2s, color 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .hero__links a:hover {
+    opacity: 1;
+    color: #dc2626;
+  }
+
+  /* ── Section markers ── */
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+
+  .section-marker__number {
+    font-size: 0.65rem;
+    opacity: 0.3;
+    letter-spacing: 0.1em;
+  }
+
+  .section-marker__line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .section-marker__label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.3;
+  }
+
+  /* ── About ── */
+  .about {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 0;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .about__text {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    opacity: 0.7;
+    font-weight: 300;
+  }
+
+  /* ── Projects ── */
+  .projects {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 0;
+  }
+
+  .projects__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-item {
+    display: grid;
+    grid-template-columns: 3rem 1fr 2rem;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.5rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s;
+  }
+
+  .project-item:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .project-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .project-item:hover .project-item__arrow {
+    opacity: 1;
+    color: #dc2626;
+    transform: translateX(4px);
+  }
+
+  .project-item:hover .project-item__title {
+    color: #dc2626;
+  }
+
+  .project-item__index {
+    font-size: 0.65rem;
+    opacity: 0.25;
+    padding-top: 0.2rem;
+  }
+
+  .project-item__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .project-item__title {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .archive-type {
+    color: #dc2626;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .project-item__desc {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .project-item__techs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .project-item__techs span {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.3;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .project-item__arrow {
+    opacity: 0;
+    transition: all 0.2s;
+    font-size: 1rem;
+    padding-top: 0.1rem;
+  }
+
+  .projects__see-all {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.4;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .projects__see-all:hover {
+    opacity: 1;
+    color: #dc2626;
+  }
+
+  /* ── Now ── */
+  .now {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 0;
+  }
+
+  .now__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0 1rem;
+  }
+
+  .now__card {
+    background: rgba(10, 10, 10, 0.95);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .now__card-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #dc2626;
+  }
+
+  .now__card-role {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .now__card-detail {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── Connect ── */
+  .connect {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 0;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .connect__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+
+  .connect__text {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    font-weight: 300;
+  }
+
+  .connect__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .connect__link {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s, color 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .connect__link:hover {
+    opacity: 1;
+    color: #dc2626;
+  }
+
+  /* ── Footer ── */
+  .footer-mark {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .footer-mark__line {
+    width: 1px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-mark span {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    opacity: 0.15;
+    text-transform: lowercase;
+    writing-mode: horizontal-tb;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 70vh;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .hero__left {
+      display: none;
+    }
+
+    .hero__right {
+      justify-content: center;
+      padding-right: 0;
+    }
+
+    .hero__links {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .hero__name {
+      font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+
+    .now__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-item {
+      grid-template-columns: 2rem 1fr;
+    }
+
+    .project-item__arrow {
+      display: none;
+    }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+</style>

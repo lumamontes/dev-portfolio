@@ -3,6 +3,9 @@ title: "Introdução básica ao framework Astro"
 publishedAt: 2023-08-13
 description: "Conheça o framework Astro: rapidez e modernidade na criação de sites! ✨🚀"
 isPublish: true
+editorialState: "published-here"
+visibility: "public"
+format: "long"
 lang: "br"
 tags: ["astro", "web-development", "framework", "performance", "mpa", "static-site", "tutorial"]
 ---

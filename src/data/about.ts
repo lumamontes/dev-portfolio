@@ -40,12 +40,12 @@ export const about: Record<'en' | 'br', AboutTranslations> = {
     'backend.skills': [
       'PHP',
       'Laravel',
+      'Kotlin',
       'Node.js',
       'PostgreSQL',
       'MySQL',
       'REST APIs',
-      'PHPUnit',
-      'Jest'
+      'Playwright'
     ],
 
     // Experience section
@@ -81,12 +81,12 @@ export const about: Record<'en' | 'br', AboutTranslations> = {
     'backend.skills': [
       'PHP',
       'Laravel',
+      'Kotlin',
       'Node.js',
       'PostgreSQL',
       'MySQL',
       'REST APIs',
-      'PHPUnit',
-      'Jest'
+      'Playwright'
     ],
 
     // Experience section
@@ -119,8 +119,32 @@ export const experiences: Record<'en' | 'br', {
         company: 'Arcotech',
         period: 'Dec 2023 - Present',
         location: 'Remote, Brazil',
-        description: 'Working on the Backoffice squad with a focus on frontend development.',
+        description: 'Full-stack engineer on the Onboarding LMS squad, driving architecture decisions and quality initiatives across frontend and backend.',
         responsibilities: [
+          'Designed the database architecture for the operational history service, adopted by the team',
+          'Built a CLI tool for data migration that processed 51k records, replacing weeks of manual work',
+          'Structured the E2E testing base with Playwright, covering 100+ critical flows',
+          'Defined the BFF response contract, eliminating frontend logic and reducing coupling',
+          'Led cross-squad performance discussions and frontend alignment sessions',
+          'Mentoring junior developers with structured growth plans',
+          'Identified and resolved 10 permission vulnerabilities in the access control system'
+        ],
+        type: 'development',
+        level: 'senior',
+        current: true
+      },
+      {
+        id: 'pupunha-code',
+        title: 'Co-Founder',
+        company: 'Pupunha Code',
+        period: 'Oct 2023 - Present',
+        location: 'Macap\u00e1, Brazil',
+        description: 'Co-founded a developer community in Amap\u00e1 to strengthen the Amazon region\'s tech ecosystem through events, meetups, open source projects, and mentorship.',
+        responsibilities: [
+          'Organizing meetups and tech talks for local developers',
+          'Building open source projects with the community',
+          'Mentoring early-career developers entering the tech industry',
+          'Growing a volunteer program with multiple contribution tracks'
         ],
         type: 'development',
         level: 'senior',
@@ -246,8 +270,32 @@ export const experiences: Record<'en' | 'br', {
         company: 'Arcotech',
         period: 'Dez 2023 - Presente',
         location: 'Remoto, Brasil',
-        description: 'Atuo no squad de Backoffice com foco em desenvolvimento frontend',
+        description: 'Engenheira full-stack no squad de Onboarding LMS, liderando decisões de arquitetura e iniciativas de qualidade em frontend e backend.',
         responsibilities: [
+          'Defini a arquitetura do banco de dados do serviço de histórico operacional, adotada pelo time',
+          'Desenvolvi CLI de migração de dados que processou 51 mil registros, substituindo semanas de trabalho manual',
+          'Estruturei a base de testes E2E com Playwright, cobrindo mais de 100 fluxos críticos',
+          'Defini o contrato de resposta do BFF, eliminando lógica do frontend e reduzindo acoplamento',
+          'Liderei discussões cross-squad sobre performance e alinhamento de frontend',
+          'Mentoria ativa de desenvolvedoras juniores com planos estruturados de crescimento',
+          'Identifiquei e resolvi 10 vulnerabilidades de permissionamento no sistema de controle de acesso'
+        ],
+        type: 'development',
+        level: 'senior',
+        current: true
+      },
+      {
+        id: 'pupunha-code',
+        title: 'Co-Fundadora',
+        company: 'Pupunha Code',
+        period: 'Out 2023 - Presente',
+        location: 'Macapá, Brasil',
+        description: 'Co-fundei uma comunidade de desenvolvedores no Amapá para fortalecer o ecossistema tech da região amazônica através de eventos, meetups, projetos open source e mentoria.',
+        responsibilities: [
+          'Organização de meetups e palestras técnicas para desenvolvedores locais',
+          'Construção de projetos open source com a comunidade',
+          'Mentoria de pessoas em início de carreira na área de tecnologia',
+          'Estruturação de programa de voluntariado com múltiplas frentes de atuação'
         ],
         type: 'development',
         level: 'senior',

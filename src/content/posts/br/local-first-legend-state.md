@@ -3,6 +3,9 @@ title: "Local-First com Legend State"
 publishedAt: 2025-05-25
 description: "Aprenda a implementar um app Local-First com sincronização automática usando Legend State."
 isPublish: true
+editorialState: "published-here"
+visibility: "public"
+format: "long"
 lang: "br"
 tags: ["react-native", "state-management", "local-first", "legend-state", "offline", "sync", "tutorial"]
 ---

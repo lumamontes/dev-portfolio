@@ -33,6 +33,26 @@ const lang = getLangFromUrl(Astro.url);
               }}>Posts</a
             >
           </li>
+          <li>/</li>
+          <li>
+            <a
+              href={`/${lang}/til`}
+              class:list={{
+                ["hover:text-neutral-100"]: true,
+                ["text-neutral-100"]: pathname.includes("/til"),
+              }}>TIL</a
+            >
+          </li>
+          <li>/</li>
+          <li>
+            <a
+              href={`/${lang}/archive`}
+              class:list={{
+                ["hover:text-neutral-100"]: true,
+                ["text-neutral-100"]: pathname.includes("/archive"),
+              }}>Archive</a
+            >
+          </li>
         </ul>
       </nav>
     </div>

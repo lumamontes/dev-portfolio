@@ -3,6 +3,9 @@ title: "Como criar um projeto Node com Typescript"
 publishedAt: 2023-12-31
 description: "Aprenda a criar um projeto Node com Typescript e Express"
 isPublish: true
+editorialState: "published-here"
+visibility: "public"
+format: "long"
 lang: "br"
 tags: ["nodejs", "typescript", "express", "setup", "backend", "tutorial"]
 ---

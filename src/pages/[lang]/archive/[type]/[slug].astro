@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import { isPublicEntryInLanguage } from '@/lib/content-model';
+
+export async function getStaticPaths() {
+  const [posts, booksEn, booksBr, learningNotes, zines, photos, music] = await Promise.all([
+    getCollection('posts'),
+    getCollection('books-en'),
+    getCollection('books-br'),
+    getCollection('learning-notes'),
+    getCollection('zines'),
+    getCollection('photos'),
+    getCollection('music'),
+  ]);
+
+  return [
+    ...posts.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'text', slug: entry.slug.split('/').slice(1).join('/') }, props: { entry } })),
+    ...booksEn.filter((entry) => isPublicEntryInLanguage(entry, 'en')).map((entry) => ({ params: { lang: 'en', type: 'book', slug: entry.slug }, props: { entry } })),
+    ...booksBr.filter((entry) => isPublicEntryInLanguage(entry, 'br')).map((entry) => ({ params: { lang: 'br', type: 'book', slug: entry.slug }, props: { entry } })),
+    ...learningNotes.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'learning-note', slug: entry.slug }, props: { entry } })),
+    ...zines.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'zine', slug: entry.slug }, props: { entry } })),
+    ...photos.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'photo', slug: entry.slug }, props: { entry } })),
+    ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: entry.slug }, props: { entry } })),
+  ];
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const isBook = entry.data.type === 'book';
+const isZine = entry.data.type === 'zine';
+const isPhoto = entry.data.type === 'photo';
+const isMusic = entry.data.type === 'music';
+const description = isBook ? entry.data.author : entry.data.description;
+---
+
+<Layout title={entry.data.title} description={description}>
+  <article class="mx-auto max-w-3xl py-12">
+    <a href={`/${entry.data.lang}/archive`} class="font-mono text-sm text-emerald-400 hover:text-emerald-300">← Archive</a>
+    <header class="mt-12 border-b border-zinc-800/70 pb-10">
+      <p class="font-mono text-sm uppercase tracking-[0.3em] text-emerald-400">{isBook ? 'book' : 'text'}</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">{entry.data.title}</h1>
+      <p class="mt-5 text-lg leading-relaxed text-zinc-400">{description}</p>
+      {isZine && <p class="mt-3 text-sm text-zinc-500">{entry.data.authors.join(' · ')}</p>}
+      {isPhoto && entry.data.place && <p class="mt-3 text-sm text-zinc-500">{entry.data.place}</p>}
+      {isMusic && <p class="mt-3 text-sm text-zinc-500">{entry.data.kind === 'automated' ? 'Automated listening log · Last.fm' : 'Authored music note'}</p>}
+    </header>
+    <div class="prose prose-invert mt-10 max-w-none prose-headings:text-white prose-a:text-emerald-400 prose-strong:text-white">
+      <Content />
+    </div>
+    {isPhoto && (
+      <div class="mt-10 grid gap-6 sm:grid-cols-2">
+        {entry.data.images.map((image) => (
+          <figure>
+            <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" class="w-full rounded-lg object-cover" />
+            {(image.caption || image.credit) && <figcaption class="mt-2 text-xs text-zinc-500">{image.caption}{image.caption && image.credit ? ' · ' : ''}{image.credit}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+    {isZine && (
+      <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+        Ler na Biblioteca de Zines ↗
+      </a>
+    )}
+    {isMusic && (
+      <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+        Ver publicação original ↗
+      </a>
+    )}
+  </article>
+</Layout>

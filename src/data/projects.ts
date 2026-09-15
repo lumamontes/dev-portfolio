@@ -22,6 +22,15 @@ const projectImages = {
 
 const projects: Project[] = [
   {
+    title: "Cuidaty",
+    techs: ["Laravel", "React", "Inertia.js", "PostgreSQL", "Tailwind CSS", "TypeScript"],
+    link: "https://cuidaty.com",
+    description: {
+      en: "A healthcare management platform for clinics, psychologists, and therapists. Features scheduling with WhatsApp reminders, electronic medical records, real-time messaging, financial management, and team control.",
+      br: "Plataforma de gestão para clínicas, psicólogos e terapeutas. Inclui agendamento com lembretes via WhatsApp, prontuário eletrônico, mensagens em tempo real, gestão financeira e controle de equipes.",
+    },
+  },
+  {
     title: "App Asset Generator",
     techs: ["Astro", "React", "Tailwind CSS", "TypeScript"],
     link: "https://github.com/lumamontes/app-asset-generator",

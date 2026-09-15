@@ -83,6 +83,7 @@ const postFieldsSchema = z.object({
   title: z.string().trim().min(1),
   publishedAt: validDateSchema,
   description: z.string().trim().min(1),
+  format: z.enum(['long', 'short']).default('long'),
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
   lang: languageSchema,
@@ -110,23 +111,118 @@ export const postSchema = postFieldsSchema.transform((entry) => {
   };
 });
 
-export const bookStatusSchema = z.enum([
-  'reading',
-  'completed',
-  'want-to-read',
-]);
+const learningNoteFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  publishedAt: validDateSchema,
+  description: z.string().trim().min(1),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+  sourceUrl: z.string().url().optional(),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const learningNoteSchema = learningNoteFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'learning-note',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
+
+const zineFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  authors: z.array(z.string().trim().min(1)).min(1),
+  description: z.string().trim().min(1),
+  context: z.string().trim().min(1),
+  date: validDateSchema.optional(),
+  cover: z.string().url().optional(),
+  externalUrl: z.string().url(),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const zineSchema = zineFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'zine',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
+
+const photoImageSchema = z.object({
+  src: z.string().trim().min(1),
+  alt: z.string().trim().min(1),
+  caption: z.string().trim().optional(),
+  credit: z.string().trim().optional(),
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+});
+
+const photoFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  images: z.array(photoImageSchema).min(1),
+  date: validDateSchema.optional(),
+  place: z.string().trim().optional(),
+  context: z.string().trim().optional(),
+  externalUrl: z.string().url().optional(),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const photoSchema = photoFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'photo',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
+
+const musicFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  publishedAt: validDateSchema,
+  description: z.string().trim().min(1),
+  kind: z.enum(['authored', 'automated']),
+  sourceUrl: z.string().url(),
+  image: z.string().url().optional(),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const musicSchema = musicFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'music',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
 
 export const bookFieldsSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().trim().min(1),
-  status: bookStatusSchema.optional(),
-  rating: z.number().min(1).max(5).optional(),
-  genre: z.array(tagSchema).default([]),
-  isbn: z.string().trim().min(1).optional(),
-  pages: z.number().int().positive().optional(),
-  dateStarted: validDateSchema.optional(),
-  dateCompleted: validDateSchema.optional(),
-  progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
   published: z.boolean().default(true),
 }).merge(optionalCanonicalFieldsSchema);
@@ -141,7 +237,7 @@ export const bookSchemaForLanguage = (lang: Language) =>
       fallbackEditorialState: book.published ? 'published-here' : 'draft',
       fallbackVisibility: book.published ? 'public' : 'private',
       category: book.category,
-      tags: book.genre,
+      tags: [],
     });
 
     return {
