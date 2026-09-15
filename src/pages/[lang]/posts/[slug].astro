@@ -3,13 +3,16 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import formatDate from "@/utils/formatDate";
 import { getLangFromUrl } from "@/utils/lang";
+import { isPublicEntryInLanguage } from "@/lib/content-model";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const paths = posts.map((post) => {
     const [lang, ...slug] = post.slug.split("/");
-    return { params: { lang, slug: slug.join("/") || undefined }, props: post };
-  });
+    return isPublicEntryInLanguage(post, lang as "en" | "br")
+      ? { params: { lang, slug: slug.join("/") || undefined }, props: post }
+      : null;
+  }).filter(Boolean);
   return paths;
 }
 

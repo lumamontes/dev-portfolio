@@ -29,6 +29,9 @@ export const visibilitySchema = z.enum(['public', 'private']);
 
 export const categorySchema = z.string().trim().min(1);
 export const tagSchema = z.string().trim().min(1);
+const validDateSchema = z.date().refine((date) => !Number.isNaN(date.getTime()), {
+  message: 'Date must be valid',
+});
 
 export const canonicalEntrySchema = z.object({
   type: entryTypeSchema,
@@ -78,7 +81,7 @@ function canonicalFields({
 
 const postFieldsSchema = z.object({
   title: z.string().trim().min(1),
-  publishedAt: z.date(),
+  publishedAt: validDateSchema,
   description: z.string().trim().min(1),
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
@@ -121,8 +124,8 @@ export const bookFieldsSchema = z.object({
   genre: z.array(tagSchema).default([]),
   isbn: z.string().trim().min(1).optional(),
   pages: z.number().int().positive().optional(),
-  dateStarted: z.date().optional(),
-  dateCompleted: z.date().optional(),
+  dateStarted: validDateSchema.optional(),
+  dateCompleted: validDateSchema.optional(),
   progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
   published: z.boolean().default(true),
@@ -152,3 +155,21 @@ export type EntryType = z.infer<typeof entryTypeSchema>;
 export type EditorialState = z.infer<typeof editorialStateSchema>;
 export type Visibility = z.infer<typeof visibilitySchema>;
 export type Language = z.infer<typeof languageSchema>;
+
+type PublishedEntry = {
+  data: {
+    visibility: Visibility;
+    lang: Language;
+  };
+};
+
+export function isPublicEntry(entry: PublishedEntry) {
+  return entry.data.visibility === 'public';
+}
+
+export function isPublicEntryInLanguage(
+  entry: PublishedEntry,
+  lang: Language,
+) {
+  return isPublicEntry(entry) && entry.data.lang === lang;
+}
