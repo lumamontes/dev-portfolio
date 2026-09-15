@@ -69,6 +69,16 @@ const server = createServer(async (request, response) => {
   console.log('WordPress token saved to .wordpress-token.json');
 });
 
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error('Port 4321 is already in use. Stop the Astro dev server or another process using it, then retry.');
+    process.exitCode = 1;
+    return;
+  }
+
+  throw error;
+});
+
 server.listen(4321, '127.0.0.1', () => {
   console.log('Opening WordPress authorization in your browser...');
   execFile('open', [authorizationUrl.toString()]);
