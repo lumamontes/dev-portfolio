@@ -4,9 +4,9 @@
 
 **Blocked by:** 01: Canonical Entry Model and Editorial Invariants.
 
-**Status:** completed
+**Status:** needs-info
 
 - [x] Private and unpublished entries never render publicly.
 - [x] Language-specific queries omit entries unavailable in that language.
 - [x] Public feeds use the same visibility and language rules.
-- [x] Representative invalid dates and malformed metadata fail clearly.
+- [ ] Representative invalid calendar dates fail clearly once the source date representation is corrected or its intended date is confirmed.
