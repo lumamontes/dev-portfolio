@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "wordpress:auth": "node --env-file=.env scripts/wordpress-auth.mjs"
+    "wordpress:auth": "node --env-file=.env scripts/wordpress-auth.mjs",
+    "wordpress:inventory": "node scripts/wordpress-migration-inventory.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^6.3.2",
