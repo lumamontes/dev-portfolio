@@ -40,6 +40,42 @@ export const canonicalEntrySchema = z.object({
   tags: z.array(tagSchema).default([]),
 });
 
+export const entrySchema = canonicalEntrySchema.extend({
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1).optional(),
+});
+
+type CanonicalFieldInput = {
+  type: EntryType;
+  lang: Language;
+  editorialState?: EditorialState;
+  visibility?: Visibility;
+  fallbackEditorialState: EditorialState;
+  fallbackVisibility: Visibility;
+  category?: string;
+  tags: string[];
+};
+
+function canonicalFields({
+  type,
+  lang,
+  editorialState,
+  visibility,
+  fallbackEditorialState,
+  fallbackVisibility,
+  category,
+  tags,
+}: CanonicalFieldInput) {
+  return canonicalEntrySchema.parse({
+    type,
+    lang,
+    editorialState: editorialState ?? fallbackEditorialState,
+    visibility: visibility ?? fallbackVisibility,
+    category,
+    tags,
+  });
+}
+
 const postFieldsSchema = z.object({
   title: z.string().trim().min(1),
   publishedAt: z.date(),
@@ -47,20 +83,26 @@ const postFieldsSchema = z.object({
   isPublish: z.boolean(),
   isDraft: z.boolean().default(false),
   lang: languageSchema,
+  editorialState: editorialStateSchema.optional(),
+  visibility: visibilitySchema.optional(),
+  category: categorySchema.optional(),
   tags: z.array(tagSchema).default([]),
 });
 
 export const postSchema = postFieldsSchema.transform((entry) => {
-  const canonicalFields = canonicalEntrySchema.parse({
+  const fields = canonicalFields({
     type: 'text',
     lang: entry.lang,
-    editorialState:
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState:
       entry.isPublish && !entry.isDraft ? 'published-here' : 'draft',
-    visibility: entry.isPublish && !entry.isDraft ? 'public' : 'private',
+    fallbackVisibility: entry.isPublish && !entry.isDraft ? 'public' : 'private',
+    category: entry.category,
     tags: entry.tags,
   });
 
-  return { ...entry, ...canonicalFields };
+  return { ...entry, ...fields };
 });
 
 export const bookStatusSchema = z.enum([
@@ -81,20 +123,26 @@ export const bookFieldsSchema = z.object({
   dateCompleted: z.date().optional(),
   progress: z.number().min(0).max(100).optional(),
   cover: z.string().url().optional(),
+  editorialState: editorialStateSchema.optional(),
+  visibility: visibilitySchema.optional(),
+  category: categorySchema.optional(),
   published: z.boolean().default(true),
 });
 
 export const bookSchemaForLanguage = (lang: Language) =>
   bookFieldsSchema.transform((book) => {
-    const canonicalFields = canonicalEntrySchema.parse({
+    const fields = canonicalFields({
       type: 'book',
       lang,
-      editorialState: book.published ? 'published-here' : 'draft',
-      visibility: book.published ? 'public' : 'private',
+      editorialState: book.editorialState,
+      visibility: book.visibility,
+      fallbackEditorialState: book.published ? 'published-here' : 'draft',
+      fallbackVisibility: book.published ? 'public' : 'private',
+      category: book.category,
       tags: book.genre,
     });
 
-    return { ...book, ...canonicalFields };
+    return { ...book, ...fields };
   });
 
 export type EntryType = z.infer<typeof entryTypeSchema>;
