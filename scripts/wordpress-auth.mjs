@@ -18,7 +18,7 @@ const authorizationUrl = new URL(authorizationEndpoint);
 authorizationUrl.searchParams.set('client_id', clientId);
 authorizationUrl.searchParams.set('redirect_uri', redirectUri);
 authorizationUrl.searchParams.set('response_type', 'code');
-authorizationUrl.searchParams.set('scope', 'posts,media,taxonomy');
+authorizationUrl.searchParams.set('scope', 'posts media taxonomy');
 authorizationUrl.searchParams.set('blog', 'tururu61.wordpress.com');
 authorizationUrl.searchParams.set('state', state);
 
