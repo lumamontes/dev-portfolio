@@ -88,6 +88,8 @@ export const postSchema = postFieldsSchema.transform((entry) => {
   const fields = canonicalFields({
     type: 'text',
     lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
     fallbackEditorialState:
       entry.isPublish && !entry.isDraft ? 'published-here' : 'draft',
     fallbackVisibility: entry.isPublish && !entry.isDraft ? 'public' : 'private',
@@ -132,6 +134,8 @@ export const bookSchemaForLanguage = (lang: Language) =>
     const fields = canonicalFields({
       type: 'book',
       lang,
+      editorialState: book.editorialState,
+      visibility: book.visibility,
       fallbackEditorialState: book.published ? 'published-here' : 'draft',
       fallbackVisibility: book.published ? 'public' : 'private',
       category: book.category,
