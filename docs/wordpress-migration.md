@@ -1,6 +1,6 @@
 # WordPress Migration Plan
 
-The migration is intentionally a separate step from the public API client. It must run only after the WordPress.com site exists and should never rewrite or delete the local sources automatically.
+The migration is intentionally a separate step from the public API client. It runs against the provisioned WordPress.com site and should never rewrite or delete the local sources automatically.
 
 ## Source Mapping
 
@@ -25,6 +25,12 @@ The migration is intentionally a separate step from the public API client. It mu
 - After import, compare title, slug, language, visibility, tags, external links and representative body content.
 - Do not cut Astro over to WordPress until the public API returns representative entries and the local fallback remains available.
 
+## Provisioned Target
+
+- WordPress.com site: `https://tururu61.wordpress.com/`
+- Public REST endpoint: `https://public-api.wordpress.com/wp/v2/sites/tururu61.wordpress.com/posts`
+- The public endpoint exposes only published entries; private editorial entries are not returned.
+
 ## Required Inputs
 
 - A provisioned WordPress.com site and its public REST posts endpoint.
@@ -32,4 +38,4 @@ The migration is intentionally a separate step from the public API client. It mu
 - Any custom fields that the Free editor cannot represent in the post body.
 - A reviewed list of media credits and selected photo assets.
 
-The importer is not run as part of `pnpm build`; this prevents a missing API, network failure or accidental credential from affecting local development or public static output.
+The importer is not run as part of `pnpm build`; this prevents a network failure or accidental credential from affecting local development or public static output. The Astro client uses the public endpoint at build time and falls back to local content when it is unavailable.
