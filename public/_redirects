@@ -1,0 +1,3 @@
+/br/books /br/archive 301
+/en/books /en/archive 301
+/:lang/books/:slug /:lang/archive/book/:slug 301
