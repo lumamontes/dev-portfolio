@@ -11,7 +11,8 @@
     "wordpress:auth": "node --env-file=.env scripts/wordpress-auth.mjs",
     "wordpress:inventory": "node scripts/wordpress-migration-inventory.mjs",
     "wordpress:migrate": "node --env-file=.env scripts/wordpress-migrate.mjs",
-    "wordpress:media": "node --env-file=.env scripts/wordpress-media.mjs"
+    "wordpress:media": "node --env-file=.env scripts/wordpress-media.mjs",
+    "wordpress:project": "node --env-file=.env scripts/wordpress-project.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^6.3.2",
