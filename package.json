@@ -13,7 +13,8 @@
     "wordpress:migrate": "node --env-file=.env scripts/wordpress-migrate.mjs",
     "wordpress:media": "node --env-file=.env scripts/wordpress-media.mjs",
     "wordpress:project": "node --env-file=.env scripts/wordpress-project.mjs",
-    "wordpress:playlists": "node --env-file=.env scripts/wordpress-playlists.mjs"
+    "wordpress:playlists": "node --env-file=.env scripts/wordpress-playlists.mjs",
+    "spotify:auth": "node --env-file=.env scripts/spotify-auth.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^6.3.2",

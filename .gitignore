@@ -18,6 +18,7 @@ pnpm-debug.log*
 .env.production
 .wordpress-token.json
 .wordpress-media.json
+.spotify-token.json
 
 # macOS-specific files
 .DS_Store
