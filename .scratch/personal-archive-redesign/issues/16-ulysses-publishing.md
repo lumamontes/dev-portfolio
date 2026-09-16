@@ -11,9 +11,9 @@
 - [x] Slug, excerpt, categories, tags and featured image behavior is documented.
 - [x] Updating an existing published entry is defined as an update by WordPress post identity.
 
-## Blocker
+## Remaining Manual Check
 
-Authentication and live publish/update verification require the WordPress.com site to be provisioned. No credentials or external connection were created.
+The WordPress.com site is provisioned. Authentication and live publish/update verification still require connecting Ulysses locally with a throwaway entry; no credentials are stored in the repository.
 
 ## Implementation Notes
 
