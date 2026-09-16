@@ -36,4 +36,4 @@ An entry may have one primary **category** and optional **tags**. The initial ca
 
 ## Publishing tools
 
-Markdown and VS Code are suitable starting points for writing. The long-term publishing system is a headless WordPress backend, with Astro as the public frontend and a writing client such as Ulysses as the primary authoring interface. WordPress.com can provide the initial free hosted backend; self-hosting is not required for the first phase. WordPress themes and WordPress frontend rendering are not part of the public experience.
+Markdown and VS Code are suitable starting points for writing. The initial free workflow uses Obsidian for local-first writing and WordPress.com for review and publishing, with Astro as the public frontend. WordPress.com can provide the initial free hosted backend; self-hosting is not required for the first phase. WordPress themes and WordPress frontend rendering are not part of the public experience.

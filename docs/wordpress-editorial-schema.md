@@ -29,7 +29,7 @@ WordPress.com Free can begin with standard posts, native categories/tags and med
 
 ## Editorial Rules
 
-- Ulysses publishes normal authored posts; it does not need to know about the Astro frontend.
+- The writing tool produces normal authored posts through WordPress.com; it does not need to know about the Astro frontend.
 - Draft, private and otherwise non-public entries are excluded by the API boundary.
 - `published-elsewhere` entries remain public only when their source URL is intentional.
 - Automated music entries are labeled as automated and never replace authored music writing.

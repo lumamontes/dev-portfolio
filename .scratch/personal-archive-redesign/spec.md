@@ -16,7 +16,7 @@ Redesign the Astro website as a unified personal archive with a distinctive, aut
 
 Consolidate content around a shared entry model that supports writing, learning notes, books, zines, projects, individual photos, photo albums and music entries. Begin with only the categories supported by current content, including Technology and Zines, and let future categories emerge from actual writing.
 
-Preserve existing URLs and current unstaged book work while migrating existing content into a single editorial system. Use WordPress.com Free as the initial hosted backend, with the option to move to self-hosted WordPress later, and Astro as the public frontend on free static hosting such as Cloudflare Pages. Use Ulysses as the preferred writing and publishing client. Keep WordPress themes and frontend rendering out of the public experience.
+Preserve existing URLs and current unstaged book work while migrating existing content into a single editorial system. Use WordPress.com Free as the initial hosted backend, with the option to move to self-hosted WordPress later, and Astro as the public frontend on free static hosting such as Cloudflare Pages. Use Obsidian for local-first writing and WordPress.com for review and publishing. Keep WordPress themes and frontend rendering out of the public experience.
 
 Support private editorial states independently from public visibility. A text can be an idea, draft, pitch, submission or work in editing without appearing publicly. Published external work can appear as an archive entry with an external publication link.
 
@@ -42,10 +42,10 @@ Support private editorial states independently from public visibility. A text ca
 18. As an editor, I want public visibility to be independent from editorial state, so that a text published externally can appear in the archive while a submitted text remains private.
 19. As an editor, I want to write initial drafts in Markdown and VS Code, so that the writing process remains portable and familiar.
 20. As an editor, I want to polish writing in an accessible visual editor, so that adding images, captions, links and metadata does not require code.
-21. As an editor, I want to publish or save WordPress posts from Ulysses, so that I can use a writing interface I enjoy instead of the WordPress editor.
+21. As an editor, I want to write in a comfortable local Markdown tool and publish through WordPress.com, so that I can keep a free, recoverable writing workflow.
 22. As an editor, I want to publish a post as a draft or published entry, so that I can control its public state from the writing workflow.
 23. As an editor, I want to define a slug, excerpt, category, tags and featured image before publishing, so that entries have complete presentation metadata.
-24. As an editor, I want to update a published entry from Ulysses when supported, so that revisions do not require returning to the WordPress editor.
+24. As an editor, I want to update a published entry without losing its WordPress identity, so that revisions do not create duplicate entries.
 25. As an editor, I want WordPress to store content, media, revisions and editorial metadata, so that the publishing system is resilient and portable.
 26. As a visitor, I want the public site to remain Astro-based, so that the frontend can have a distinctive design independent of WordPress themes.
 27. As an editor, I want current books to be migrated without losing reading status, ratings, metadata or notes, so that the existing book work is preserved.
@@ -98,7 +98,7 @@ Support private editorial states independently from public visibility. A text ca
 - The public Astro build consumes only public WordPress content. Private editorial content stays in WordPress and is never exposed through the public build.
 - The architecture must keep WordPress.com-specific assumptions behind a content access boundary so that migration to self-hosted WordPress remains possible.
 - WordPress is headless: the public frontend does not depend on WordPress themes, templates or frontend rendering.
-- The first authoring integration should use Ulysses' existing WordPress publishing support, including draft/published state, slug, excerpt, categories, tags, featured image and updates where supported.
+- The initial authoring workflow should use Obsidian for local Markdown writing and the WordPress.com editor for publishing metadata, drafts, media and final review.
 - The WordPress.com REST API is the initial Astro integration boundary because it avoids plugin requirements on the free hosted plan. WPGraphQL remains a future option if the shared content model requires it after prototyping.
 - WordPress admin is not the primary writing interface, but remains available for configuration, media and fields that an external writing client cannot manage.
 - The repository remains private while it contains unpublished personal writing. A future public-repository transition must account for Git history and must not expose private drafts.
@@ -122,12 +122,12 @@ Support private editorial states independently from public visibility. A text ca
 - Interactive music and hidden-experience tests should verify graceful behavior when APIs are unavailable, permissions are denied, data is stale or the user prefers reduced motion.
 - Accessibility checks should cover keyboard navigation, semantic labels, focus states, reduced motion and content readability for experimental elements.
 - The current repository has no established automated test suite, so the initial implementation should use Astro build/type validation plus focused content and route tests at the highest available seam.
-- Manual acceptance testing should cover Ulysses-to-WordPress draft publishing, WordPress-to-Astro build delivery, media upload, post update, private content exclusion and mobile browsing.
+- Manual acceptance testing should cover Markdown-to-WordPress transfer, WordPress-to-Astro build delivery, media upload, post update, private content exclusion and mobile browsing.
 
 ## Out of Scope
 
 - Creating a custom writing editor from scratch.
-- Replacing Ulysses with a bespoke CMS interface in the first implementation.
+- Creating a bespoke CMS or publishing bridge before an existing free workflow has been validated.
 - Making the repository public while it contains private writing or private Git history.
 - Defining a complete future taxonomy before new content exists.
 - Requiring every entry to have an English and Brazilian Portuguese version.
@@ -146,7 +146,7 @@ Support private editorial states independently from public visibility. A text ca
 - The current implementation has duplicated book routes and collection definitions, plus an incomplete TIL source. Migration should resolve these deliberately rather than layering another source on top.
 - WordPress.com Free provides hosted WordPress, unlimited posts/pages and 1 GB of media storage, but custom-domain and plugin requirements must be checked before relying on them. The public custom domain can remain on Cloudflare Pages.
 - Cloudflare Pages can build and deploy the Astro frontend from Git and supports preview deployments. It is not itself a WordPress/PHP host.
-- Ulysses' WordPress integration is strong for standard post metadata. Custom editorial fields may still require WordPress configuration or occasional admin use.
+- Obsidian is free for personal use and provides the writing environment; WordPress.com remains responsible for publishing metadata, media and editorial status on the free plan.
 - The current photo sites use static/gallery-oriented frontend stacks and external Cloudinary-hosted images; migration should preserve image credits, URLs and storage decisions rather than blindly copying assets.
 - The current music blog already contains authored music notes, embedded links/images and automatically generated Last.fm listening summaries. These are distinct migration sources and should receive different entry treatment.
 - The live listening feature should not be designed until its source, authentication model and privacy boundary are chosen.

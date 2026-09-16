@@ -15,5 +15,5 @@
 
 - Added `docs/wordpress-editorial-schema.md` with the portable WordPress.com Free mapping.
 - Standard posts, native categories/tags and the media library are the initial backend primitives.
-- Custom post types and registered REST fields remain an optional self-hosted evolution, not a dependency of Astro or Ulysses.
+- Custom post types and registered REST fields remain an optional self-hosted evolution, not a dependency of Astro or the free writing workflow.
 - The public frontend continues to consume the normalized boundary from `src/lib/wordpress.ts`.
