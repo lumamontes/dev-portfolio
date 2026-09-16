@@ -11,7 +11,8 @@ type TranslationKey<T> = T extends Record<string, any> ? keyof T[keyof T] : neve
 export function useTranslations<T extends Record<string, any>>(lang: keyof typeof ui, translations?: T) {
   if (!translations) {
     return function t(key: keyof typeof ui[typeof defaultLang]) {
-      return ui[lang][key] || ui[defaultLang][key];
+      const current = ui[lang] as typeof ui[typeof defaultLang];
+      return current[key] || ui[defaultLang][key];
     }
   }
 

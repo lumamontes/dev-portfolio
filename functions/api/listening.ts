@@ -14,7 +14,7 @@ interface SpotifyPlayback {
   } | null;
 }
 
-export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
+export const onRequestGet = async ({ env }: { env: Env }) => {
   if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET || !env.SPOTIFY_REFRESH_TOKEN) return new Response(null, { status: 204 });
   const credentials = btoa(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`);
   const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
