@@ -6,7 +6,7 @@ import { writeFile } from 'node:fs/promises';
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const redirectUri = 'http://127.0.0.1:4321/spotify/callback';
-const scope = 'user-read-currently-playing';
+const scope = 'user-read-currently-playing user-read-playback-state';
 
 if (!clientId || !clientSecret) {
   throw new Error('SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in .env');
