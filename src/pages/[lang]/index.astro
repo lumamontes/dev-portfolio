@@ -39,11 +39,23 @@ const copy = isBr
       </figure>
     </main>
     <footer class="home-footer">
-      <span>LM / 2026</span>
+      <button class="footer-mark" type="button" data-secret-toggle aria-expanded="false" aria-controls="secret-note" aria-label={isBr ? 'Revelar uma pequena surpresa' : 'Reveal a small surprise'}>LM / 2026</button>
       <a href={`mailto:${presentation.mail}`}>{presentation.mail}</a>
     </footer>
+    <p id="secret-note" class="secret-note" data-secret-note hidden>{isBr ? 'Você encontrou uma dobra secreta. Continue explorando.' : 'You found a hidden fold. Keep exploring.'}</p>
   </div>
 </Layout>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-secret-toggle]');
+  const note = document.querySelector<HTMLElement>('[data-secret-note]');
+  toggle?.addEventListener('click', () => {
+    if (!note) return;
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    note.hidden = expanded;
+  });
+</script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&display=swap');
@@ -69,6 +81,8 @@ const copy = isBr
   .visual-study figcaption { position: absolute; z-index: 5; right: 9%; bottom: 10%; max-width: 15rem; color: #111210; background: #dfff00; padding: .35rem .5rem; font-size: .65rem; transform: rotate(-5deg); }
   @keyframes drift { to { transform: rotate(346deg); } }
   .home-footer { display: flex; justify-content: space-between; flex: 0 0 3.5rem; align-items: flex-end; color: #666861; font-size: .72rem; padding-bottom: .8rem; }
+  .footer-mark { border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; } .footer-mark:hover, .footer-mark:focus-visible { color: #dfff00; } .footer-mark:focus-visible { outline: 2px solid #e8e7df; outline-offset: 4px; }
+  .secret-note { color: #dfff00; font-family: 'Atkinson Hyperlegible', Arial, sans-serif; font-size: .78rem; margin: 0 0 1rem; }
   .home-footer a { color: inherit; text-decoration: none; } .home-footer a:hover { color: #dfff00; }
   @media (max-width: 720px) { .home-page { height: calc(100svh - 4rem); min-height: 38rem; } .home-hero { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 2rem; padding: 1.5rem 0 0; } .home-copy { flex: 0 0 auto; } .place { margin-bottom: 1rem; } h1 { font-size: clamp(4.8rem, 23vw, 8rem); margin-bottom: 1.2rem; } .intro { font-size: .94rem; margin-bottom: 1.2rem; } .visual-study { align-self: center; width: min(78vw, 22rem); } .home-footer { flex-basis: 2.5rem; } }
   @media (prefers-reduced-motion: reduce) { .visual-lines { animation: none; } }
