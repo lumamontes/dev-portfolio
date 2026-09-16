@@ -18,6 +18,8 @@ No secret is required for the current local-content build. When WordPress is con
 
 Spotify live listening must use a server-side token exchange or a separately protected integration. Playlist links and public embeds do not require listening permissions.
 
+For the live listening Pages Function, add `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN` as encrypted production variables. The refresh token comes from `.spotify-token.json`; copy only its value into the Cloudflare secret, never into Git or a public variable.
+
 ## Domain
 
 After the first successful production deploy, attach `lumamontes.com` in Cloudflare Pages and verify that the generated sitemap uses the canonical domain.
