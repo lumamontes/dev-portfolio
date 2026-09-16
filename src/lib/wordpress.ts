@@ -18,13 +18,14 @@ export type WordPressPage = {
 export type WordPressArchiveEntry = {
   title: string;
   description: string;
-  type: 'text' | 'learning-note' | 'book' | 'zine' | 'photo' | 'music';
+  type: 'text' | 'learning-note' | 'book' | 'zine' | 'photo' | 'music' | 'project';
   lang: 'en' | 'br';
   slug: string;
   date: Date;
   tags: string[];
   category?: string;
   html: string;
+  externalUrl?: string;
 };
 
 export const WORDPRESS_API_URL =
@@ -128,7 +129,7 @@ export async function getWordPressArchiveEntries(fetcher: typeof fetch = fetch) 
       const terms = (post._embedded?.['wp:term'] ?? []).flat().map((term) => term.name).filter(Boolean) as string[];
       const typeTerm = terms.find((term) => term.startsWith('entry:'))?.slice(6);
       const langTerm = terms.find((term) => term.startsWith('lang:'))?.slice(5);
-      if (!typeTerm || !['text', 'learning-note', 'book', 'zine', 'photo', 'music'].includes(typeTerm) || !['en', 'br'].includes(langTerm ?? '')) return [];
+      if (!typeTerm || !['text', 'learning-note', 'book', 'zine', 'photo', 'music', 'project'].includes(typeTerm) || !['en', 'br'].includes(langTerm ?? '')) return [];
       return [{
         title: stripHtml(post.title?.rendered ?? post.slug),
         description: stripHtml(post.excerpt?.rendered ?? ''),
@@ -139,6 +140,7 @@ export async function getWordPressArchiveEntries(fetcher: typeof fetch = fetch) 
         tags: terms.filter((term) => !term.startsWith('entry:') && !term.startsWith('lang:')),
         category: terms.find((term) => !term.startsWith('entry:') && !term.startsWith('lang:')),
         html: post.content?.rendered ?? '',
+        externalUrl: post.content?.rendered?.match(/href="(https?:\/\/[^\"]+)"/)?.[1],
       }];
     });
   } catch {

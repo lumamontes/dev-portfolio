@@ -7,6 +7,7 @@ import PageBackground from '../../components/shared/PageBackground.astro';
 import PageHeader from '../../components/shared/PageHeader.astro';
 import ProjectsGrid from '../../components/projects/ProjectsGrid.astro';
 import ProjectsStyles from '../../components/projects/ProjectsStyles.astro';
+import { getWordPressArchiveEntries } from '../../lib/wordpress';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -14,7 +15,16 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const totalProjects = projects.length;
+const wordpressProjects = (await getWordPressArchiveEntries()).filter((entry) => entry.type === 'project' && entry.lang === lang);
+const displayedProjects = wordpressProjects.length > 0
+  ? wordpressProjects.map((entry) => ({
+      title: entry.title,
+      techs: entry.tags,
+      link: entry.externalUrl ?? '#',
+      description: { en: entry.lang === 'en' ? entry.description : '', br: entry.lang === 'br' ? entry.description : '' },
+    }))
+  : projects;
+const totalProjects = displayedProjects.length;
 ---
 
 <Layout title={t('nav.projects')} description={t('projects.description')}>
@@ -28,7 +38,7 @@ const totalProjects = projects.length;
     />
     
     <ProjectsGrid 
-      projects={projects}
+      projects={displayedProjects}
       lang={lang}
       allProjectsText={t('projects.all')}
       totalProjects={totalProjects}

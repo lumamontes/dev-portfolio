@@ -7,7 +7,7 @@ import projects from '@/data/projects';
 import { getWordPressArchiveEntries } from '@/lib/wordpress';
 
 const lang = getLangFromUrl(Astro.url);
-const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.lang === lang);
+const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.lang === lang && entry.type !== 'project');
 
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'br' } }];
