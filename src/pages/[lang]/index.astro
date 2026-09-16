@@ -38,13 +38,38 @@ const copy = isBr
         <figcaption>{copy.visual}</figcaption>
       </figure>
     </main>
+    <section class="listening-now" aria-labelledby="listening-title">
+      <span id="listening-title">{isBr ? 'ouvindo agora' : 'listening now'}</span>
+      <p data-listening>{isBr ? 'Nada tocando agora.' : 'Nothing is playing right now.'}</p>
+    </section>
     <footer class="home-footer">
       <button class="footer-mark" type="button" data-secret-toggle aria-expanded="false" aria-controls="secret-note" aria-label={isBr ? 'Revelar uma pequena surpresa' : 'Reveal a small surprise'}>LM / 2026</button>
       <a href={`mailto:${presentation.mail}`}>{presentation.mail}</a>
     </footer>
     <p id="secret-note" class="secret-note" data-secret-note hidden>{isBr ? 'Você encontrou uma dobra secreta. Continue explorando.' : 'You found a hidden fold. Keep exploring.'}</p>
-  </div>
+</div>
 </Layout>
+
+<script>
+  const listening = document.querySelector<HTMLElement>('[data-listening]');
+  if (listening) {
+    fetch('/api/listening')
+      .then((response) => response.status === 204 ? null : response.json())
+      .then((track) => {
+        if (!track) return;
+        listening.textContent = `${track.title} · ${track.artist}`;
+        if (track.url) {
+          const link = document.createElement('a');
+          link.href = track.url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = `${track.title} · ${track.artist}`;
+          listening.replaceChildren(link);
+        }
+      })
+      .catch(() => undefined);
+  }
+</script>
 
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('[data-secret-toggle]');
@@ -79,11 +104,13 @@ const copy = isBr
   .visual-lines { position: absolute; inset: -15%; z-index: 1; background: repeating-radial-gradient(ellipse at 45% 50%, transparent 0 18px, rgba(232,231,223,.8) 19px 20px, transparent 21px 37px); transform: rotate(-14deg); animation: drift 18s linear infinite; }
   .visual-ring { position: absolute; z-index: 4; inset: 14%; width: 72%; height: 72%; border: 2px solid #e8e7df; border-radius: 50%; mix-blend-mode: exclusion; }
   .visual-study figcaption { position: absolute; z-index: 5; right: 9%; bottom: 10%; max-width: 15rem; color: #111210; background: #dfff00; padding: .35rem .5rem; font-size: .65rem; transform: rotate(-5deg); }
+  .listening-now { display: flex; align-items: baseline; gap: 1rem; border-top: 1px solid #3b3c37; padding: .8rem 0; color: #dfff00; font: .78rem 'Atkinson Hyperlegible', Arial, sans-serif; }
+  .listening-now p { color: #a6a79e; margin: 0; } .listening-now a { color: inherit; text-decoration: none; } .listening-now a:hover { color: #e8e7df; }
   @keyframes drift { to { transform: rotate(346deg); } }
   .home-footer { display: flex; justify-content: space-between; flex: 0 0 3.5rem; align-items: flex-end; color: #666861; font-size: .72rem; padding-bottom: .8rem; }
   .footer-mark { border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; } .footer-mark:hover, .footer-mark:focus-visible { color: #dfff00; } .footer-mark:focus-visible { outline: 2px solid #e8e7df; outline-offset: 4px; }
   .secret-note { color: #dfff00; font-family: 'Atkinson Hyperlegible', Arial, sans-serif; font-size: .78rem; margin: 0 0 1rem; }
   .home-footer a { color: inherit; text-decoration: none; } .home-footer a:hover { color: #dfff00; }
-  @media (max-width: 720px) { .home-page { height: calc(100svh - 4rem); min-height: 38rem; } .home-hero { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 2rem; padding: 1.5rem 0 0; } .home-copy { flex: 0 0 auto; } .place { margin-bottom: 1rem; } h1 { font-size: clamp(4.8rem, 23vw, 8rem); margin-bottom: 1.2rem; } .intro { font-size: .94rem; margin-bottom: 1.2rem; } .visual-study { align-self: center; width: min(78vw, 22rem); } .home-footer { flex-basis: 2.5rem; } }
+  @media (max-width: 720px) { .home-page { height: calc(100svh - 4rem); min-height: 38rem; } .home-hero { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 2rem; padding: 1.5rem 0 0; } .home-copy { flex: 0 0 auto; } .place { margin-bottom: 1rem; } h1 { font-size: clamp(4.8rem, 23vw, 8rem); margin-bottom: 1.2rem; } .intro { font-size: .94rem; margin-bottom: 1.2rem; } .visual-study { align-self: center; width: min(78vw, 22rem); } .listening-now { display: block; } .listening-now p { margin-top: .35rem; } .home-footer { flex-basis: 2.5rem; } }
   @media (prefers-reduced-motion: reduce) { .visual-lines { animation: none; } }
 </style>
