@@ -8,228 +8,51 @@ import { getWordPressArchiveEntries } from '@/lib/wordpress';
 
 const lang = getLangFromUrl(Astro.url);
 const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.lang === lang && entry.type !== 'project');
-
-export function getStaticPaths() {
-  return [{ params: { lang: 'en' } }, { params: { lang: 'br' } }];
-}
-
+export function getStaticPaths() { return [{ params: { lang: 'en' } }, { params: { lang: 'br' } }]; }
 const [posts, books, learningNotes, zines, photos, music] = await Promise.all([
-  getCollection('posts'),
-  getCollection(lang === 'br' ? 'books-br' : 'books-en'),
-  getCollection('learning-notes'),
-  getCollection('zines'),
-  getCollection('photos'),
-  getCollection('music'),
+  getCollection('posts'), getCollection(lang === 'br' ? 'books-br' : 'books-en'), getCollection('learning-notes'), getCollection('zines'), getCollection('photos'), getCollection('music'),
 ]);
-const projectEntries = projects.map((project) => ({
-  title: project.title,
-  description: project.description[lang],
-  type: 'project' as const,
-  category: 'Technology',
-  tags: project.techs,
-  date: undefined,
-  href: project.link,
-  external: true,
-}));
-
+const projectEntries = projects.map((project) => ({ title: project.title, description: project.description[lang], type: 'project' as const, category: 'Technology', tags: project.techs, date: undefined, href: project.link, external: true }));
 const localEntries = [
   ...projectEntries,
-  ...posts
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.description,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: entry.data.publishedAt,
-      href: `/${lang}/archive/text/${entry.slug.split('/').slice(1).join('/')}`,
-      external: false,
-    })),
-  ...books
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.author,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: undefined,
-      href: `/${lang}/archive/book/${entry.slug}`,
-      external: false,
-    })),
-  ...learningNotes
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.description,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: entry.data.publishedAt,
-      href: `/${lang}/archive/learning-note/${entry.slug}`,
-      external: false,
-    })),
-  ...zines
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.description,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: entry.data.date,
-      href: `/${lang}/archive/zine/${entry.slug}`,
-      external: false,
-    })),
-  ...photos
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.description,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: entry.data.date,
-      href: `/${lang}/archive/photo/${entry.slug}`,
-      external: false,
-    })),
-  ...music
-    .filter((entry) => isPublicEntryInLanguage(entry, lang))
-    .map((entry) => ({
-      title: entry.data.title,
-      description: entry.data.description,
-      type: entry.data.type,
-      category: entry.data.category,
-      tags: entry.data.tags,
-      date: entry.data.publishedAt,
-      href: `/${lang}/archive/music/${entry.slug}`,
-      external: false,
-    })),
+  ...posts.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.description, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: entry.data.publishedAt, href: `/${lang}/archive/text/${entry.slug.split('/').slice(1).join('/')}`, external: false })),
+  ...books.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.author, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: undefined, href: `/${lang}/archive/book/${entry.slug}`, external: false })),
+  ...learningNotes.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.description, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: entry.data.publishedAt, href: `/${lang}/archive/learning-note/${entry.slug}`, external: false })),
+  ...zines.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.description, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: entry.data.date, href: `/${lang}/archive/zine/${entry.slug}`, external: false })),
+  ...photos.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.description, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: entry.data.date, href: `/${lang}/archive/photo/${entry.slug}`, external: false })),
+  ...music.filter((entry) => isPublicEntryInLanguage(entry, lang)).map((entry) => ({ title: entry.data.title, description: entry.data.description, type: entry.data.type, category: entry.data.category, tags: entry.data.tags, date: entry.data.publishedAt, href: `/${lang}/archive/music/${entry.slug}`, external: false })),
 ].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
-
-const entries = wordpressEntries.length > 0
-  ? [
-      ...projectEntries,
-      ...wordpressEntries.map((entry) => ({
-        title: entry.title,
-        description: entry.description,
-        type: entry.type,
-        category: entry.category,
-        tags: entry.tags,
-        date: entry.date,
-        href: `/${lang}/archive/${entry.type}/${entry.slug.replace(/-en$/, '')}`,
-        external: false,
-      })),
-    ].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0))
-  : localEntries;
-
+const entries = wordpressEntries.length > 0 ? [...projectEntries, ...wordpressEntries.map((entry) => ({ title: entry.title, description: entry.description, type: entry.type, category: entry.category, tags: entry.tags, date: entry.date, href: `/${lang}/archive/${entry.type}/${entry.slug.replace(/-en$/, '')}`, external: false }))].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0)) : localEntries;
 const categories = [...new Set(entries.map((entry) => entry.category).filter(Boolean))].sort();
 const tags = [...new Set(entries.flatMap((entry) => entry.tags))].sort();
-const labels = lang === 'br'
-  ? { title: 'Arquivo', description: 'Textos, leituras e tudo que estou construindo.', all: 'Tudo', type: 'Tipo', category: 'Categoria', tags: 'Tags', empty: 'Nenhuma entrada encontrada.' }
-  : { title: 'Archive', description: 'Writing, reading and everything I am making.', all: 'Everything', type: 'Type', category: 'Category', tags: 'Tags', empty: 'No entries found.' };
+const labels = lang === 'br' ? { title: 'Arquivo', description: 'Coisas que escrevi, li, fiz e ainda estou tentando entender.', all: 'Tudo', type: 'Filtrar por tipo', category: 'Filtrar por categoria', empty: 'Nada aqui ainda.' } : { title: 'Archive', description: 'Things I wrote, read, made, and am still trying to understand.', all: 'Everything', type: 'Filter by type', category: 'Filter by category', empty: 'Nothing here yet.' };
+const cleanText = (value: string) => value.replace(/&nbsp;/g, ' ').replace(/&hellip;/g, '...').replace(/&amp;/g, '&').replace(/&rsquo;/g, "'");
 ---
-
-<Layout title={`${labels.title} - Luma Montes`} description={labels.description}>
-  <div class="mx-auto max-w-5xl space-y-10 py-8">
-    <header class="max-w-2xl space-y-4">
-      <p class="font-mono text-sm uppercase tracking-[0.3em] text-emerald-400">/ {lang}</p>
-      <h1 class="text-4xl font-bold tracking-tight text-white md:text-6xl">{labels.title}</h1>
-      <p class="text-lg leading-relaxed text-zinc-400">{labels.description}</p>
-    </header>
-
-    <section aria-label="Archive filters" class="flex flex-wrap items-center gap-3 border-y border-zinc-800/70 py-5">
-      <label class="sr-only" for="archive-type">{labels.type}</label>
-      <select id="archive-type" class="filter-control">
-        <option value="all">{labels.all}</option>
-        <option value="text">{lang === 'br' ? 'Textos' : 'Writing'}</option>
-        <option value="book">{lang === 'br' ? 'Livros' : 'Books'}</option>
-        <option value="learning-note">{lang === 'br' ? 'Aprendizados' : 'Learning notes'}</option>
-        <option value="project">{lang === 'br' ? 'Projetos' : 'Projects'}</option>
-        <option value="zine">Zines</option>
-        <option value="photo">{lang === 'br' ? 'Fotos' : 'Photos'}</option>
-        <option value="music">{lang === 'br' ? 'Música' : 'Music'}</option>
-      </select>
-      <label class="sr-only" for="archive-category">{labels.category}</label>
-      <select id="archive-category" class="filter-control">
-        <option value="all">{labels.category}: {labels.all}</option>
-        {categories.map((category) => <option value={category}>{category}</option>)}
-      </select>
-      <div class="flex flex-wrap gap-2" aria-label={labels.tags}>
-        {tags.map((tag) => <button type="button" class="tag-filter" data-tag={tag}>{tag}</button>)}
-      </div>
+<Layout title={`${labels.title} / Luma Montes`} description={labels.description}>
+  <div class="archive-page">
+    <header class="archive-header"><p class="archive-kicker">{lang === 'br' ? 'um arquivo sem ordem perfeita' : 'an archive without perfect order'}</p><h1>{labels.title}</h1><p>{labels.description}</p></header>
+    <section class="archive-filters" aria-label="Archive filters">
+      <label><span>{labels.type}</span><select id="archive-type"><option value="all">{labels.all}</option><option value="text">Writing</option><option value="book">Books</option><option value="learning-note">Learning notes</option><option value="project">Projects</option><option value="zine">Zines</option><option value="photo">Photos</option><option value="music">Music</option></select></label>
+      <span class="archive-total">{entries.length} {lang === 'br' ? 'entradas' : 'entries'}</span>
     </section>
-
-    <p id="archive-empty" class="hidden py-16 text-center text-zinc-500">{labels.empty}</p>
-    <div id="archive-entries" class="grid gap-4 md:grid-cols-2">
-      {entries.map((entry) => (
-        <a href={entry.href} target={entry.external ? '_blank' : undefined} rel={entry.external ? 'noopener noreferrer' : undefined} class="archive-entry group rounded-lg border border-zinc-800 bg-zinc-900/40 p-6 transition hover:-translate-y-1 hover:border-emerald-400/50" data-type={entry.type} data-category={entry.category ?? ''} data-tags={entry.tags.join('|')}>
-          <div class="mb-8 flex items-start justify-between gap-4">
-            <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">{entry.type}</span>
-            {entry.date && <time class="text-xs text-zinc-500">{entry.date.toLocaleDateString(lang === 'br' ? 'pt-BR' : 'en-US', { year: 'numeric', month: 'short' })}</time>}
-          </div>
-          <h2 class="text-xl font-medium text-white group-hover:text-emerald-300">{entry.title}</h2>
-          <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
-          {entry.tags.length > 0 && <div class="mt-5 flex flex-wrap gap-2">{entry.tags.slice(0, 4).map((tag) => <span class="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-500">{tag}</span>)}</div>}
-        </a>
-      ))}
+    <p id="archive-empty" hidden>{labels.empty}</p>
+    <div id="archive-entries" class="timeline">
+      {entries.map((entry) => <a href={entry.href} target={entry.external ? '_blank' : undefined} rel={entry.external ? 'noopener noreferrer' : undefined} class="timeline-entry" data-type={entry.type}><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-meta"><span>{entry.type}</span>{entry.date && <time>{entry.date.toLocaleDateString(lang === 'br' ? 'pt-BR' : 'en-US', { year: 'numeric', month: 'short' })}</time>}</div><div class="timeline-body"><h2>{cleanText(entry.title)}</h2><p>{cleanText(entry.description)}</p></div></a>)}
     </div>
   </div>
 </Layout>
-
 <script>
-  const entries = [...document.querySelectorAll<HTMLElement>('.archive-entry')];
-  const type = document.querySelector<HTMLSelectElement>('#archive-type');
-  const category = document.querySelector<HTMLSelectElement>('#archive-category');
-  const tags = new Set<string>();
-  const empty = document.querySelector<HTMLElement>('#archive-empty');
-
-  function filterEntries() {
-    let visible = 0;
-    entries.forEach((entry) => {
-      const matchesType = !type?.value || type.value === 'all' || entry.dataset.type === type.value;
-      const matchesCategory = !category?.value || category.value === 'all' || entry.dataset.category === category.value;
-      const entryTags = (entry.dataset.tags ?? '').split('|');
-      const matchesTags = tags.size === 0 || [...tags].some((tag) => entryTags.includes(tag));
-      const show = matchesType && matchesCategory && matchesTags;
-      entry.hidden = !show;
-      if (show) visible += 1;
-    });
-    empty?.classList.toggle('hidden', visible > 0);
-  }
-
+  const entries = [...document.querySelectorAll<HTMLElement>('.timeline-entry')]; const type = document.querySelector<HTMLSelectElement>('#archive-type'); const empty = document.querySelector<HTMLElement>('#archive-empty');
+  function filterEntries() { let visible = 0; entries.forEach((entry) => { const show = !type?.value || type.value === 'all' || entry.dataset.type === type.value; entry.hidden = !show; if (show) visible++; }); if (empty) empty.hidden = visible > 0; }
   type?.addEventListener('change', filterEntries);
-  category?.addEventListener('change', filterEntries);
-  document.querySelectorAll<HTMLButtonElement>('.tag-filter').forEach((button) => {
-    button.addEventListener('click', () => {
-      const tag = button.dataset.tag;
-      if (!tag) return;
-      if (tags.has(tag)) {
-        tags.delete(tag);
-        button.classList.remove('active');
-      } else {
-        tags.add(tag);
-        button.classList.add('active');
-      }
-      filterEntries();
-    });
-  });
 </script>
-
 <style>
-  .filter-control, .tag-filter {
-    border: 1px solid rgb(63 63 70 / 0.8);
-    border-radius: 0.375rem;
-    background: rgb(24 24 27 / 0.8);
-    color: rgb(161 161 170);
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-  }
-  .filter-control:focus, .tag-filter:hover, .tag-filter.active {
-    border-color: rgb(52 211 153 / 0.7);
-    color: rgb(110 231 183);
-    outline: none;
-  }
-  .archive-entry[hidden] { display: none; }
+  .archive-page { max-width: 980px; padding: 5rem 3rem 8rem; margin: 2rem auto 0; background: #e8e7df; color: #111210; } .archive-header { max-width: 620px; margin-bottom: 5rem; } .archive-kicker { color: #713bff; font-size: .8rem; margin-bottom: 2rem; } .archive-header h1 { font-size: clamp(6rem, 15vw, 12rem); margin-bottom: 2rem; color: #111210; } .archive-header > p:last-child { color: #4d4e48; font-size: 1.1rem; line-height: 1.5; max-width: 30rem; }
+  .archive-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; border-top: 1px solid #aaa9a1; border-bottom: 1px solid #aaa9a1; padding: 1rem 0; margin-bottom: 4rem; } .archive-filters label { display: flex; flex-direction: column; gap: .4rem; } .archive-filters label span { color: #5e5f59; font-size: .7rem; } select, .tag-filter { color: #111210; background: #e8e7df; border: 1px solid #6b6c65; padding: .5rem .65rem; font: .78rem 'Atkinson Hyperlegible', sans-serif; } select:focus, .tag-filter:focus { outline: 2px solid #713bff; outline-offset: 2px; } .tag-filters { display: flex; flex-wrap: wrap; gap: .4rem; } .tag-filter { color: #4d4e48; border-color: #aaa9a1; cursor: pointer; } .tag-filter:hover, .tag-filter.active { color: #e8e7df; background: #713bff; border-color: #713bff; }
+  .timeline { position: relative; } .timeline::before { content: ''; position: absolute; left: 7rem; top: 0; bottom: 0; width: 1px; background: #aaa9a1; } .timeline-entry { display: grid; grid-template-columns: 7rem 1fr; column-gap: 2rem; position: relative; padding: 0 0 3.2rem; text-decoration: none; color: inherit; } .timeline-entry:nth-child(even) .timeline-body { transform: translateX(4rem); } .timeline-dot { position: absolute; left: calc(7rem - 4px); top: .2rem; width: 9px; height: 9px; background: #e8e7df; border: 1px solid #713bff; } .timeline-meta { display: flex; flex-direction: column; gap: .4rem; color: #713bff; font-size: .75rem; padding-top: .05rem; } .timeline-meta time { color: #6b6c65; } .timeline-body { max-width: 580px; } .timeline-body h2 { font: 500 clamp(1.8rem, 4vw, 3rem)/.95 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: -.02em; margin-bottom: .65rem; } .timeline-body p { color: #4d4e48; line-height: 1.5; max-width: 42rem; } .timeline-body small { display: block; color: #6b6c65; margin-top: .8rem; font-size: .72rem; } .timeline-entry:hover .timeline-body h2 { color: #713bff; } .timeline-entry:hover .timeline-dot { background: #dfff00; border-color: #111210; } .timeline-entry[hidden] { display: none; } #archive-empty { color: #4d4e48; padding: 3rem 0; }
+  @media (max-width: 720px) { .archive-page { padding: 3rem 1rem 6rem; margin-top: 1rem; } .archive-header { margin-bottom: 3rem; } .archive-header h1 { font-size: 6rem; } .archive-filters { align-items: stretch; flex-direction: column; } .archive-filters label { align-items: stretch; } .timeline::before { left: .25rem; } .timeline-entry { display: block; padding-left: 2rem; } .timeline-dot { left: 0; } .timeline-entry:nth-child(even) .timeline-body { transform: none; } .timeline-meta { flex-direction: row; gap: 1rem; margin-bottom: .7rem; } }
+  .archive-total { color: #6b6c65; font-size: .78rem; margin-left: auto; padding-bottom: .55rem; }
+  .timeline-entry:nth-child(even) .timeline-body { transform: none; }
+  .timeline-entry { padding-bottom: 2.4rem; }
+  @media (max-width: 720px) { .archive-total { margin-left: 0; } }
 </style>

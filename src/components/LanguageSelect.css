@@ -1,5 +1,5 @@
 .language-select-wrapper {
-	color: var(--theme-text-light);
+	color: #777970;
 	position: relative;
 }
 
@@ -12,8 +12,9 @@
 }
 
 .language-select {
-	--background-color-default: var(--theme-divider);
-	--border-color-default: var(--theme-divider);
+	background-color: #111210;
+	border: 0;
+	color: currentColor;
 	width: 100%;
 	max-width: 18ch;
 	overflow: hidden;
@@ -31,7 +32,8 @@
 }
 
 .language-select option {
-	background-color: var(--theme-bg);
+	background-color: #111210;
+	color: #e8e7df;
 }
 
 [dir='rtl'] .language-select {

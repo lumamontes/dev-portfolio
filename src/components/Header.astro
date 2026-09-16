@@ -1,60 +1,33 @@
 ---
-import removeTrailingSlash from "../utils/removeTrailingSlash";
-import presentation from "../data/presentation";
+import removeTrailingSlash from '../utils/removeTrailingSlash';
 import LanguagePicker from './LanguagePicker.astro';
-import { getLangFromUrl } from "../utils/lang";
+import { getLangFromUrl } from '../utils/lang';
 
 const pathname = removeTrailingSlash(Astro.url.pathname);
 const lang = getLangFromUrl(Astro.url);
+const homePath = `/${lang === 'br' ? '' : lang}`;
 ---
-<header class="sticky top-0 z-50 w-full backdrop-blur-[2px] border-b border-zinc-800/50">
-  <nav class="container flex items-center h-14 py-12">
-    <div class="flex w-full flex-col gap-2 md:flex-row md:justify-between md:items-center">
-      <LanguagePicker />
 
-      <nav role="navigation">
-        <ul role="list" class="flex flex-row gap-2">
-          <li>
-            <a
-              href={`/${lang === "br" ? "" : lang}`}
-              class:list={{
-                ["hover:text-neutral-100"]: true,
-                ["text-neutral-100"]: pathname === "/",
-              }}>Home</a
-            >
-          </li>
-          <li>/</li>
-          <li>
-            <a
-              href={`/${lang}/posts`}
-              class:list={{
-                ["hover:text-neutral-100"]: true,
-                ["text-neutral-100"]: pathname === "/posts",
-              }}>Posts</a
-            >
-          </li>
-          <li>/</li>
-          <li>
-            <a
-              href={`/${lang}/til`}
-              class:list={{
-                ["hover:text-neutral-100"]: true,
-                ["text-neutral-100"]: pathname.includes("/til"),
-              }}>TIL</a
-            >
-          </li>
-          <li>/</li>
-          <li>
-            <a
-              href={`/${lang}/archive`}
-              class:list={{
-                ["hover:text-neutral-100"]: true,
-                ["text-neutral-100"]: pathname.includes("/archive"),
-              }}>Archive</a
-            >
-          </li>
-        </ul>
-      </nav>
+<header class="site-header">
+  <nav aria-label="Primary navigation">
+    <a class="wordmark" href={homePath} aria-label="Luma Montes home">luma<span>.</span></a>
+    <div class="header-links">
+      <a class:list={{ active: pathname === homePath || (lang === 'br' && pathname === '/') }} href={homePath}>home</a>
+      <a class:list={{ active: pathname.includes('/archive') }} href={`/${lang}/archive`}>archive</a>
+      <a class:list={{ active: pathname.includes('/projects') }} href={`/${lang}/projects`}>work</a>
     </div>
+    <LanguagePicker />
   </nav>
 </header>
+
+<style>
+  .site-header { width: min(1180px, calc(100% - 3rem)); margin: 0 auto; border-bottom: 1px solid #3b3c37; }
+  .site-header nav { height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+  .wordmark { color: #e8e7df; font: 600 2rem/.8 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: -.05em; text-decoration: none; }
+  .wordmark span { color: #dfff00; }
+  .header-links { display: flex; gap: 1.5rem; margin-left: auto; }
+  .header-links a { color: #777970; font: .78rem 'Atkinson Hyperlegible', Arial, sans-serif; text-decoration: none; }
+  .header-links a:hover, .header-links a.active { color: #dfff00; }
+  .site-header :global(.language-select-wrapper) { color: #777970; }
+  @media (max-width: 720px) { .site-header { width: calc(100% - 2rem); } .site-header nav { height: 4rem; } .header-links { gap: .9rem; } }
+</style>

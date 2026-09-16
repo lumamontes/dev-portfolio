@@ -21,12 +21,12 @@ const { title, description } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen bg-neutral-950 text-neutral-100 antialiased">
+  <body class="site-shell">
     <!-- Header lives outside the container so its background can span full-width -->
     <Header />
     
     <!-- All page content will now share this identical wrapper -->
-    <main class="container py-8">
+    <main class="site-main">
       <slot />
     </main>
   </body>
@@ -34,7 +34,7 @@ const { title, description } = Astro.props;
 
 <style is:global>
   :root {
-    --accent: 136, 58, 234;
+    --accent: 223, 255, 0;
     --accent-light: 224, 204, 250;
     --accent-dark: 49, 10, 101;
     --accent-gradient: linear-gradient(
@@ -47,14 +47,20 @@ const { title, description } = Astro.props;
 
   html {
     font-family: system-ui, sans-serif;
-    background: #13151a;
-    background-size: 224px;
+    background: #111210;
+    color: #e8e7df;
   }
 
   code {
     font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
       Bitstream Vera Sans Mono, Courier New, monospace;
   }
+
+  .site-shell { margin: 0; min-width: 320px; background: #111210; color: #e8e7df; }
+  .site-main { width: min(1180px, calc(100% - 3rem)); margin: 0 auto; }
+  a { transition: color .18s ease, border-color .18s ease, background-color .18s ease; }
+  :focus-visible { outline: 2px solid #dfff00; outline-offset: 4px; }
+  @media (max-width: 720px) { .site-main { width: min(100% - 2rem, 600px); } }
 
   /* Reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
