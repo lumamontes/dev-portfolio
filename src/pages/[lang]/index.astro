@@ -1,116 +1,83 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getLangFromUrl } from '../../utils/lang';
+import { getLangFromUrl, useTranslations } from '../../utils/lang';
 import { languages } from '../../data/ui';
-import presentation from '../../data/presentation';
+import { about } from '@/data/about';
+import { Image } from 'astro:assets';
+import MeImg from '../../assets/images/me.jpg';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
 
 const lang = getLangFromUrl(Astro.url);
-const isBr = lang === 'br';
-const copy = isBr
-  ? { place: 'Macapá, Amapá / Brasil', role: 'engenheira de software', intro: 'Faço produtos, escrevo sobre o que aprendo e coleciono coisas que me fazem pensar.', archive: 'abrir o arquivo', visual: 'estudo visual · substitua isto por algo seu' }
-  : { place: 'Macapá, Amapá / Brazil', role: 'software engineer', intro: 'I make products, write about what I learn, and collect things that make me think.', archive: 'open the archive', visual: 'visual study · replace this with something yours' };
+const t = useTranslations(lang);
+const a = useTranslations(lang, about);
 ---
 
-<Layout title="Luma Montes" description={isBr ? 'Engenheira de software de Macapá, Amapá.' : 'Software engineer from Macapá, Amapá.'}>
-  <div class="home-page">
-    <main class="home-hero" aria-labelledby="home-title">
-      <div class="home-copy">
-        <p class="place">{copy.place}</p>
-        <h1 id="home-title">Luma<br />Montes</h1>
-        <p class="role">{copy.role}</p>
-        <p class="intro">{copy.intro}</p>
-        <div class="home-actions">
-          <a class="archive-link" href={`/${lang}/archive`}>{copy.archive}<span aria-hidden="true">↘</span></a>
-          <nav class="external-links" aria-label={isBr ? 'Links externos' : 'External links'}>
-            {presentation.socials.filter((social) => social.label !== 'Email').map((social) => <a href={social.link} target="_blank" rel="noopener noreferrer">{social.label}</a>)}
-          </nav>
-        </div>
+<Layout title={t('presentation.title')} description={t('presentation.description')} showNav={false}>
+  <section class="landing-hero">
+    <article class="hero-card">
+      <div class="img-frame">
+        <Image src={MeImg} alt={t('presentation.description')} class="me-img" />
       </div>
-
-      <figure class="visual-study">
-        <div class="visual-lines" aria-hidden="true"></div>
-        <div class="visual-ring" aria-hidden="true"></div>
-        <img src="/me.gif" alt="" />
-        <figcaption>{copy.visual}</figcaption>
-      </figure>
-    </main>
-    <section class="listening-now" aria-labelledby="listening-title">
-      <span id="listening-title">{isBr ? 'ouvindo agora' : 'listening now'}</span>
-      <p data-listening>{isBr ? 'Nada tocando agora.' : 'Nothing is playing right now.'}</p>
-    </section>
-    <footer class="home-footer">
-      <button class="footer-mark" type="button" data-secret-toggle aria-expanded="false" aria-controls="secret-note" aria-label={isBr ? 'Revelar uma pequena surpresa' : 'Reveal a small surprise'}>LM / 2026</button>
-      <a href={`mailto:${presentation.mail}`}>{presentation.mail}</a>
-    </footer>
-    <p id="secret-note" class="secret-note" data-secret-note hidden>{isBr ? 'Você encontrou uma dobra secreta. Continue explorando.' : 'You found a hidden fold. Keep exploring.'}</p>
-</div>
+      <h1 class="hero-title">{t('presentation.title')}</h1>
+      <p class="hero-bio">{t('presentation.description')}</p>
+      
+      <div class="hero-actions">
+        <a href={`/${lang}/archive`} class="archive-btn">Explorar Arquivo ↗</a>
+      </div>
+    </article>
+  </section>
 </Layout>
 
-<script>
-  const listening = document.querySelector<HTMLElement>('[data-listening]');
-  if (listening) {
-    fetch('/api/listening')
-      .then((response) => response.status === 204 ? null : response.json())
-      .then((track) => {
-        if (!track) return;
-        listening.textContent = `${track.title} · ${track.artist}`;
-        if (track.url) {
-          const link = document.createElement('a');
-          link.href = track.url;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.textContent = `${track.title} · ${track.artist}`;
-          listening.replaceChildren(link);
-        }
-      })
-      .catch(() => undefined);
-  }
-</script>
-
-<script>
-  const toggle = document.querySelector<HTMLButtonElement>('[data-secret-toggle]');
-  const note = document.querySelector<HTMLElement>('[data-secret-note]');
-  toggle?.addEventListener('click', () => {
-    if (!note) return;
-    const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!expanded));
-    note.hidden = expanded;
-  });
-</script>
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&display=swap');
-  .home-page { height: calc(100svh - 5rem); min-height: 34rem; overflow: hidden; display: flex; flex-direction: column; }
-  .home-hero { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(17rem, .85fr) minmax(22rem, 1.15fr); align-items: center; gap: 7vw; }
-  .home-copy { position: relative; z-index: 1; }
-  .place, .role, .external-links, .visual-study figcaption, .home-footer { font-family: 'Atkinson Hyperlegible', Arial, sans-serif; }
-  .place { color: #dfff00; font-size: .78rem; margin-bottom: 1.5rem; }
-  h1 { color: #e8e7df; font: 600 clamp(5rem, 10.8vw, 10rem)/.76 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: -.075em; margin: 0 0 1.7rem -.07em; }
-  .role { color: #e8e7df; font-size: 1rem; margin-bottom: .8rem; }
-  .intro { color: #9c9d95; font-size: 1rem; line-height: 1.5; max-width: 25rem; margin-bottom: 1.5rem; }
-  .home-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-  .archive-link { display: inline-flex; align-items: center; gap: .75rem; color: #111210; background: #dfff00; padding: .7rem .8rem; text-decoration: none; font: .85rem 'Atkinson Hyperlegible', Arial, sans-serif; }
-  .archive-link:hover { background: #e8e7df; }
-  .external-links { display: flex; gap: .9rem; font-size: .78rem; }
-  .external-links a { color: #777970; text-decoration: none; border-bottom: 1px solid transparent; }
-  .external-links a:hover { color: #dfff00; border-color: #dfff00; }
-  .visual-study { width: min(100%, 38rem); aspect-ratio: 1; position: relative; isolation: isolate; overflow: hidden; margin: 0; background: #1b1c18; clip-path: polygon(8% 13%, 57% 3%, 93% 20%, 87% 73%, 66% 96%, 22% 87%, 2% 56%); }
-  .visual-study img { position: absolute; inset: 12%; z-index: 2; width: 76%; height: 76%; object-fit: cover; filter: grayscale(1) contrast(1.7) brightness(.92); mix-blend-mode: screen; opacity: .9; }
-  .visual-study::before { content: ''; position: absolute; inset: 0; z-index: 3; background: #dfff00; mix-blend-mode: color; opacity: .75; }
-  .visual-lines { position: absolute; inset: -15%; z-index: 1; background: repeating-radial-gradient(ellipse at 45% 50%, transparent 0 18px, rgba(232,231,223,.8) 19px 20px, transparent 21px 37px); transform: rotate(-14deg); animation: drift 18s linear infinite; }
-  .visual-ring { position: absolute; z-index: 4; inset: 14%; width: 72%; height: 72%; border: 2px solid #e8e7df; border-radius: 50%; mix-blend-mode: exclusion; }
-  .visual-study figcaption { position: absolute; z-index: 5; right: 9%; bottom: 10%; max-width: 15rem; color: #111210; background: #dfff00; padding: .35rem .5rem; font-size: .65rem; transform: rotate(-5deg); }
-  .listening-now { display: flex; align-items: baseline; gap: 1rem; border-top: 1px solid #3b3c37; padding: .8rem 0; color: #dfff00; font: .78rem 'Atkinson Hyperlegible', Arial, sans-serif; }
-  .listening-now p { color: #a6a79e; margin: 0; } .listening-now a { color: inherit; text-decoration: none; } .listening-now a:hover { color: #e8e7df; }
-  @keyframes drift { to { transform: rotate(346deg); } }
-  .home-footer { display: flex; justify-content: space-between; flex: 0 0 3.5rem; align-items: flex-end; color: #666861; font-size: .72rem; padding-bottom: .8rem; }
-  .footer-mark { border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; } .footer-mark:hover, .footer-mark:focus-visible { color: #dfff00; } .footer-mark:focus-visible { outline: 2px solid #e8e7df; outline-offset: 4px; }
-  .secret-note { color: #dfff00; font-family: 'Atkinson Hyperlegible', Arial, sans-serif; font-size: .78rem; margin: 0 0 1rem; }
-  .home-footer a { color: inherit; text-decoration: none; } .home-footer a:hover { color: #dfff00; }
-  @media (max-width: 720px) { .home-page { height: calc(100svh - 4rem); min-height: 38rem; } .home-hero { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 2rem; padding: 1.5rem 0 0; } .home-copy { flex: 0 0 auto; } .place { margin-bottom: 1rem; } h1 { font-size: clamp(4.8rem, 23vw, 8rem); margin-bottom: 1.2rem; } .intro { font-size: .94rem; margin-bottom: 1.2rem; } .visual-study { align-self: center; width: min(78vw, 22rem); } .listening-now { display: block; } .listening-now p { margin-top: .35rem; } .home-footer { flex-basis: 2.5rem; } }
-  @media (prefers-reduced-motion: reduce) { .visual-lines { animation: none; } }
+  .landing-hero {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 65vh;
+  }
+  .hero-card {
+    max-width: 580px;
+  }
+  .img-frame {
+    width: 180px;
+    height: 180px;
+    border: 1px solid #111111;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .me-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .hero-bio {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+  .archive-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #111111;
+    background-color: #111111;
+    color: #F4F4F0;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+  }
+  .archive-btn:hover {
+    background-color: transparent;
+    color: #111111;
+    text-decoration: none;
+  }
 </style>
