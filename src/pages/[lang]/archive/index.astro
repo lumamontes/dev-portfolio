@@ -8,27 +8,37 @@ export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
 
+import { getCollection } from 'astro:content';
+import { getWordPressArchiveEntries } from '@/lib/wordpress';
+import { isPublicEntryInLanguage } from '@/lib/content-model';
+
 const lang = getLangFromUrl(Astro.url);
 
-const writings = [
-  { title: "Spikes e RFCs em Times de Eng", tag: "tech", year: "2026" },
-  { title: "Séries Longas, Tempo e Memória", tag: "ensaio", year: "2026" },
-  { title: "Estado Dinâmico em Mobile Apps", tag: "tech", year: "2025" },
-  { title: "Cadernos de Macapá", tag: "texto", year: "2025" },
+const [posts, booksEn, booksBr, learningNotes, zines, photos, musicCollection, wpEntries] = await Promise.all([
+  getCollection('posts'),
+  getCollection('books-en'),
+  getCollection('books-br'),
+  getCollection('learning-notes'),
+  getCollection('zines'),
+  getCollection('photos'),
+  getCollection('music'),
+  getWordPressArchiveEntries(),
+]);
+
+const localEntries = [
+  ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang })),
+  ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang })),
+  ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang })),
+  ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang })),
+  ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang })),
+  ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang })),
 ];
 
-const projects = [
-  { title: "Biblioteca de Zines", type: "Open Source Archive", link: "https://biblioteca-de-zines.com.br" },
-  { title: "Gêmulas Zine", type: "Publicação Zine", link: "#" },
-  { title: "Borderline Mag", type: "Web Magazine", link: "#" },
-  { title: "Para Depois", type: "Personal Archive", link: "#" },
-];
+const allEntries = [...localEntries, ...wpEntries.filter(e => e.lang === lang)];
 
-const music = [
-  { title: "Paramore — Live '23", type: "Show Bootleg" },
-  { title: "Musiquinhas pra Maria", type: "Playlist" },
-  { title: "Violão Clássico e Espanhol", type: "Estudos" },
-];
+const writings = allEntries.filter(e => ['text', 'learning-note'].includes(e.type));
+const projects = allEntries.filter(e => ['project', 'zine'].includes(e.type));
+const music = allEntries.filter(e => e.type === 'music');
 ---
 
 <Layout title="Arquivo — Luma Goes" description="Arquivo de projetos, zines e textos." showNav={true}>
@@ -44,9 +54,9 @@ const music = [
       <ul class="col-list">
         {writings.map((item) => (
           <li class="list-item">
-            <a href="#" class="item-link">
+            <a href={`/${lang}/archive/${item.type}/${item.slug}`} class="item-link">
               <span class="item-name">{item.title}</span>
-              <span class="item-meta">[{item.tag}]</span>
+              <span class="item-meta">[{item.type}]</span>
             </a>
           </li>
         ))}

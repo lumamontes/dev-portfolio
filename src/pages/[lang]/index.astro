@@ -16,7 +16,7 @@ const a = useTranslations(lang, about);
 ---
 
 <Layout title={t('presentation.title')} description={t('presentation.description')} showNav={false}>
-  <section class="landing-hero">
+  <section class="landing-hero grid lg:grid-cols-2 gap-12 items-center">
     <article class="hero-card">
       <div class="img-frame">
         <Image src={MeImg} alt={t('presentation.description')} class="me-img" />

@@ -36,5 +36,6 @@ export const onRequestGet = async ({ env }: { env: Env }) => {
     album: item.album?.name ?? '',
     image: item.album?.images?.[0]?.url ?? null,
     url: item.external_urls?.spotify ?? null,
+    isPlaying: playback.is_playing,
   }, { headers: { 'cache-control': 'no-store' } });
 };
