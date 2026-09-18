@@ -42,11 +42,13 @@ const a = useTranslations(lang, about);
     max-width: 580px;
   }
   .img-frame {
-    width: 180px;
-    height: 180px;
-    border: 1px solid #111111;
-    margin-bottom: 1.5rem;
+    width: 220px;
+    height: 220px;
+    border: 2px solid #111111;
+    margin-bottom: 2rem;
     overflow: hidden;
+    box-shadow: 6px 6px 0px #111111;
+    transform: rotate(-1deg);
   }
   .me-img {
     width: 100%;
@@ -54,10 +56,12 @@ const a = useTranslations(lang, about);
     object-fit: cover;
   }
   .hero-title {
-    font-size: 1.75rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    letter-spacing: -0.02em;
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
   }
   .hero-bio {
     font-size: 0.95rem;
@@ -67,13 +71,15 @@ const a = useTranslations(lang, about);
   }
   .archive-btn {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    border: 1px solid #111111;
+    padding: 1rem 1.5rem;
+    border: 2px solid #111111;
     background-color: #111111;
     color: #F4F4F0;
-    font-weight: 700;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
+    font-weight: 900;
+    font-size: 1rem;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+    transition: all 0.1s steps(2);
   }
   .archive-btn:hover {
     background-color: transparent;
