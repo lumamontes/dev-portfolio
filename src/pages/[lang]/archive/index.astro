@@ -26,15 +26,18 @@ const [posts, booksEn, booksBr, learningNotes, zines, photos, musicCollection, w
 ]);
 
 const localEntries = [
-  ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang })),
-  ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang })),
-  ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang })),
-  ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang })),
-  ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang })),
-  ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang })),
+  ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang, link: `/${lang}/archive/text/${e.slug.split('/').pop()}` })),
+  ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang, link: `/${lang}/archive/book/${e.slug}` })),
+  ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang, link: `/${lang}/archive/learning-note/${e.slug}` })),
+  ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/zine/${e.slug}` })),
+  ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang, link: `/${lang}/archive/photo/${e.slug}` })),
+  ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang, link: `/${lang}/archive/music/${e.slug}` })),
 ];
 
-const allEntries = [...localEntries, ...wpEntries.filter(e => e.lang === lang)];
+const allEntries = [
+  ...localEntries, 
+  ...wpEntries.filter(e => e.lang === lang).map(e => ({ ...e, link: e.externalUrl || `/${lang}/archive/${e.type}/${e.slug}` }))
+];
 
 const writings = allEntries.filter(e => ['text', 'learning-note'].includes(e.type));
 const projects = allEntries.filter(e => ['project', 'zine'].includes(e.type));
@@ -69,8 +72,8 @@ const music = allEntries.filter(e => e.type === 'music');
       <ul class="col-list">
         {projects.map((item) => (
           <li class="list-item">
-            <a href={item.link} target={item.link.startsWith('http') ? "_blank" : "_self"} class="item-link">
-              <span class="item-name">{item.title} ↗</span>
+            <a href={item.link} target={item.link?.startsWith('http') ? "_blank" : "_self"} class="item-link">
+              <span class="item-name">{item.title} {item.link?.startsWith('http') ? '↗' : ''}</span>
               <span class="item-meta">{item.type}</span>
             </a>
           </li>
