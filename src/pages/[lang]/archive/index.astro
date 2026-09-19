@@ -14,12 +14,13 @@ import { isPublicEntryInLanguage } from '@/lib/content-model';
 
 const lang = getLangFromUrl(Astro.url);
 
-const [posts, booksEn, booksBr, learningNotes, zines, photos, musicCollection, wpEntries] = await Promise.all([
+const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, musicCollection, wpEntries] = await Promise.all([
   getCollection('posts'),
   getCollection('books-en'),
   getCollection('books-br'),
   getCollection('learning-notes'),
   getCollection('zines'),
+  getCollection('projects'),
   getCollection('photos'),
   getCollection('music'),
   getWordPressArchiveEntries(),
@@ -30,6 +31,7 @@ const localEntries = [
   ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang, link: `/${lang}/archive/book/${e.slug}` })),
   ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang, link: `/${lang}/archive/learning-note/${e.slug}` })),
   ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/zine/${e.slug}` })),
+  ...projectEntries.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'project', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/project/${e.slug}` })),
   ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang, link: `/${lang}/archive/photo/${e.slug}` })),
   ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang, link: `/${lang}/archive/music/${e.slug}` })),
 ];

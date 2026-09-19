@@ -160,6 +160,37 @@ export const zineSchema = zineFieldsSchema.transform((entry) => ({
   }),
 }));
 
+const projectFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  role: z.string().trim().optional(),
+  period: z.string().trim().optional(),
+  stack: z.array(z.string().trim().min(1)).default([]),
+  // Omitted entirely for private-repo projects with no safe public
+  // destination to link to (see docs/adr/0002).
+  externalUrl: z.string().url().optional(),
+  // Set only after manually verifying the destination sends no framing
+  // restriction — never inferred. See docs/adr/0002.
+  embeddable: z.boolean().default(false),
+  cover: z.string().url().optional(),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const projectSchema = projectFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'project',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
+
 const photoImageSchema = z.object({
   src: z.string().trim().min(1),
   alt: z.string().trim().min(1),

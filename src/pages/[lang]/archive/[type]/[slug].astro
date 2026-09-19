@@ -5,12 +5,13 @@ import { isPublicEntryInLanguage } from '@/lib/content-model';
 import { getWordPressArchiveEntries, type WordPressArchiveEntry } from '@/lib/wordpress';
 
 export async function getStaticPaths() {
-  const [posts, booksEn, booksBr, learningNotes, zines, photos, music] = await Promise.all([
+  const [posts, booksEn, booksBr, learningNotes, zines, projects, photos, music] = await Promise.all([
     getCollection('posts'),
     getCollection('books-en'),
     getCollection('books-br'),
     getCollection('learning-notes'),
     getCollection('zines'),
+    getCollection('projects'),
     getCollection('photos'),
     getCollection('music'),
   ]);
@@ -27,6 +28,7 @@ export async function getStaticPaths() {
     ...booksBr.filter((entry) => isPublicEntryInLanguage(entry, 'br')).map((entry) => ({ params: { lang: 'br', type: 'book', slug: entry.slug }, props: { entry } })),
     ...learningNotes.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'learning-note', slug: entry.slug }, props: { entry } })),
     ...zines.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'zine', slug: entry.slug }, props: { entry } })),
+    ...projects.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'project', slug: entry.slug }, props: { entry } })),
     ...photos.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'photo', slug: entry.slug }, props: { entry } })),
     ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: entry.slug }, props: { entry } })),
   ];
@@ -41,6 +43,7 @@ const title = wordpressEntry?.title ?? entry.data.title;
 const description = wordpressEntry?.description ?? (type === 'book' ? entry.data.author : entry.data.description);
 const isBook = type === 'book';
 const isZine = type === 'zine';
+const isProject = type === 'project';
 const isPhoto = type === 'photo';
 const isMusic = type === 'music';
 const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
@@ -59,6 +62,8 @@ const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
             {isZine && !isWordPressEntry && <span class="bg-emerald-400 px-2 py-0.5 zine-border">BY {entry.data.authors.join(' & ')}</span>}
             {isPhoto && !isWordPressEntry && entry.data.place && <span class="bg-zinc-200 px-2 py-0.5 zine-border">LOC: {entry.data.place}</span>}
             {isMusic && !isWordPressEntry && <span class="bg-yellow-400 px-2 py-0.5 zine-border">SOURCE: {entry.data.kind}</span>}
+            {isProject && !isWordPressEntry && entry.data.role && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.role}</span>}
+            {isProject && !isWordPressEntry && entry.data.period && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.period}</span>}
           </div>
         </header>
         <div class="prose prose-zinc max-w-none prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
@@ -99,6 +104,21 @@ const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
     {isMusic && !isWordPressEntry && (
       <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
         Ver publicação original ↗
+      </a>
+    )}
+    {isProject && !isWordPressEntry && entry.data.stack.length > 0 && (
+      <div class="mt-10">
+        <p class="opacity-50 mb-2">// STACK</p>
+        <ul class="flex flex-wrap gap-2">
+          {entry.data.stack.map((tech: string) => (
+            <li class="bg-zinc-200 px-2 py-0.5 zine-border">{tech}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+    {isProject && !isWordPressEntry && entry.data.externalUrl && (
+      <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+        {entry.data.embeddable ? 'Ver projeto ao vivo ↗' : 'Ver repositório ↗'}
       </a>
     )}
         </div>
