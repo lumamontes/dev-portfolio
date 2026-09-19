@@ -2,69 +2,15 @@
 import { languages } from '@/data/ui';
 import Layout from '@/layouts/Layout.astro';
 import { getLangFromUrl } from '@/utils/lang';
-
+import { getArchiveEntries, groupArchiveEntries } from '@/lib/archive-entries';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
 
-import { getCollection } from 'astro:content';
-import { getWordPressArchiveEntries } from '@/lib/wordpress';
-import { isPublicEntryInLanguage } from '@/lib/content-model';
-
 const lang = getLangFromUrl(Astro.url);
-
-const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, musicCollection, playlistEntries, wpEntries] = await Promise.all([
-  getCollection('posts'),
-  getCollection('books-en'),
-  getCollection('books-br'),
-  getCollection('learning-notes'),
-  getCollection('zines'),
-  getCollection('projects'),
-  getCollection('photos'),
-  getCollection('music'),
-  getCollection('playlists'),
-  getWordPressArchiveEntries(),
-]);
-
-// `project` and `book` have their own canonical local content
-// collections — a WordPress-tagged post of either type would otherwise
-// duplicate it under a different (and possibly stale) title, as already
-// found for "Zine Library" / "Biblioteca de Zines" and confirmed here
-// too for the Clean Code book entry.
-const wpEntriesExcludingProjects = wpEntries
-  .filter((e) => e.type !== 'project' && e.type !== 'book')
-  // The 5 existing playlists are hosted in WordPress tagged entry:music
-  // (ticket 19, before playlist existed as its own type). Reclassified
-  // here rather than by rewriting the live WordPress posts — the source
-  // platform and link are unchanged, only how this site displays them.
-  .map((e) => (e.type === 'music' && e.tags.includes('playlist') ? { ...e, type: 'playlist' as const } : e));
-
-const localEntries = [
-  ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang, link: `/${lang}/archive/text/${e.slug.split('/').pop()}` })),
-  ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang, link: `/${lang}/archive/book/${e.slug}` })),
-  ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang, link: `/${lang}/archive/learning-note/${e.slug}` })),
-  ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/zine/${e.slug}` })),
-  // Always link to the entry's own portal page, never straight out to
-  // externalUrl — that's where the live-embed/link-card tiers (ticket 29)
-  // actually render; bypassing it here would skip the portal entirely.
-  ...projectEntries.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'project', slug: e.slug, lang, link: `/${lang}/archive/project/${e.slug}` })),
-  ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang, link: `/${lang}/archive/photo/${e.slug}` })),
-  ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang, link: `/${lang}/archive/music/${e.slug}` })),
-  ...playlistEntries.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'playlist', slug: e.slug, lang, link: `/${lang}/archive/playlist/${e.slug}` })),
-];
-
-const allEntries = [
-  ...localEntries, 
-  ...wpEntriesExcludingProjects.filter(e => e.lang === lang).map(e => ({ ...e, link: e.externalUrl || `/${lang}/archive/${e.type}/${e.slug}` }))
-];
-
-const writings = allEntries.filter(e => ['text', 'learning-note'].includes(e.type));
-const projects = allEntries.filter(e => ['project', 'zine'].includes(e.type));
-const music = allEntries.filter(e => e.type === 'music');
-const books = allEntries.filter(e => e.type === 'book');
-const photosGroup = allEntries.filter(e => e.type === 'photo');
-const playlistsGroup = allEntries.filter(e => e.type === 'playlist');
+const entries = await getArchiveEntries(lang);
+const groups = groupArchiveEntries(entries);
 ---
 
 <Layout title="Arquivo — Luma Goes" description="Arquivo de projetos, zines e textos." showNav={true}>
@@ -74,101 +20,21 @@ const playlistsGroup = allEntries.filter(e => e.type === 'playlist');
   </div>
 
   <div class="archive-grid">
-    <!-- Column 1: Writing -->
-    <div class="archive-col">
-      <h2 class="col-title">Escritos & Textos</h2>
-      <ul class="col-list">
-        {writings.map((item) => (
-          <li class="list-item">
-            <a href={`/${lang}/archive/${item.type}/${item.slug}`} class="item-link">
-              <span class="item-name">{item.title}</span>
-              <span class="item-meta">[{item.type}]</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    <!-- Column 2: Projects & Zines -->
-    <div class="archive-col">
-      <h2 class="col-title">Projetos & Labs</h2>
-      <ul class="col-list">
-        {projects.map((item) => (
-          <li class="list-item">
-            <a href={item.link} target={item.link?.startsWith('http') ? "_blank" : "_self"} class="item-link">
-              <span class="item-name">{item.title} {item.link?.startsWith('http') ? '↗' : ''}</span>
-              <span class="item-meta">{item.type}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    <!-- Column 3: Music & Media -->
-    <div class="archive-col">
-      <h2 class="col-title">Música & Mídia</h2>
-      <ul class="col-list">
-        {music.map((item) => (
-          <li class="list-item">
-            <div class="item-link">
-              <span class="item-name">{item.title}</span>
-              <span class="item-meta">{item.type}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    <!-- Column 4: Books -->
-    {books.length > 0 && (
+    {groups.map((group) => (
       <div class="archive-col">
-        <h2 class="col-title">Livros</h2>
+        <h2 class="col-title">{group.label}</h2>
         <ul class="col-list">
-          {books.map((item) => (
+          {group.entries.map((item) => (
             <li class="list-item">
-              <a href={item.link} class="item-link">
-                <span class="item-name">{item.title}</span>
+              <a href={item.link} target={item.link.startsWith('http') ? '_blank' : '_self'} class="item-link">
+                <span class="item-name">{item.title} {item.link.startsWith('http') ? '↗' : ''}</span>
                 <span class="item-meta">{item.type}</span>
               </a>
             </li>
           ))}
         </ul>
       </div>
-    )}
-
-    <!-- Column 5: Photos -->
-    {photosGroup.length > 0 && (
-      <div class="archive-col">
-        <h2 class="col-title">Fotos</h2>
-        <ul class="col-list">
-          {photosGroup.map((item) => (
-            <li class="list-item">
-              <a href={item.link} class="item-link">
-                <span class="item-name">{item.title}</span>
-                <span class="item-meta">{item.type}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    <!-- Column 6: Playlists -->
-    {playlistsGroup.length > 0 && (
-      <div class="archive-col">
-        <h2 class="col-title">Playlists</h2>
-        <ul class="col-list">
-          {playlistsGroup.map((item) => (
-            <li class="list-item">
-              <a href={`/${lang}/archive/${item.type}/${item.slug}`} class="item-link">
-                <span class="item-name">{item.title}</span>
-                <span class="item-meta">{item.type}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+    ))}
   </div>
 </Layout>
 
