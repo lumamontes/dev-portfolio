@@ -5,6 +5,7 @@ import {
   postSchema,
   photoSchema,
   musicSchema,
+  playlistSchema,
   projectSchema,
   zineSchema,
 } from './lib/content-model';
@@ -49,6 +50,11 @@ const music = defineCollection({
   schema: musicSchema,
 });
 
+const playlists = defineCollection({
+  type: 'content',
+  schema: playlistSchema,
+});
+
 export const collections = {
   posts,
   'books-en': booksEn,
@@ -58,4 +64,5 @@ export const collections = {
   projects,
   photos,
   music,
+  playlists,
 };

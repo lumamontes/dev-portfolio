@@ -31,7 +31,13 @@ const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, mu
 // duplicate it under a different (and possibly stale) title, as already
 // found for "Zine Library" / "Biblioteca de Zines" and confirmed here
 // too for the Clean Code book entry.
-const wpEntriesExcludingProjects = wpEntries.filter((e) => e.type !== 'project' && e.type !== 'book');
+const wpEntriesExcludingProjects = wpEntries
+  .filter((e) => e.type !== 'project' && e.type !== 'book')
+  // The 5 existing playlists are hosted in WordPress tagged entry:music
+  // (ticket 19, before playlist existed as its own type). Reclassified
+  // here rather than by rewriting the live WordPress posts — the source
+  // platform and link are unchanged, only how this site displays them.
+  .map((e) => (e.type === 'music' && e.tags.includes('playlist') ? { ...e, type: 'playlist' as const } : e));
 
 const localEntries = [
   ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang, link: `/${lang}/archive/text/${e.slug.split('/').pop()}` })),
@@ -56,6 +62,7 @@ const projects = allEntries.filter(e => ['project', 'zine'].includes(e.type));
 const music = allEntries.filter(e => e.type === 'music');
 const books = allEntries.filter(e => e.type === 'book');
 const photosGroup = allEntries.filter(e => e.type === 'photo');
+const playlistsGroup = allEntries.filter(e => e.type === 'playlist');
 ---
 
 <Layout title="Arquivo — Luma Goes" description="Arquivo de projetos, zines e textos." showNav={true}>
@@ -143,6 +150,23 @@ const photosGroup = allEntries.filter(e => e.type === 'photo');
         </ul>
       </div>
     )}
+
+    <!-- Column 6: Playlists -->
+    {playlistsGroup.length > 0 && (
+      <div class="archive-col">
+        <h2 class="col-title">Playlists</h2>
+        <ul class="col-list">
+          {playlistsGroup.map((item) => (
+            <li class="list-item">
+              <a href={`/${lang}/archive/${item.type}/${item.slug}`} class="item-link">
+                <span class="item-name">{item.title}</span>
+                <span class="item-meta">{item.type}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
   </div>
 </Layout>
 
@@ -166,11 +190,11 @@ const photosGroup = allEntries.filter(e => e.type === 'photo');
   }
   .archive-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     align-items: start;
     gap: 3rem;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 1300px) {
     .archive-grid {
       grid-template-columns: repeat(3, 1fr);
     }

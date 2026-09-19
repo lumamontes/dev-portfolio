@@ -3,12 +3,8 @@ import type { EditorialState, EntryType } from './content-model';
 export const previewModes = ['live-embed', 'native', 'link-card'] as const;
 export type PreviewMode = (typeof previewModes)[number];
 
-// `playlist` isn't in EntryType yet (that's ticket 25); accepted here ahead
-// of time so this function's contract doesn't need to change once it lands.
-export type PreviewEntryType = EntryType | 'playlist';
-
 export interface PreviewableEntry {
-  type: PreviewEntryType;
+  type: EntryType;
   editorialState?: EditorialState;
   externalUrl?: string;
   /**
@@ -20,7 +16,7 @@ export interface PreviewableEntry {
   embeddable?: boolean;
 }
 
-const nativeEntryTypes: PreviewEntryType[] = [
+const nativeEntryTypes: EntryType[] = [
   'text',
   'learning-note',
   'book',

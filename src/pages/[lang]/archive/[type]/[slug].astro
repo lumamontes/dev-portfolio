@@ -6,7 +6,7 @@ import { getWordPressArchiveEntries, type WordPressArchiveEntry } from '@/lib/wo
 import { resolveEntryPreview } from '@/lib/portal-preview';
 
 export async function getStaticPaths() {
-  const [posts, booksEn, booksBr, learningNotes, zines, projects, photos, music] = await Promise.all([
+  const [posts, booksEn, booksBr, learningNotes, zines, projects, photos, music, playlists] = await Promise.all([
     getCollection('posts'),
     getCollection('books-en'),
     getCollection('books-br'),
@@ -15,15 +15,23 @@ export async function getStaticPaths() {
     getCollection('projects'),
     getCollection('photos'),
     getCollection('music'),
+    getCollection('playlists'),
   ]);
 
   // `project` and `book` have their own canonical local content
   // collections — a WordPress-tagged post of either type with the same
   // slug would otherwise silently win and shadow the real content below
   // (verified: this was already happening to the local Clean Code entry).
-  const wordpressEntries = (await getWordPressArchiveEntries()).filter(
-    (entry) => entry.type !== 'project' && entry.type !== 'book',
-  );
+  // The 5 existing playlists are hosted in WordPress tagged entry:music
+  // (ticket 19, before playlist existed as its own type) — reclassified
+  // here rather than by rewriting the live WordPress posts.
+  const wordpressEntries = (await getWordPressArchiveEntries())
+    .filter((entry) => entry.type !== 'project' && entry.type !== 'book')
+    .map((entry) =>
+      entry.type === 'music' && entry.tags.includes('playlist')
+        ? { ...entry, type: 'playlist' as const }
+        : entry,
+    );
   const wordpressPaths = wordpressEntries.map((entry) => ({
     params: { lang: entry.lang, type: entry.type, slug: entry.slug.replace(/-en$/, '') },
     props: { wordpressEntry: entry },
@@ -38,6 +46,7 @@ export async function getStaticPaths() {
     ...projects.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'project', slug: entry.slug }, props: { entry } })),
     ...photos.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'photo', slug: entry.slug }, props: { entry } })),
     ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: entry.slug }, props: { entry } })),
+    ...playlists.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'playlist', slug: entry.slug }, props: { entry } })),
   ];
   return [...wordpressPaths, ...localPaths.filter(({ params }) => !wordpressKeys.has(`${params.lang}/${params.type}/${params.slug}`))];
 }
@@ -53,7 +62,11 @@ const isZine = type === 'zine';
 const isProject = type === 'project';
 const isPhoto = type === 'photo';
 const isMusic = type === 'music';
-const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
+const isPlaylist = type === 'playlist';
+const Content = !isWordPressEntry && !isPlaylist ? (await entry.render()).Content : undefined;
+const playlistUrl = wordpressEntry?.externalUrl ?? entry?.data.externalUrl;
+const playlistNote = !isWordPressEntry ? entry?.data.note : undefined;
+const playlistCover = !isWordPressEntry ? entry?.data.cover : undefined;
 
 const previewMode = isProject && !isWordPressEntry
   ? resolveEntryPreview({
@@ -81,9 +94,35 @@ const previewMode = isProject && !isWordPressEntry
             {isProject && !isWordPressEntry && entry.data.period && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.period}</span>}
           </div>
         </header>
-        <div class="prose prose-zinc max-w-none prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
-          {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
-        </div>
+        {!isPlaylist && (
+          <div class="prose prose-zinc max-w-none prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
+            {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
+          </div>
+        )}
+
+        {isPlaylist && playlistUrl && (
+          <a
+            href={playlistUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-4 border-2 border-[#111111] p-4 zine-shadow hover:bg-zinc-100"
+          >
+            {playlistCover ? (
+              <img src={playlistCover} alt="" class="h-16 w-16 flex-shrink-0 object-cover" />
+            ) : (
+              <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center border border-[#111111] bg-zinc-200 font-mono text-[10px] uppercase opacity-60">
+                No cover
+              </div>
+            )}
+            <span class="min-w-0">
+              <span class="block font-mono text-[10px] uppercase opacity-60">Listen on Spotify</span>
+              <span class="block truncate font-bold">{title}</span>
+            </span>
+          </a>
+        )}
+        {isPlaylist && playlistNote && (
+          <p class="mt-6 text-lg opacity-80">{playlistNote}</p>
+        )}
 
         {isPhoto && !isWordPressEntry && (
           <div class={`mt-10 grid gap-6 ${entry.data.images.length > 1 ? 'sm:grid-cols-2' : ''}`}>

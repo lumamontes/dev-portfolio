@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isPublicEntry, isPublicEntryInLanguage, projectSchema } from './content-model';
+import { isPublicEntry, isPublicEntryInLanguage, playlistSchema, projectSchema } from './content-model';
 
 const baseProjectInput = {
   title: 'Example Project',
@@ -45,6 +45,39 @@ describe('projectSchema', () => {
     const entry = projectSchema.parse({ ...baseProjectInput, embeddable: true });
 
     expect(entry.embeddable).toBe(true);
+  });
+});
+
+describe('playlistSchema', () => {
+  const basePlaylistInput = {
+    title: 'ap das gemeas',
+    externalUrl: 'https://open.spotify.com/playlist/51gthShGNUzGGOnSxvTe70',
+    lang: 'br' as const,
+  };
+
+  it('is its own entry type, not music', () => {
+    const entry = playlistSchema.parse(basePlaylistInput);
+
+    expect(entry.type).toBe('playlist');
+  });
+
+  it('requires an externalUrl (a playlist is always a pointer somewhere)', () => {
+    expect(() => playlistSchema.parse({ title: 'No link', lang: 'en' })).toThrow();
+  });
+
+  it('accepts an optional note without requiring one', () => {
+    const withoutNote = playlistSchema.parse(basePlaylistInput);
+    const withNote = playlistSchema.parse({ ...basePlaylistInput, note: 'For long drives.' });
+
+    expect(withoutNote.note).toBeUndefined();
+    expect(withNote.note).toBe('For long drives.');
+  });
+
+  it('defaults to public, published-here', () => {
+    const entry = playlistSchema.parse(basePlaylistInput);
+
+    expect(entry.editorialState).toBe('published-here');
+    expect(entry.visibility).toBe('public');
   });
 });
 

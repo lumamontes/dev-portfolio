@@ -8,6 +8,7 @@ export const entryTypes = [
   'project',
   'photo',
   'music',
+  'playlist',
 ] as const;
 
 export const entryTypeSchema = z.enum(entryTypes);
@@ -241,6 +242,32 @@ export const musicSchema = musicFieldsSchema.transform((entry) => ({
   ...entry,
   ...canonicalFields({
     type: 'music',
+    lang: entry.lang,
+    editorialState: entry.editorialState,
+    visibility: entry.visibility,
+    fallbackEditorialState: 'published-here',
+    fallbackVisibility: 'public',
+    category: entry.category,
+    tags: entry.tags,
+  }),
+}));
+
+// A playlist is a lightweight pointer to a collection hosted elsewhere —
+// name, cover, destination link, optional note — not authored music
+// writing. See CONTEXT.md's "playlist entry" definition.
+const playlistFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  cover: z.string().url().optional(),
+  externalUrl: z.string().url(),
+  note: z.string().trim().optional(),
+  lang: languageSchema,
+  tags: z.array(tagSchema).default([]),
+}).merge(optionalCanonicalFieldsSchema);
+
+export const playlistSchema = playlistFieldsSchema.transform((entry) => ({
+  ...entry,
+  ...canonicalFields({
+    type: 'playlist',
     lang: entry.lang,
     editorialState: entry.editorialState,
     visibility: entry.visibility,
