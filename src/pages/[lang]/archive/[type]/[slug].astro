@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import { isPublicEntryInLanguage } from '@/lib/content-model';
 import { getWordPressArchiveEntries, type WordPressArchiveEntry } from '@/lib/wordpress';
+import { resolveEntryPreview } from '@/lib/portal-preview';
 
 export async function getStaticPaths() {
   const [posts, booksEn, booksBr, learningNotes, zines, projects, photos, music] = await Promise.all([
@@ -47,6 +48,14 @@ const isProject = type === 'project';
 const isPhoto = type === 'photo';
 const isMusic = type === 'music';
 const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
+
+const previewMode = isProject && !isWordPressEntry
+  ? resolveEntryPreview({
+      type: 'project',
+      externalUrl: entry.data.externalUrl,
+      embeddable: entry.data.embeddable,
+    }).mode
+  : undefined;
 ---
 
 <Layout title={title} description={description}>
@@ -69,6 +78,46 @@ const Content = !isWordPressEntry ? (await entry.render()).Content : undefined;
         <div class="prose prose-zinc max-w-none prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
           {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
         </div>
+
+        {previewMode === 'live-embed' && (
+          <div class="mt-10 border-2 border-[#111111] zine-shadow">
+            <div class="flex items-center justify-between bg-[#111111] px-3 py-2 font-mono text-[10px] uppercase text-[#F4F4F0]">
+              <span>Live preview</span>
+              <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline">
+                Open in new tab ↗
+              </a>
+            </div>
+            <iframe
+              src={entry.data.externalUrl}
+              title={`Live preview of ${title}`}
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              class="h-[600px] w-full border-0"
+            />
+          </div>
+        )}
+
+        {previewMode === 'link-card' && entry.data.externalUrl && (
+          <a
+            href={entry.data.externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-10 flex items-center gap-4 border-2 border-[#111111] p-4 zine-shadow hover:bg-zinc-100"
+          >
+            {entry.data.cover ? (
+              <img src={entry.data.cover} alt="" class="h-16 w-16 flex-shrink-0 object-cover" />
+            ) : (
+              <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center border border-[#111111] bg-zinc-200 font-mono text-[10px] uppercase opacity-60">
+                No preview
+              </div>
+            )}
+            <span class="min-w-0">
+              <span class="block font-mono text-[10px] uppercase opacity-60">Visit the real thing</span>
+              <span class="block truncate font-bold">{title}</span>
+              <span class="block truncate text-sm opacity-70">{description}</span>
+            </span>
+          </a>
+        )}
       </div>
     </article>
 
