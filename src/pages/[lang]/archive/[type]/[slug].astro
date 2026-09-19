@@ -17,7 +17,10 @@ export async function getStaticPaths() {
     getCollection('music'),
   ]);
 
-  const wordpressEntries = await getWordPressArchiveEntries();
+  // `project` now has its own canonical content collection (ticket 24) —
+  // a WordPress-tagged `entry:project` post with the same slug would
+  // otherwise silently win and shadow the real content below.
+  const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.type !== 'project');
   const wordpressPaths = wordpressEntries.map((entry) => ({
     params: { lang: entry.lang, type: entry.type, slug: entry.slug.replace(/-en$/, '') },
     props: { wordpressEntry: entry },
@@ -164,11 +167,6 @@ const previewMode = isProject && !isWordPressEntry
           ))}
         </ul>
       </div>
-    )}
-    {isProject && !isWordPressEntry && entry.data.externalUrl && (
-      <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
-        {entry.data.embeddable ? 'Ver projeto ao vivo ↗' : 'Ver repositório ↗'}
-      </a>
     )}
         </div>
       </div>

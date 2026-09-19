@@ -26,19 +26,28 @@ const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, mu
   getWordPressArchiveEntries(),
 ]);
 
+// `project` now has its own canonical content collection (ticket 24) —
+// a WordPress-tagged `entry:project` post would otherwise duplicate it
+// under a different title (see ticket 24's note on the pre-existing
+// "Zine Library" / "Biblioteca de Zines" overlap).
+const wpEntriesExcludingProjects = wpEntries.filter((e) => e.type !== 'project');
+
 const localEntries = [
   ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang, link: `/${lang}/archive/text/${e.slug.split('/').pop()}` })),
   ...(lang === 'en' ? booksEn : booksBr).filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'book', slug: e.slug, lang, link: `/${lang}/archive/book/${e.slug}` })),
   ...learningNotes.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'learning-note', slug: e.slug, lang, link: `/${lang}/archive/learning-note/${e.slug}` })),
   ...zines.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'zine', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/zine/${e.slug}` })),
-  ...projectEntries.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'project', slug: e.slug, lang, link: e.data.externalUrl || `/${lang}/archive/project/${e.slug}` })),
+  // Always link to the entry's own portal page, never straight out to
+  // externalUrl — that's where the live-embed/link-card tiers (ticket 29)
+  // actually render; bypassing it here would skip the portal entirely.
+  ...projectEntries.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'project', slug: e.slug, lang, link: `/${lang}/archive/project/${e.slug}` })),
   ...photos.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'photo', slug: e.slug, lang, link: `/${lang}/archive/photo/${e.slug}` })),
   ...musicCollection.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'music', slug: e.slug, lang, link: `/${lang}/archive/music/${e.slug}` })),
 ];
 
 const allEntries = [
   ...localEntries, 
-  ...wpEntries.filter(e => e.lang === lang).map(e => ({ ...e, link: e.externalUrl || `/${lang}/archive/${e.type}/${e.slug}` }))
+  ...wpEntriesExcludingProjects.filter(e => e.lang === lang).map(e => ({ ...e, link: e.externalUrl || `/${lang}/archive/${e.type}/${e.slug}` }))
 ];
 
 const writings = allEntries.filter(e => ['text', 'learning-note'].includes(e.type));
