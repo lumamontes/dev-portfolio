@@ -82,6 +82,30 @@ const previewMode = isProject && !isWordPressEntry
           {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
         </div>
 
+        {isPhoto && !isWordPressEntry && (
+          <div class={`mt-10 grid gap-6 ${entry.data.images.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+            {entry.data.images.map((image: { src: string; alt: string; caption?: string; credit?: string; width?: number; height?: number }) => (
+              <figure class="m-0">
+                <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`Open full-size: ${image.alt}`}>
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    loading="lazy"
+                    class="w-full border-2 border-[#111111] zine-shadow object-cover"
+                  />
+                </a>
+                {(image.caption || image.credit) && (
+                  <figcaption class="mt-2 font-mono text-xs opacity-60">
+                    {image.caption}{image.caption && image.credit ? ' · ' : ''}{image.credit}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        )}
+
         {previewMode === 'live-embed' && (
           <div class="mt-10 border-2 border-[#111111] zine-shadow">
             <div class="flex items-center justify-between bg-[#111111] px-3 py-2 font-mono text-[10px] uppercase text-[#F4F4F0]">
@@ -139,15 +163,11 @@ const previewMode = isProject && !isWordPressEntry
           </div>
 
           {isPhoto && !isWordPressEntry && (
-      <div class="mt-10 grid gap-6 sm:grid-cols-2">
-        {entry.data.images.map((image) => (
-          <figure>
-            <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" class="w-full rounded-lg object-cover" />
-            {(image.caption || image.credit) && <figcaption class="mt-2 text-xs text-zinc-500">{image.caption}{image.caption && image.credit ? ' · ' : ''}{image.credit}</figcaption>}
-          </figure>
-        ))}
-      </div>
-    )}
+            <div class="mt-10">
+              <p class="opacity-50 mb-2">// IMAGES</p>
+              <p class="font-bold">{entry.data.images.length} {entry.data.images.length === 1 ? 'photo' : 'photos'}</p>
+            </div>
+          )}
     {isZine && !isWordPressEntry && (
       <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
         Ler na Biblioteca de Zines ↗
