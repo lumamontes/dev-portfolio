@@ -43,6 +43,23 @@ const lang = getLangFromUrl(Astro.url);
 </section>
 
 <script>
+  function createIdleText(text: string) {
+    const span = document.createElement('span');
+    span.className = 'idle-text';
+    span.textContent = text;
+    return span;
+  }
+
+  function isSafeHttpUrl(value: unknown): value is string {
+    if (typeof value !== 'string') return false;
+    try {
+      const url = new URL(value);
+      return url.protocol === 'https:' || url.protocol === 'http:';
+    } catch {
+      return false;
+    }
+  }
+
   const listening = document.querySelector<HTMLElement>('[data-listening]');
   const cdImage = document.querySelector<HTMLElement>('[data-cd-image]');
   const albumCover = document.querySelector<HTMLImageElement>('[data-album-cover]');
@@ -63,8 +80,8 @@ const lang = getLangFromUrl(Astro.url);
           }
           if (statusDot) statusDot.classList.remove('is-active');
           if (albumCover) albumCover.classList.add('is-hidden');
-          
-          listening.innerHTML = `<span class="idle-text">Not listening right now</span>`;
+
+          listening.replaceChildren(createIdleText('Not listening right now'));
           return;
         }
 
@@ -85,26 +102,23 @@ const lang = getLangFromUrl(Astro.url);
         const trackText = `${track.title} — ${track.artist}`;
         const content = `${trackText} \u00A0\u00A0\u2022\u00A0\u00A0 ${trackText} \u00A0\u00A0\u2022\u00A0\u00A0 `;
 
-        if (track.url) {
-          listening.innerHTML = `
-            <a href="${track.url}" target="_blank" rel="noopener noreferrer" class="marquee-track marquee-scroll">
-              ${content}
-            </a>
-          `;
-        } else {
-          listening.innerHTML = `
-            <span class="marquee-track marquee-scroll">
-              ${content}
-            </span>
-          `;
+        const safeUrl = isSafeHttpUrl(track.url) ? track.url : undefined;
+        const trackEl = document.createElement(safeUrl ? 'a' : 'span');
+        trackEl.className = 'marquee-track marquee-scroll';
+        trackEl.textContent = content;
+        if (safeUrl && trackEl instanceof HTMLAnchorElement) {
+          trackEl.href = safeUrl;
+          trackEl.target = '_blank';
+          trackEl.rel = 'noopener noreferrer';
         }
+        listening.replaceChildren(trackEl);
       })
       .catch(() => {
         if (cdImage) {
           cdImage.classList.add('is-idle');
           cdImage.classList.remove('is-playing');
         }
-        if (listening) listening.innerHTML = `<span class="idle-text">Offline</span>`;
+        if (listening) listening.replaceChildren(createIdleText('Offline'));
       });
   }
 </script>
@@ -261,5 +275,30 @@ const lang = getLangFromUrl(Astro.url);
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cd-gif.is-playing,
+    .cd-gif.is-idle {
+      animation: none;
+    }
+    .marquee-scroll {
+      animation: none;
+    }
+    .status-dot.is-active {
+      animation: none;
+    }
+  }
+
+  /* Below the header's own mobile stacking point, flow in place instead of
+     floating over page content that now spans the full width. */
+  @media (max-width: 640px) {
+    .listening-widget {
+      position: static;
+      top: auto;
+      right: auto;
+      margin: 0 0 1.5rem auto;
+      width: fit-content;
+    }
   }
 </style>
