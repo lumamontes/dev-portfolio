@@ -3,31 +3,70 @@ import removeTrailingSlash from '../utils/removeTrailingSlash';
 import LanguagePicker from './LanguagePicker.astro';
 import { getLangFromUrl } from '../utils/lang';
 
+interface Props {
+  showNav?: boolean;
+}
+
+const { showNav = true } = Astro.props;
 const pathname = removeTrailingSlash(Astro.url.pathname);
 const lang = getLangFromUrl(Astro.url);
 const homePath = `/${lang === 'br' ? '' : lang}`;
 ---
 
 <header class="site-header">
-  <nav aria-label="Primary navigation">
-    <a class="wordmark" href={homePath} aria-label="Luma Montes home">luma<span>.</span></a>
-    <div class="header-links">
-      <a class:list={{ active: pathname === homePath || (lang === 'br' && pathname === '/') }} href={homePath}>home</a>
-      <a class:list={{ active: pathname.includes('/archive') }} href={`/${lang}/archive`}>archive</a>
-      <a class:list={{ active: pathname.includes('/projects') }} href={`/${lang}/projects`}>work</a>
+  <nav aria-label="Primary navigation" class="header-nav">
+    {showNav && (
+      <div class="header-links">
+        <a class:list={{ active: pathname === homePath || (lang === 'br' && pathname === '/') }} href={homePath}>home</a>
+        <a class:list={{ active: pathname.includes('/archive') }} href={`/${lang}/archive`}>archive</a>
+        <a class:list={{ active: pathname.includes('/projects') }} href={`/${lang}/projects`}>work</a>
+      </div>
+    )}
+    
+    <div class="header-right">
+      <LanguagePicker />
     </div>
-    <LanguagePicker />
   </nav>
 </header>
 
 <style>
-  .site-header { width: min(1180px, calc(100% - 3rem)); margin: 0 auto; border-bottom: 1px solid #3b3c37; }
-  .site-header nav { height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-  .wordmark { color: #e8e7df; font: 600 2rem/.8 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: -.05em; text-decoration: none; }
-  .wordmark span { color: #dfff00; }
-  .header-links { display: flex; gap: 1.5rem; margin-left: auto; }
-  .header-links a { color: #777970; font: .78rem 'Atkinson Hyperlegible', Arial, sans-serif; text-decoration: none; }
-  .header-links a:hover, .header-links a.active { color: #dfff00; }
-  .site-header :global(.language-select-wrapper) { color: #777970; }
-  @media (max-width: 720px) { .site-header { width: calc(100% - 2rem); } .site-header nav { height: 4rem; } .header-links { gap: .9rem; } }
+  .site-header {
+    background-color: #F4F4F0;
+    padding: 1rem 0;
+    border-bottom: 1px solid #111111;
+  }
+
+  .header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .header-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .header-links a {
+    font-family: 'Azeret Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111111;
+    text-decoration: none;
+    text-transform: lowercase;
+  }
+
+  .header-links a:hover,
+  .header-links a.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+  }
 </style>
