@@ -26,11 +26,12 @@ const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, mu
   getWordPressArchiveEntries(),
 ]);
 
-// `project` now has its own canonical content collection (ticket 24) —
-// a WordPress-tagged `entry:project` post would otherwise duplicate it
-// under a different title (see ticket 24's note on the pre-existing
-// "Zine Library" / "Biblioteca de Zines" overlap).
-const wpEntriesExcludingProjects = wpEntries.filter((e) => e.type !== 'project');
+// `project` and `book` have their own canonical local content
+// collections — a WordPress-tagged post of either type would otherwise
+// duplicate it under a different (and possibly stale) title, as already
+// found for "Zine Library" / "Biblioteca de Zines" and confirmed here
+// too for the Clean Code book entry.
+const wpEntriesExcludingProjects = wpEntries.filter((e) => e.type !== 'project' && e.type !== 'book');
 
 const localEntries = [
   ...posts.filter(e => isPublicEntryInLanguage(e, lang)).map(e => ({ title: e.data.title, type: 'text', slug: e.slug.split('/').pop(), lang, link: `/${lang}/archive/text/${e.slug.split('/').pop()}` })),
@@ -53,6 +54,8 @@ const allEntries = [
 const writings = allEntries.filter(e => ['text', 'learning-note'].includes(e.type));
 const projects = allEntries.filter(e => ['project', 'zine'].includes(e.type));
 const music = allEntries.filter(e => e.type === 'music');
+const books = allEntries.filter(e => e.type === 'book');
+const photosGroup = allEntries.filter(e => e.type === 'photo');
 ---
 
 <Layout title="Arquivo — Luma Goes" description="Arquivo de projetos, zines e textos." showNav={true}>
@@ -106,6 +109,40 @@ const music = allEntries.filter(e => e.type === 'music');
         ))}
       </ul>
     </div>
+
+    <!-- Column 4: Books -->
+    {books.length > 0 && (
+      <div class="archive-col">
+        <h2 class="col-title">Livros</h2>
+        <ul class="col-list">
+          {books.map((item) => (
+            <li class="list-item">
+              <a href={item.link} class="item-link">
+                <span class="item-name">{item.title}</span>
+                <span class="item-meta">{item.type}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <!-- Column 5: Photos -->
+    {photosGroup.length > 0 && (
+      <div class="archive-col">
+        <h2 class="col-title">Fotos</h2>
+        <ul class="col-list">
+          {photosGroup.map((item) => (
+            <li class="list-item">
+              <a href={item.link} class="item-link">
+                <span class="item-name">{item.title}</span>
+                <span class="item-meta">{item.type}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
   </div>
 </Layout>
 
@@ -129,8 +166,14 @@ const music = allEntries.filter(e => e.type === 'music');
   }
   .archive-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    align-items: start;
     gap: 3rem;
+  }
+  @media (max-width: 1100px) {
+    .archive-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
   @media (max-width: 860px) {
     .archive-grid {

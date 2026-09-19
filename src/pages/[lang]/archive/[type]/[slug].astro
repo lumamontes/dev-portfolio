@@ -17,10 +17,13 @@ export async function getStaticPaths() {
     getCollection('music'),
   ]);
 
-  // `project` now has its own canonical content collection (ticket 24) —
-  // a WordPress-tagged `entry:project` post with the same slug would
-  // otherwise silently win and shadow the real content below.
-  const wordpressEntries = (await getWordPressArchiveEntries()).filter((entry) => entry.type !== 'project');
+  // `project` and `book` have their own canonical local content
+  // collections — a WordPress-tagged post of either type with the same
+  // slug would otherwise silently win and shadow the real content below
+  // (verified: this was already happening to the local Clean Code entry).
+  const wordpressEntries = (await getWordPressArchiveEntries()).filter(
+    (entry) => entry.type !== 'project' && entry.type !== 'book',
+  );
   const wordpressPaths = wordpressEntries.map((entry) => ({
     params: { lang: entry.lang, type: entry.type, slug: entry.slug.replace(/-en$/, '') },
     props: { wordpressEntry: entry },
