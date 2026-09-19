@@ -6,6 +6,8 @@
 
 **Status:** needs-info
 
+**Related:** 32 (a widget-duplication bug found during planning — unrelated to this ticket's live-data confirmation blocker).
+
 - [x] The source, authentication and privacy boundary are explicit.
 - [x] Live listening data is never required for core site behavior.
 - [x] Missing, stale, denied or unavailable data has a graceful fallback.

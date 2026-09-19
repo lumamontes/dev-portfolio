@@ -6,6 +6,8 @@
 
 **Status:** completed
 
+**Superseded by:** 24 (projects move from the hardcoded data source used here into a real `project` content collection, plus a curated set of additional GitHub projects; the zine half of this ticket stands as-is).
+
 - [x] Existing project information is represented as the current editable project source and appears in the archive.
 - [x] A zine entry supports title, optional cover, description, context, optional date and external link.
 - [x] Zine entries link clearly to Biblioteca de Zines.

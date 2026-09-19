@@ -6,6 +6,8 @@
 
 **Status:** completed
 
+**Superseded by:** 34 (this ticket's scope was to preserve `/about`, `/contact`, `/til` and `/projects` as full pages; the updated spec now removes `/about`/`/contact` and redirects `/til`/`/projects` into the Archive instead).
+
 - [x] Existing public routes resolve to the correct entry.
 - [x] Intentional route changes have permanent redirects.
 - [x] Language-specific routes do not cross into the wrong content variant.

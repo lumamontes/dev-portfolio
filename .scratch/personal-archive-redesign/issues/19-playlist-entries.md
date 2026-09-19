@@ -6,6 +6,8 @@
 
 **Status:** completed
 
+**Superseded by:** 25 (playlists move from being WordPress `music` entries with Spotify embeds to their own standalone entry type — name, cover, link, optional note — per the updated domain model in `CONTEXT.md`; the 5 existing playlist entries get reclassified, not discarded).
+
 - [x] A playlist can be represented as an archive entry or embedded experience.
 - [x] The source platform and attribution are visible.
 - [x] The page remains useful when embeds are blocked or unavailable.

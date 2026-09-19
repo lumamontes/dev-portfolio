@@ -6,6 +6,8 @@
 
 **Status:** completed
 
+**Extended by:** 27 (the homepage now also needs to absorb the identity/contact content from `/about` and `/contact` before those pages can be removed).
+
 - [x] The introduction communicates Luma's professional and creative identity.
 - [x] Professional and creative entries appear without a segregation layer.
 - [x] Visitors can reach deeper archive and professional sections.

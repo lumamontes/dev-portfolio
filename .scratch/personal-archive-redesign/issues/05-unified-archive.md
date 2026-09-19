@@ -6,6 +6,8 @@
 
 **Status:** completed
 
+**Extended by:** 26 (books are fetched but never rendered on the archive index, and photos are not rendered as a group either — both gaps found during planning and closed there).
+
 - [x] Mixed public entries render in one archive.
 - [x] Each entry has a clear visitor-facing type label.
 - [x] Archive filtering respects language, visibility, category and tags.

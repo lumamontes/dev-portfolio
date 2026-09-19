@@ -16,9 +16,15 @@ A **zine entry** documents a zine with its title, cover, context and related lin
 
 A **photo entry** documents one photograph or a photo album. It can include images, captions, dates, place and context without requiring every image to become a separate archive entry. `photo` is the canonical type for both forms.
 
-A **music entry** documents a musical listening experience, artist, album, playlist, music blog post or listening log. Live listening data is optional and must respect Luma's privacy.
+A **music entry** documents a musical listening experience, artist, album, music blog post or listening log. Live listening data is optional and must respect Luma's privacy.
+
+A **playlist entry** documents a named playlist as a lightweight link preview (name, cover, destination link), with an optional short note or observation. It is not a music entry: a playlist is a pointer to a collection hosted elsewhere, not authored listening writing.
+_Avoid_: treating a playlist as a music entry.
 
 A **book entry** documents a book Luma wants to recommend or remember. It needs only the book's identity and can include a cover and a short personal impression. Reading-tracker metadata is optional and a separate reading-note entity is not required.
+
+**Experience** is Luma's professional history (employment and volunteer roles: organization, dates, title, scope, responsibilities). It is not an archive entry type and never contains projects or repository links — a role that also produced a notable open-source project is represented as a separate `project` entry in the archive, referenced from the experience if useful, not folded into it.
+_Avoid_: filing an open-source or personal project under Experience/Work.
 
 ## Editorial state
 
