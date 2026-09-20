@@ -67,75 +67,70 @@ O [Mermaid](https://mermaid.js.org/) é uma ferramenta excelente para isso, pois
 
 Imagine que você precisa documentar um fluxo de autenticação OAuth. Em vez de apenas texto, você pode criar um diagrama:
 
-sequenceDiagram  
-    participant U as Usuário  
-    participant A as App  
-    participant S as Servidor Auth  
-    participant API as API  
-      
-    U->>A: Clica em "Login"  
-    A->>S: Redireciona para autenticação  
-    S->>U: Exibe tela de login  
-    U->>S: Insere credenciais  
-    S->>A: Retorna token de acesso  
-    A->>API: Faz requisição com token  
-    API->>A: Retorna dados  
-    A->>U: Exibe conteúdo
+```mermaid
+sequenceDiagram
+    participant U as Usuário
+    participant A as App
+    participant S as Servidor Auth
+    participant API as API
 
+    U->>A: Clica em "Login"
+    A->>S: Redireciona para autenticação
+    S->>U: Exibe tela de login
+    U->>S: Insere credenciais
+    S->>A: Retorna token de acesso
+    A->>API: Faz requisição com token
+    API->>A: Retorna dados
+    A->>U: Exibe conteúdo
+```
 
 ## Exemplo 2: Arquitetura de um sistema
 
 Para documentar a arquitetura de uma feature, um diagrama de componentes é muito útil:
 
-graph TD  
-    A\[Frontend\] -->|HTTP Request| B\[API Gateway\]  
-    B -->|Valida Token| C\[Auth Service\]  
-    B -->|Processa Dados| D\[Feature Service\]  
-    D -->|Lê/Escreve| E\[(Database)\]  
-    D -->|Envia Eventos| F\[Message Queue\]  
-    F -->|Processa| G\[Background Worker\]
-
+```mermaid
+graph TD
+    A[Frontend] -->|HTTP Request| B[API Gateway]
+    B -->|Valida Token| C[Auth Service]
+    B -->|Processa Dados| D[Feature Service]
+    D -->|Lê/Escreve| E[(Database)]
+    D -->|Envia Eventos| F[Message Queue]
+    F -->|Processa| G[Background Worker]
+```
 
 ## Exemplo 3: Estados de uma feature
 
 Para features com diferentes estados ou ciclos de vida:
 
-stateDiagram-v2  
-    \[\*\] --> Rascunho  
-    Rascunho --> EmRevisao: Enviar para revisão  
-    EmRevisao --> Aprovado: Aprovar  
-    EmRevisao --> Rascunho: Solicitar alterações  
-    Aprovado --> Publicado: Publicar  
-    Publicado --> Arquivado: Arquivar  
-    Arquivado --> \[\*\]
-
+```mermaid
+stateDiagram-v2
+    [*] --> Rascunho
+    Rascunho --> EmRevisao: Enviar para revisão
+    EmRevisao --> Aprovado: Aprovar
+    EmRevisao --> Rascunho: Solicitar alterações
+    Aprovado --> Publicado: Publicar
+    Publicado --> Arquivado: Arquivar
+    Arquivado --> [*]
+```
 
 ## Exemplo 4: Processo de decisão
 
-flowchart TD  
-    A\[Recebe requisição\] --> B{Usuário autenticado?}  
-    B -->|Não| C\[Retorna 401\]  
-    B -->|Sim| D{Tem permissão?}  
-    D -->|Não| E\[Retorna 403\]  
-    D -->|Sim| F{Dados válidos?}  
-    F -->|Não| G\[Retorna 400\]  
-    F -->|Sim| H\[Processa requisição\]  
-    H --> I\[Retorna 200\]
+```mermaid
+flowchart TD
+    A[Recebe requisição] --> B{Usuário autenticado?}
+    B -->|Não| C[Retorna 401]
+    B -->|Sim| D{Tem permissão?}
+    D -->|Não| E[Retorna 403]
+    D -->|Sim| F{Dados válidos?}
+    F -->|Não| G[Retorna 400]
+    F -->|Sim| H[Processa requisição]
+    H --> I[Retorna 200]
+```
 
 
 ## 4 — Leia e aprenda com os melhores
 
 Leia documentações de linguagens de programação/frameworks famosos, livros e conteúdo sobre escrita técnica. Com o tempo você vai perceber que isso vai influenciando na sua própria escrita.
-
-## Get Luma Goes Montes’s stories in your inbox
-
-Join Medium for free to get updates from this writer.
-
-Subscribe
-
-Subscribe
-
-Remember me for faster sign in
 
 Você pode até mesmo usar outras documentações públicas de inspiração (não no conteúdo, mas da forma que aquilo foi entregue para o leitor).
 

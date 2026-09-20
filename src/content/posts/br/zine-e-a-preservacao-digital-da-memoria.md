@@ -94,34 +94,6 @@ No contexto de zines, temos alguns arquivos comunitários independentes que têm
 
 (Inclusive, já temos um texto [aqui](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines?r=53s7hh&utm_campaign=post&utm_medium=web) sobre como **digitalizar seus zines**, pra quem quiser começar a mandar seus zines pra gente)
 
-[](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)
-
-[
-
-![Como digitalizar seus zines](https://substackcdn.com/image/fetch/$s_!q6R1!,w_140,h_140,c_fill,f_auto,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe4a44250-6c01-4407-b3c9-0d518f6110d8_4961x3508.png)
-
-](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)
-
-[
-
-#### Como digitalizar seus zines
-
-](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)
-
-[](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)
-
-[](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)[Biblioteca de Zines](https://substack.com/profile/308685797-biblioteca-de-zines) e [Angelo Dias](https://substack.com/profile/25000032-angelo-dias)
-
-·
-
-April 12, 2025
-
-[
-
-Ler a história completa
-
-](https://bibliotecadezines.substack.com/p/como-digitalizar-seus-zines)
-
 ## Eaí, foi minha [cuíra](https://www.dicio.com.br/cuira/) sobre todo esse assunto:
 
 > `Como uma comunidade muitas vezes independente e com equipe reduzida consegue manter esse tipo de arquivo digital por muito tempo, respeitando suas próprias escolhas e os direitos de seus autores, sem depender de uma pessoa só e com o menor custo possível?`

@@ -63,6 +63,7 @@ const lang = wordpressEntry?.lang ?? entry.data.lang;
 const title = wordpressEntry?.title ?? entry.data.title;
 const description = wordpressEntry?.description ?? (type === 'book' ? entry.data.author : entry.data.description);
 const isBook = type === 'book';
+const isText = type === 'text';
 const isZine = type === 'zine';
 const isProject = type === 'project';
 const isPhoto = type === 'photo';
@@ -225,6 +226,11 @@ const currentSlug = wordpressEntry
               <p class="font-bold">{entry.data.images.length} {entry.data.images.length === 1 ? 'photo' : 'photos'}</p>
             </div>
           )}
+    {isText && !isWordPressEntry && entry.data.externalUrl && (
+      <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+        Originally published at {new URL(entry.data.externalUrl).hostname.replace(/^www\./, '')} ↗
+      </a>
+    )}
     {isZine && !isWordPressEntry && (
       <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
         Ler na Biblioteca de Zines ↗
