@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import { isPublicEntryInLanguage, type Language } from './content-model';
-import { getWordPressArchiveEntries } from './wordpress';
+import { getWordPressArchiveEntries, type WordPressArchiveEntry } from './wordpress';
 
 export interface ArchiveEntry {
   title: string;
@@ -8,6 +8,38 @@ export interface ArchiveEntry {
   slug: string;
   lang: Language;
   link: string;
+}
+
+// Memoized so the WordPress API is hit once per build/process, no matter
+// how many times this or getArchiveEntries is called (getStaticPaths for
+// paths, then once per language for the sidebar) — three separate
+// round-trips to the same endpoint was a real, measured build slowdown.
+let canonicalWordPressEntries: Promise<WordPressArchiveEntry[]> | null = null;
+
+/**
+ * WordPress entries with the project/book exclusion and the playlist
+ * reclassification applied — the single place that logic lives, reused
+ * by getArchiveEntries and by [type]/[slug].astro's getStaticPaths so
+ * the two can't drift into disagreeing about which entries exist.
+ */
+export function getCanonicalWordPressEntries(): Promise<WordPressArchiveEntry[]> {
+  if (!canonicalWordPressEntries) {
+    canonicalWordPressEntries = getWordPressArchiveEntries().then((entries) =>
+      entries
+        // `project` and `book` have their own canonical local content
+        // collections — a WordPress-tagged post of either type would
+        // otherwise duplicate it under a different (and possibly stale)
+        // title (see docs/adr commentary on the "Zine Library" / Clean
+        // Code overlaps).
+        .filter((e) => e.type !== 'project' && e.type !== 'book')
+        // The 5 existing playlists are hosted in WordPress tagged
+        // entry:music (ticket 19, before playlist existed as its own
+        // type). Reclassified here rather than by rewriting the live
+        // WordPress posts.
+        .map((e) => (e.type === 'music' && e.tags.includes('playlist') ? { ...e, type: 'playlist' as const } : e)),
+    );
+  }
+  return canonicalWordPressEntries;
 }
 
 /**
@@ -18,7 +50,7 @@ export interface ArchiveEntry {
  * apart the way the project/book duplication bugs did.
  */
 export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]> {
-  const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, musicCollection, playlistEntries, wpEntries] =
+  const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, musicCollection, playlistEntries, wpEntriesExcludingProjects] =
     await Promise.all([
       getCollection('posts'),
       getCollection('books-en'),
@@ -29,19 +61,8 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
       getCollection('photos'),
       getCollection('music'),
       getCollection('playlists'),
-      getWordPressArchiveEntries(),
+      getCanonicalWordPressEntries(),
     ]);
-
-  // `project` and `book` have their own canonical local content
-  // collections — a WordPress-tagged post of either type would otherwise
-  // duplicate it under a different (and possibly stale) title (see
-  // docs/adr commentary on the "Zine Library" / Clean Code overlaps).
-  const wpEntriesExcludingProjects = wpEntries
-    .filter((e) => e.type !== 'project' && e.type !== 'book')
-    // The 5 existing playlists are hosted in WordPress tagged entry:music
-    // (ticket 19, before playlist existed as its own type). Reclassified
-    // here rather than by rewriting the live WordPress posts.
-    .map((e) => (e.type === 'music' && e.tags.includes('playlist') ? { ...e, type: 'playlist' as const } : e));
 
   const localEntries: ArchiveEntry[] = [
     ...posts.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
@@ -114,15 +135,29 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
   const pointerTypes = new Set(['zine', 'project', 'playlist']);
   const wordpressEntries: ArchiveEntry[] = wpEntriesExcludingProjects
     .filter((e) => e.lang === lang)
-    .map((e) => ({
-      title: e.title,
-      type: e.type,
-      slug: e.slug,
-      lang: e.lang,
-      link: (pointerTypes.has(e.type) && e.externalUrl) || `/${lang}/archive/${e.type}/${e.slug}`,
-    }));
+    .map((e) => {
+      // The generated route strips a trailing -en (see getStaticPaths in
+      // [type]/[slug].astro) — the link built here must match exactly,
+      // or entries with such a slug 404 when clicked.
+      const routeSlug = e.slug.replace(/-en$/, '');
+      return {
+        title: e.title,
+        type: e.type,
+        slug: routeSlug,
+        lang: e.lang,
+        link: (pointerTypes.has(e.type) && e.externalUrl) || `/${lang}/archive/${e.type}/${routeSlug}`,
+      };
+    });
 
-  return [...localEntries, ...wordpressEntries];
+  // WordPress wins on a (type, slug) collision — matching the exact
+  // priority [type]/[slug].astro's getStaticPaths already uses when
+  // generating routes. Without this, a local entry later migrated into
+  // WordPress under the same slug would list twice here even though only
+  // one page actually exists to link to.
+  const wordpressKeys = new Set(wordpressEntries.map((e) => `${e.type}/${e.slug}`));
+  const dedupedLocalEntries = localEntries.filter((e) => !wordpressKeys.has(`${e.type}/${e.slug}`));
+
+  return [...dedupedLocalEntries, ...wordpressEntries];
 }
 
 export interface GroupedArchiveEntries {
