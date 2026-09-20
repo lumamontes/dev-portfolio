@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import { isPublicEntryInLanguage, type Language } from './content-model';
 import { getWordPressArchiveEntries, type WordPressArchiveEntry } from './wordpress';
+import { useTranslations } from '../utils/lang';
 
 export interface ArchiveEntry {
   title: string;
@@ -170,14 +171,14 @@ export interface GroupedArchiveEntries {
 }
 
 /** Groups by entry type first, per the sidebar/index navigation decision. */
-export function groupArchiveEntries(entries: ArchiveEntry[]): GroupedArchiveEntries[] {
+export function groupArchiveEntries(entries: ArchiveEntry[], lang: Language): GroupedArchiveEntries[] {
+  const t = useTranslations(lang);
   const groups: Array<{ label: string; types: string[] }> = [
-    { label: 'Escritos & Textos', types: ['text'] },
-    { label: 'TIL / Aprendizados', types: ['learning-note'] },
-    { label: 'Projetos & Labs', types: ['project', 'zine'] },
-    { label: 'Música & Mídia', types: ['music', 'playlist'] },
-    { label: 'Livros', types: ['book'] },
-    { label: 'Fotos', types: ['photo'] },
+    { label: t('archive.group.text'), types: ['text', 'learning-note'] },
+    { label: t('archive.group.projects'), types: ['project', 'zine'] },
+    { label: t('archive.group.music'), types: ['music', 'playlist'] },
+    { label: t('archive.group.books'), types: ['book'] },
+    { label: t('archive.group.photos'), types: ['photo'] },
   ];
 
   return groups

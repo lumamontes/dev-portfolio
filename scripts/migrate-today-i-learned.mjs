@@ -47,14 +47,12 @@ const notes = [
     tags: ['indexeddb', 'javascript'],
     publishedAt: '2025-11-22',
   },
-  {
-    slug: 'json-backup-export-patterns',
-    sourceFile: 'json-backup-export-import-patterns.md',
-    title: 'JSON backup and export patterns for task management',
-    description: 'Implementing JSON-based backup functionality for user data export/import while working on the Tarefitas app.',
-    tags: ['data-patterns'],
-    publishedAt: '2026-02-16',
-  },
+  // json-backup-export-patterns.md is deliberately NOT here: the local
+  // clone had a "json-backup-export-import-patterns.md" file, but it was
+  // untracked in that repo's own git status and was never actually pushed
+  // to GitHub — its sourceUrl would 404. It was migrated and hand-authored
+  // directly in src/content/learning-notes/json-backup-export-patterns.md
+  // instead, with the real note content inlined and no sourceUrl field.
   {
     slug: 'kotlin-spring-boot-api',
     sourceFile: 'kotlin-with-spring-boot-for-api-usage.md',
