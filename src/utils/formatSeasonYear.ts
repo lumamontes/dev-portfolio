@@ -11,6 +11,10 @@ const seasonsByMonth: Record<'en' | 'br', string[]> = {
 };
 
 export default function formatSeasonYear(date: Date, lang: 'en' | 'br' = 'en'): string {
-  const season = seasonsByMonth[lang][date.getMonth()];
-  return `${season} ${date.getFullYear()}`;
+  // Content collections parse a date-only YAML scalar (`publishedAt:
+  // 2025-06-01`) as UTC midnight — local getters would shift the date
+  // backward a day in any negative-UTC-offset timezone (including Brazil's),
+  // which can misreport both the season and, for a Jan 1 date, the year.
+  const season = seasonsByMonth[lang][date.getUTCMonth()];
+  return `${season} ${date.getUTCFullYear()}`;
 }
