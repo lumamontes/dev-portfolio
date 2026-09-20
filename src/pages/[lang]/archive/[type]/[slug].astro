@@ -98,7 +98,7 @@ const currentSlug = wordpressEntry
 
 <Layout title={title} description={description}>
   <div class="flex flex-col lg:flex-row min-h-screen border-t-2 border-[#111111]">
-    <aside class="w-full lg:w-[300px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-r-2 border-[#111111] p-6 order-2 lg:order-1">
+    <aside class="w-full lg:w-[300px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-l-2 border-[#111111] p-6 order-2">
       <div class="lg:sticky lg:top-6">
         <nav aria-label="Archive navigation">
           <h3 class="mb-4 text-xs font-black uppercase tracking-wide">Navegar</h3>
@@ -139,7 +139,7 @@ const currentSlug = wordpressEntry
       </div>
     </aside>
 
-    <article class="flex-1 min-w-0 overflow-y-auto order-1 lg:order-2">
+    <article class="flex-1 min-w-0 overflow-y-auto order-1">
       <div class="flex items-center justify-between border-b-2 border-[#111111] px-4 py-3 lg:px-10">
         <a href={`/${lang}/archive`} class="font-mono text-xs uppercase font-bold bg-[#111111] text-[#F4F4F0] px-2 py-1 inline-block">← INDEX</a>
         <p class="font-mono text-xs uppercase tracking-widest opacity-60">[{type}]</p>
