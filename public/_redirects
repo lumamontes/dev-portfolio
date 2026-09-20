@@ -1,3 +1,14 @@
 /br/books /br/archive 301
 /en/books /en/archive 301
 /:lang/books/:slug /:lang/archive/book/:slug 301
+
+/br/about /br 301
+/en/about /en 301
+/br/contact /br 301
+/en/contact /en 301
+
+/br/til /br/archive 301
+/en/til /en/archive 301
+
+/br/projects /br/archive 301
+/en/projects /en/archive 301

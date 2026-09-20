@@ -20,7 +20,7 @@ const homePath = `/${lang === 'br' ? '' : lang}`;
       <div class="header-links">
         <a class:list={{ active: pathname === homePath || (lang === 'br' && pathname === '/') }} href={homePath}>home</a>
         <a class:list={{ active: pathname.includes('/archive') }} href={`/${lang}/archive`}>archive</a>
-        <a class:list={{ active: pathname.includes('/projects') }} href={`/${lang}/projects`}>work</a>
+        <a class:list={{ active: pathname.includes('/experience') }} href={`/${lang}/experience`}>work</a>
       </div>
     )}
     
