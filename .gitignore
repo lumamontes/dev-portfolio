@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+.aider*
+
+# Obsidian vault settings (personal editor state, not shared)
+.obsidian/
