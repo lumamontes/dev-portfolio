@@ -26,15 +26,16 @@ const nativeEntryTypes: EntryType[] = [
   'music',
 ];
 
-export function resolveEntryPreview(entry: PreviewableEntry): { mode: PreviewMode } {
+export function resolveEntryPreview(entry: PreviewableEntry): { mode: PreviewMode; embedUrl?: string } {
   if (entry.type === 'playlist') {
     // Unlike the general project live-embed tier, this needs no manual
     // `embeddable` verification: Spotify's /embed/ endpoint is a first-party
     // surface built to be iframed, so it's safe to detect purely from the
     // URL shape. Anything else (a non-Spotify playlist link) stays capped
     // at link-card, per the ADR's "genuine third-party pointer" ceiling.
-    if (entry.externalUrl && toSpotifyEmbedUrl(entry.externalUrl)) {
-      return { mode: 'spotify-embed' };
+    const embedUrl = entry.externalUrl ? toSpotifyEmbedUrl(entry.externalUrl) : undefined;
+    if (embedUrl) {
+      return { mode: 'spotify-embed', embedUrl };
     }
     return { mode: 'link-card' };
   }

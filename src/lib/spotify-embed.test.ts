@@ -20,6 +20,12 @@ describe('toSpotifyEmbedUrl', () => {
     );
   });
 
+  it('converts a region-qualified locale-prefixed share link (e.g. intl-pt-BR)', () => {
+    expect(toSpotifyEmbedUrl('https://open.spotify.com/intl-pt-BR/playlist/37i9dQZF1DXcBWIGoYBM5M')).toBe(
+      'https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M',
+    );
+  });
+
   it('converts a track URL', () => {
     expect(toSpotifyEmbedUrl('https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC')).toBe(
       'https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC',

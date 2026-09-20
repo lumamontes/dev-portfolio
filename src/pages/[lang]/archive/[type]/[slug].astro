@@ -6,7 +6,6 @@ import type { WordPressArchiveEntry } from '@/lib/wordpress';
 import { resolveEntryPreview } from '@/lib/portal-preview';
 import { getArchiveEntries, getCanonicalWordPressEntries, groupArchiveEntries } from '@/lib/archive-entries';
 import formatDate from '@/utils/formatDate';
-import { toSpotifyEmbedUrl } from '@/lib/spotify-embed';
 
 export async function getStaticPaths() {
   const [posts, booksEn, booksBr, learningNotes, zines, projects, photos, music, playlists] = await Promise.all([
@@ -75,8 +74,8 @@ const Content = !isWordPressEntry && !isPlaylist ? (await entry.render()).Conten
 const playlistUrl = wordpressEntry?.externalUrl ?? entry?.data.externalUrl;
 const playlistNote = !isWordPressEntry ? entry?.data.note : undefined;
 const playlistCover = !isWordPressEntry ? entry?.data.cover : undefined;
-const playlistPreviewMode = isPlaylist ? resolveEntryPreview({ type: 'playlist', externalUrl: playlistUrl }).mode : undefined;
-const spotifyEmbedUrl = playlistPreviewMode === 'spotify-embed' && playlistUrl ? toSpotifyEmbedUrl(playlistUrl) : undefined;
+const playlistPreview = isPlaylist ? resolveEntryPreview({ type: 'playlist', externalUrl: playlistUrl }) : undefined;
+const spotifyEmbedUrl = playlistPreview?.mode === 'spotify-embed' ? playlistPreview.embedUrl : undefined;
 
 const previewMode = isProject && !isWordPressEntry
   ? resolveEntryPreview({
