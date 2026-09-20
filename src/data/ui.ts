@@ -21,19 +21,16 @@ export const defaultLang = 'en';
 export const ui = {
   en: {
     // Main presentation
-    'presentation.title': 'Hi, I\'m Luma',
-    'presentation.description': "I'm a full-stack developer from Amapá with over 4 years of experience creating amazing web and mobile experiences. Currently working at Arcotech as a Software Engineer II, developing solutions for educational institutions. Previously worked as a Senior Developer at Proesc for 2 years, where I contributed to frontend, backend, and mobile projects using ReactJS, React Native, PHP, Laravel, and PostgreSQL.",
+    'currently.listening': 'currently listening',
+    'currently.listening.description': 'what I\'m listening to right now',
+    'currently.listening.empty': 'nothing playing.',
+    'presentation.title': 'Luma Montes',
+    'presentation.description': "im a software engineer from a city in the extreme north of brazil called Macapá. i love coding, making random website with my twin sister Luana, contributing to community and open source projects. this website has a bit about my professional work but also some stuff about music, books, and other of my interests. i hope you enjoy it! ",
     'presentation.location': 'Macapá, Amapá, Brazil',
     'presentation.experience': '4+ years of experience',
     'presentation.currentRole': 'Software Engineer II at Arcotech',
     'about.me': 'Me.',
     'about.me.description': 'I like to play videogames, watch tv shows with maaany seasons, basketball and anything involving technology and education.',
-
-    // Blog section
-    'blog.latest': 'Latest posts',
-    'blog.all': 'See all posts',
-    'blog.cta': 'Read on dev.to',
-    'blog.empty': 'More articles coming soon!',
 
     'currently.learning': 'Currently Learning',
     'currently.learning.description': 'Skills in progress',
@@ -75,18 +72,7 @@ export const ui = {
     'about.skills.tools': 'Tools',
     'skills.learning': 'Learning',
     'experience.subtitle': 'Experience',
-    // Blog page  
-    'blog.description': 'I like to write a bit as I learn new things, here are some of my posts.',
-    'blog.total_posts': 'total posts',
-    'blog.filter.title': 'Filter by tags:',
-    'blog.filter.all': 'All Posts',
-    'blog.filter.clear': 'Clear all',
-    'blog.filter.showAll': 'Show all tags',
-    'blog.filter.hideAll': 'Hide tags',
-    'blog.filter.search': 'Search tags...',
-    'blog.filter.noResults.title': 'No posts found',
-    'blog.filter.noResults.description': 'Try selecting different tags or clear all filters.',
-    
+
     'coffe.title': 'A simple cup of coffee.',
     'coffe.description': 'A simple cup of coffee.',
     'about.connect.title': 'Let\'s connect!',
@@ -133,19 +119,17 @@ export const ui = {
   },
   br: {
     // Main presentation  
-    'presentation.title': 'Oi, me chamo Luma',
-    'presentation.description': "Sou uma desenvolvedora fullstack do Amapá com mais de 4 anos de experiência criando experiências web e mobile incríveis. Atualmente trabalho na Arcotech como Engenheira de Software II, desenvolvendo soluções para instituições de ensino. Anteriormente trabalhei como Desenvolvedora Sênior na Proesc por 2 anos, onde contribuí para projetos frontend, backend e mobile usando ReactJS, React Native, PHP, Laravel e PostgreSQL.",
+    'currently.listening': 'ouvindo agora',
+    'currently.listening.description': 'a música que tô ouvindo agora',
+    'currently.listening.empty': 'nadas.',
+    'presentation.title': 'Luma Montes',
+    // 'presentation.description': "im a software engineer from a city in the extreme north of brazil called Macapá. i love coding, making random website with my twin sister Luana, contributing to community and open source projects. this website has a bit about my professional work but also some stuff about music, books, and other of my interests. i hope you enjoy it! ",
+    'presentation.description': "sou uma engenheira de software de uma cidade no extremo norte do brasil chamada Macapá. eu amo codar, fazer uns sites bestildas e aleatórios com a minha irmã gêmea Luana, e contribuir pra comunidades e projetos open source. esse site tem um pouco sobre minhas experiências profissionais, mas também algumas coisas sobre música, livros e outros interesses. uuuhu",
     'presentation.location': 'Macapá, Amapá, Brasil',
     'presentation.experience': '4+ anos de experiência',
     'presentation.currentRole': 'Engenheira de Software II na Arcotech',
     'about.me': 'Eu.',
     'about.me.description': 'Gosto de jogar videogames, ver séries com muuuitas temporadas, assistir basquete e de qualquer coisa envolvendo tecnologia e educação.',
-
-    // Blog section
-    'blog.latest': 'Últimos posts',
-    'blog.all': 'Ver todos os posts',
-    'blog.cta': 'Ler no dev.to',
-    'blog.empty': 'Mais artigos chegando em breve!',
 
     'currently.learning': 'Estudando atualmente',
     'currently.learning.description': 'Habilidades em progresso',
@@ -180,19 +164,7 @@ export const ui = {
     'projects.others': 'Outros Projetos',
     'projects.inProgress': 'Em Desenvolvimento',
     'projects.all': 'Todos os projetos',
-    
-    // Blog page  
-    'blog.description': 'Gosto de escrever um pouco conforme vou aprendendo coisas novas, aqui tem alguns dos meus posts.',
-    'blog.total_posts': 'total de posts',
-    'blog.filter.title': 'Filtrar por tags:',
-    'blog.filter.all': 'Todos os Posts',
-    'blog.filter.clear': 'Limpar tudo',
-    'blog.filter.showAll': 'Mostrar todas as tags',
-    'blog.filter.hideAll': 'Esconder tags',
-    'blog.filter.search': 'Pesquisar tags...',
-    'blog.filter.noResults.title': 'Nenhum post encontrado',
-    'blog.filter.noResults.description': 'Tente selecionar outras tags ou limpar todos os filtros.',
-    
+
     'coffe.title': 'Um simples café.',
     'coffe.description': 'Um simples café.',
     // Contact page
