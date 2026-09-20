@@ -175,10 +175,9 @@ export function groupArchiveEntries(entries: ArchiveEntry[]): GroupedArchiveEntr
     { label: 'Escritos & Textos', types: ['text'] },
     { label: 'TIL / Aprendizados', types: ['learning-note'] },
     { label: 'Projetos & Labs', types: ['project', 'zine'] },
-    { label: 'Música & Mídia', types: ['music'] },
+    { label: 'Música & Mídia', types: ['music', 'playlist'] },
     { label: 'Livros', types: ['book'] },
     { label: 'Fotos', types: ['photo'] },
-    { label: 'Playlists', types: ['playlist'] },
   ];
 
   return groups
