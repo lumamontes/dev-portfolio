@@ -2,7 +2,7 @@
 title: "Equivalence Classes: What should I test during software development?"
 publishedAt: 2024-07-16
 description: "Talking a bit about equivalence classes and how they can help determine what to test and when to stop during software development."
-isPublish: false
+isPublish: true
 lang: "en"
 tags: ["testing", "software-engineering", "equivalence-classes", "test-strategy", "quality-assurance", "theory"]
 ---

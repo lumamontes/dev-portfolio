@@ -1,6 +1,6 @@
 ---
 title: "Effective technical writing"
-publishedAt: 2026-09-15
+publishedAt: 2025-07-24
 description: "A few reminders about making technical writing easier to read."
 lang: "en"
 tags: ["writing", "documentation"]

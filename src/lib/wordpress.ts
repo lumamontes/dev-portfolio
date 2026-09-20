@@ -65,13 +65,6 @@ const namedEntities: Record<string, string> = {
   quot: '"',
   apos: "'",
   nbsp: ' ',
-  '#8217': '’',
-  '#8216': '‘',
-  '#8220': '“',
-  '#8221': '”',
-  '#8211': '–',
-  '#8212': '—',
-  '#8230': '…',
 };
 
 function decodeHtmlEntities(value: string) {

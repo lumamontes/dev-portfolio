@@ -172,7 +172,8 @@ export interface GroupedArchiveEntries {
 /** Groups by entry type first, per the sidebar/index navigation decision. */
 export function groupArchiveEntries(entries: ArchiveEntry[]): GroupedArchiveEntries[] {
   const groups: Array<{ label: string; types: string[] }> = [
-    { label: 'Escritos & Textos', types: ['text', 'learning-note'] },
+    { label: 'Escritos & Textos', types: ['text'] },
+    { label: 'TIL / Aprendizados', types: ['learning-note'] },
     { label: 'Projetos & Labs', types: ['project', 'zine'] },
     { label: 'Música & Mídia', types: ['music'] },
     { label: 'Livros', types: ['book'] },

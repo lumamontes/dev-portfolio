@@ -2,7 +2,7 @@
 title: "Testing JWT Authenticated APIs with PHPUnit and Pest in Laravel"
 publishedAt: 2024-04-16
 description: "How to test your Laravel APIs with PHPUnit and Pest, using Factory, Traits, and custom commands"
-isPublish: false
+isPublish: true
 lang: "en"
 tags: ["php", "laravel", "testing", "phpunit", "pest", "jwt", "api", "authentication", "tutorial"]
 ---

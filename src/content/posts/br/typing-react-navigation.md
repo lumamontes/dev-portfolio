@@ -3,7 +3,7 @@ title: "Como Tipar Navegação no React Native com TypeScript"
 publishedAt: 2024-02-17
 description: "Algumas formas que a gente consegue fazer a tipagem de diferentes navegadores no React 
 Navigation"
-isPublish: false
+isPublish: true
 lang: "br"
 tags: ["react-native", "typescript", "navigation", "react-navigation", "mobile-development", "tutorial"]
 ---

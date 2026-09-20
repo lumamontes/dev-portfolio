@@ -1,6 +1,6 @@
 ---
 title: "Sharing state between Astro islands"
-publishedAt: 2026-09-15
+publishedAt: 2025-08-21
 description: "Astro islands need a shared client-side store when multiple components share state."
 lang: "en"
 tags: ["astro", "state-management"]

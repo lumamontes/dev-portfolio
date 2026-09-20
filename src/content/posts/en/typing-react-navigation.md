@@ -2,7 +2,7 @@
 title: "Typing React Navigation with TypeScript"
 publishedAt: 2024-02-17
 description: "Different ways we can type navigation and routes with React Navigation"
-isPublish: false
+isPublish: true
 lang: "en"
 tags: ["react-native", "typescript", "navigation", "react-navigation", "mobile-development", "tutorial"]
 ---

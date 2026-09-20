@@ -2,7 +2,7 @@
 title: "Testando SSR no Next.js com Jest"
 publishedAt: 2024-02-18
 description: "Como testar uma página SSR no Next.js usando Jest"
-isPublish: false
+isPublish: true
 lang: "br"
 tags: ["nextjs", "testing", "jest", "ssr", "server-side-rendering", "react", "tutorial"]
 ---
