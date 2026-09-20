@@ -1,10 +1,21 @@
 ---
-title: "Gerenciamento de estados de forma minimalista no React Native com Jotai"
-publishedAt: 2024-02-17
-description: "Nesse artigo, vou falar sobre o Jotai, uma biblioteca de gerenciamento de estados globais para React, explicando seu funcionamento e como utilizá-lo em um projeto React Native."
-isPublish: false
-lang: "br"
-tags: ["react-native", "state-management", "jotai", "react", "atomic", "minimalist", "tutorial"]
+title: Gerenciamento de estados de forma minimalista no React Native com Jotai
+publishedAt: 2024-03-09
+description: 'Nesse artigo, vou falar sobre o Jotai, uma biblioteca de gerenciamento de estados globais para React, explicando seu funcionamento e como utilizá-lo em um projeto React Native.'
+isPublish: true
+lang: br
+tags:
+  - react-native
+  - state-management
+  - jotai
+  - react
+  - atomic
+  - minimalist
+  - tutorial
+isDraft: false
+editorialState: published-elsewhere
+visibility: public
+externalUrl: 'https://dev.to/lumamontes/gerenciamento-de-estados-de-forma-minimalista-no-react-native-com-jotai-5fle'
 ---
 
 Nesse artigo, vou falar sobre o Jotai, uma biblioteca de gerenciamento de estados globais para React. Vou explicar o que é o Jotai, como ele funciona, e como utilizá-lo em um projeto React Native.

@@ -1,10 +1,23 @@
 ---
-title: "O que eu aprendi liderando tecnicamente a criação de um aplicativo de comunicação escolar"
-publishedAt: 2025-11-20
-description: "Compartilho aprendizados práticos sobre liderança técnica em mobile, incluindo escolha de stack, TypeScript, Expo, documentação e como evitar o Bus Factor."
-isPublish: false
-lang: "br"
-tags: ["react-native", "mobile-development", "tech-lead", "typescript", "expo", "leadership", "best-practices", "documentation", "team-management"]
+title: O que eu aprendi liderando tecnicamente a criação de um aplicativo de comunicação escolar
+publishedAt: 2025-08-09
+description: 'Compartilho aprendizados práticos sobre liderança técnica em mobile, incluindo escolha de stack, TypeScript, Expo, documentação e como evitar o Bus Factor.'
+isPublish: true
+lang: br
+tags:
+  - react-native
+  - mobile-development
+  - tech-lead
+  - typescript
+  - expo
+  - leadership
+  - best-practices
+  - documentation
+  - team-management
+isDraft: false
+editorialState: published-elsewhere
+visibility: public
+externalUrl: 'https://dev.to/lumamontes/o-que-eu-aprendi-liderando-tecnicamente-a-criacao-de-um-aplicativo-de-comunicacao-escolar-1agl'
 ---
 
 # O que eu aprendi liderando tecnicamente a criação de um aplicativo de comunicação escolar

@@ -1,10 +1,21 @@
 ---
-title: "Using Guard/Wrapper components as an alternative to ternary conditions in React"
+title: Using Guard/Wrapper components as an alternative to ternary conditions in React
 publishedAt: 2025-12-15
-description: "Learn how to use Guard/Wrapper components to improve React code readability, replacing complex ternaries with declarative and reusable components."
-isPublish: false
-lang: "en"
-tags: ["react", "components", "refactoring", "code-quality", "best-practices", "conditional-rendering", "wrapper-components", "tutorial"]
+description: 'Learn how to use Guard/Wrapper components to improve React code readability, replacing complex ternaries with declarative and reusable components.'
+isPublish: true
+lang: en
+tags:
+  - react
+  - components
+  - refactoring
+  - code-quality
+  - best-practices
+  - conditional-rendering
+  - wrapper-components
+  - tutorial
+isDraft: false
+editorialState: published-here
+visibility: public
 ---
 
 # Using Guard/Wrapper components as an alternative to ternary conditions in React

@@ -1,10 +1,22 @@
 ---
-title: "Usando Guard/Wrapper components como alternativa a condições ternárias no React"
-publishedAt: 2025-12-15
-description: "Aprenda a usar componentes Guard/Wrapper para melhorar a legibilidade do código React, substituindo ternários complexos por componentes declarativos e reutilizáveis."
-isPublish: false
-lang: "br"
-tags: ["react", "components", "refactoring", "code-quality", "best-practices", "conditional-rendering", "wrapper-components", "tutorial"]
+title: Usando Guard/Wrapper components como alternativa a condições ternárias no React
+publishedAt: 2025-08-18
+description: 'Aprenda a usar componentes Guard/Wrapper para melhorar a legibilidade do código React, substituindo ternários complexos por componentes declarativos e reutilizáveis.'
+isPublish: true
+lang: br
+tags:
+  - react
+  - components
+  - refactoring
+  - code-quality
+  - best-practices
+  - conditional-rendering
+  - wrapper-components
+  - tutorial
+isDraft: false
+editorialState: published-elsewhere
+visibility: public
+externalUrl: 'https://dev.to/pupunhacode/usando-guardwrapper-components-como-alternativa-a-condicoes-ternarias-no-react-1ch8'
 ---
 
 # Usando Guard/Wrapper components como alternativa a condições ternárias no React

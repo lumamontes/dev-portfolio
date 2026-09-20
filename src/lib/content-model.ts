@@ -89,6 +89,10 @@ const postFieldsSchema = z.object({
   isDraft: z.boolean().default(false),
   lang: languageSchema,
   tags: z.array(tagSchema).default([]),
+  // Set for a post migrated in from somewhere it was originally published
+  // (editorialState: 'published-elsewhere') — shown as provenance, never
+  // fetched live. See docs/adr/0002-external-entry-preview-strategy.md.
+  externalUrl: z.string().url().optional(),
 }).merge(optionalCanonicalFieldsSchema);
 
 export const postSchema = postFieldsSchema.transform((entry) => {

@@ -1,10 +1,22 @@
 ---
-title: "What I learned technically leading the creation of a school communication app"
+title: What I learned technically leading the creation of a school communication app
 publishedAt: 2025-11-20
-description: "I share practical learnings about technical leadership in mobile development, including stack selection, TypeScript, Expo, documentation, and how to avoid Bus Factor."
-isPublish: false
-lang: "en"
-tags: ["react-native", "mobile-development", "tech-lead", "typescript", "expo", "leadership", "best-practices", "documentation", "team-management"]
+description: 'I share practical learnings about technical leadership in mobile development, including stack selection, TypeScript, Expo, documentation, and how to avoid Bus Factor.'
+isPublish: true
+lang: en
+tags:
+  - react-native
+  - mobile-development
+  - tech-lead
+  - typescript
+  - expo
+  - leadership
+  - best-practices
+  - documentation
+  - team-management
+isDraft: false
+editorialState: published-here
+visibility: public
 ---
 
 # What I learned technically leading the creation of a school communication app
