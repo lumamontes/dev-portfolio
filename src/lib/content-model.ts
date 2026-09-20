@@ -147,6 +147,11 @@ const zineFieldsSchema = z.object({
   date: validDateSchema.optional(),
   cover: z.string().url().optional(),
   externalUrl: z.string().url(),
+  // A locally hosted PDF of the zine itself (e.g. /zines/gemulas.pdf under
+  // public/), rendered inline in the portal so the zine is actually
+  // readable on this site — externalUrl remains the Biblioteca de Zines
+  // reference link, shown alongside it, not a substitute for it.
+  pdfUrl: z.string().trim().optional(),
   lang: languageSchema,
   tags: z.array(tagSchema).default([]),
 }).merge(optionalCanonicalFieldsSchema);
