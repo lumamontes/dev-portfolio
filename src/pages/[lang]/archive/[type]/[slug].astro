@@ -292,6 +292,14 @@ const currentSlug = wordpressEntry
           </a>
         )}
 
+        {isText && !isWordPressEntry && entry.data.bannerImage && (
+          <img
+            src={entry.data.bannerImage}
+            alt=""
+            class="mb-8 max-w-3xl w-full border-2 border-[#111111] zine-shadow"
+          />
+        )}
+
         {!isPlaylist && !isBook && (
           <div class="prose prose-zinc max-w-3xl prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
             {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}

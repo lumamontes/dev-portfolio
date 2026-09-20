@@ -93,6 +93,11 @@ const postFieldsSchema = z.object({
   // (editorialState: 'published-elsewhere') — shown as provenance, never
   // fetched live. See docs/adr/0002-external-entry-preview-strategy.md.
   externalUrl: z.string().url().optional(),
+  // A root-relative path into public/ (e.g. "/images/posts/my-post.jpg"),
+  // matching the same convention photoImageSchema's `src` already uses —
+  // not a full URL, since this is for locally-authored images, not
+  // external CDN links.
+  bannerImage: z.string().trim().optional(),
 }).merge(optionalCanonicalFieldsSchema);
 
 export const postSchema = postFieldsSchema.transform((entry) => {
