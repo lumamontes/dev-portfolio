@@ -110,7 +110,7 @@ const currentSlug = wordpressEntry
                   {group.entries.map((item) => {
                     const isCurrent = item.type === type && item.slug === currentSlug;
                     return (
-                      <li class="border-t border-dotted border-[#111111]/30 first:border-t-0">
+                      <li class="block border-t border-dotted border-[#111111]/30 first:border-t-0">
                         <a
                           href={item.link}
                           target={item.link.startsWith('http') ? '_blank' : '_self'}
