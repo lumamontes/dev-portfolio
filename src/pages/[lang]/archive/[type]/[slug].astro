@@ -98,7 +98,7 @@ const currentSlug = wordpressEntry
 
 <Layout title={title} description={description}>
   <div class="flex flex-col lg:flex-row min-h-screen border-t-2 border-[#111111]">
-    <aside class="w-full lg:w-[420px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-r-2 border-[#111111] p-6 order-2 lg:order-1">
+    <aside class="w-full lg:w-[300px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-r-2 border-[#111111] p-6 order-2 lg:order-1">
       <div class="lg:sticky lg:top-6">
         <nav aria-label="Archive navigation">
           <h3 class="mb-4 text-xs font-black uppercase tracking-wide">Navegar</h3>
@@ -145,7 +145,7 @@ const currentSlug = wordpressEntry
         <p class="font-mono text-xs uppercase tracking-widest opacity-60">[{type}]</p>
       </div>
 
-      {/* PREVIEW — compact, boxed, never the dominant element on the page */}
+      {/* PREVIEW — the actual content is the point of clicking through, so it gets the dominant content column; the sidebar is a real but secondary lateral-nav aid */}
       <div class="px-4 py-8 lg:px-10">
         {isZine && !isWordPressEntry && entry.data.pdfUrl && (
           <div class="max-w-2xl border-2 border-[#111111] zine-shadow">
@@ -222,7 +222,7 @@ const currentSlug = wordpressEntry
         )}
 
         {previewMode === 'live-embed' && (
-          <div class="w-full lg:max-w-sm border-2 border-[#111111] zine-shadow">
+          <div class="border-2 border-[#111111] zine-shadow">
             <div class="flex items-center justify-between bg-[#111111] px-3 py-2 font-mono text-[10px] uppercase text-[#F4F4F0]">
               <span>Live preview</span>
               <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline">
