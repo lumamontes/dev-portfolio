@@ -4,6 +4,7 @@ authors: ["Luana Góes", "Luma Montes"]
 description: "Uma zine autobiográfica feita por duas irmãs gêmeas sobre ser gêmeas."
 context: "Feita com papel A4, caneta preta, canetinha e colagem."
 externalUrl: "https://www.biblioteca-de-zines.com.br/zines/luana-goes-gemulas"
+pdfUrl: "/zines/gemulas.pdf"
 lang: "br"
 category: "Zines"
 tags: ["Autobiográfico"]
