@@ -1,13 +1,22 @@
 ---
-title: "Introdução básica ao framework Astro"
-publishedAt: 2023-08-13
-description: "Conheça o framework Astro: rapidez e modernidade na criação de sites! ✨🚀"
+title: Introdução básica ao framework Astro
+publishedAt: 2024-05-18
+description: "Conheça o framework Astro: rapidez e modernidade na criação de sites! ✨\U0001F680"
 isPublish: true
-editorialState: "published-here"
-visibility: "public"
-format: "long"
-lang: "br"
-tags: ["astro", "web-development", "framework", "performance", "mpa", "static-site", "tutorial"]
+editorialState: published-elsewhere
+visibility: public
+format: long
+lang: br
+tags:
+  - astro
+  - web-development
+  - framework
+  - performance
+  - mpa
+  - static-site
+  - tutorial
+isDraft: false
+externalUrl: 'https://dev.to/lumamontes/introducao-ao-framework-astro-398j'
 ---
 
 

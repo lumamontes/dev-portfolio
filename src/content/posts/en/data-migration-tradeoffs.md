@@ -1,10 +1,21 @@
 ---
-title: "Data migration: trade-offs and strategies"
+title: 'Data migration: trade-offs and strategies'
 publishedAt: 2026-01-18
-description: "Learn about the main trade-offs and strategies when performing data migrations, including ETL, Jupyter Notebook vs CLI, and practical challenges."
-isPublish: false
-lang: "en"
-tags: ["data-migration", "etl", "data-engineering", "jupyter-notebook", "cli", "database", "best-practices", "tutorial"]
+description: 'Learn about the main trade-offs and strategies when performing data migrations, including ETL, Jupyter Notebook vs CLI, and practical challenges.'
+isPublish: true
+lang: en
+tags:
+  - data-migration
+  - etl
+  - data-engineering
+  - jupyter-notebook
+  - cli
+  - database
+  - best-practices
+  - tutorial
+isDraft: false
+editorialState: published-here
+visibility: public
 ---
 
 **Context**

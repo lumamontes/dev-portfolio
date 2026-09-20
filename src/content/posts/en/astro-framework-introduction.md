@@ -1,13 +1,21 @@
 ---
-title: "Basic introduction to Astro Framework"
+title: Basic introduction to Astro Framework
 publishedAt: 2023-08-13
-description: "Discover the Astro framework: speed and modernity in website creation! ✨🚀"
+description: "Discover the Astro framework: speed and modernity in website creation! ✨\U0001F680"
 isPublish: true
-editorialState: "published-here"
-visibility: "public"
-format: "long"
-lang: "en"
-tags: ["astro", "web-development", "framework", "performance", "mpa", "static-site", "tutorial"]
+editorialState: published-here
+visibility: public
+format: long
+lang: en
+tags:
+  - astro
+  - web-development
+  - framework
+  - performance
+  - mpa
+  - static-site
+  - tutorial
+isDraft: false
 ---
 
 

@@ -1,10 +1,20 @@
 ---
-title: "Local-First With Legend State"
+title: Local-First With Legend State
 publishedAt: 2025-05-25
-description: "Learn how to implement a Local-First app with Legend State, a powerful state management library for React."
-isPublish: false
-lang: "en"
-tags: ["react-native", "state-management", "local-first", "legend-state", "offline", "sync", "tutorial"]
+description: 'Learn how to implement a Local-First app with Legend State, a powerful state management library for React.'
+isPublish: true
+lang: en
+tags:
+  - react-native
+  - state-management
+  - local-first
+  - legend-state
+  - offline
+  - sync
+  - tutorial
+isDraft: false
+editorialState: published-here
+visibility: public
 ---
 
 ***If you want to jump straight to the code, this [repository here](https://github.com/lumamontes/local-first-legend-state) contains an API and an Expo app that implement everything discussed in this article:***

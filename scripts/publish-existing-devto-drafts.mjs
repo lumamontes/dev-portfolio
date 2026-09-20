@@ -39,6 +39,33 @@ const items = [
     externalUrl: 'https://dev.to/proesc/fluxo-de-autenticacao-no-react-native-usando-expo-router-61h',
     publishedAt: '2024-02-18',
   },
+  // Second sweep of the author's dev.to profile turned up 4 more articles
+  // that, same as above, already existed locally as drafts under different
+  // slugs.
+  {
+    br: 'src/content/posts/br/astro-framework-introduction.md',
+    en: 'src/content/posts/en/astro-framework-introduction.md',
+    externalUrl: 'https://dev.to/lumamontes/introducao-ao-framework-astro-398j',
+    publishedAt: '2024-05-18',
+  },
+  {
+    br: 'src/content/posts/br/local-first-legend-state.md',
+    en: 'src/content/posts/en/local-first-legend-state.md',
+    externalUrl: 'https://dev.to/lumamontes/construindo-apps-local-first-com-legend-state-no-react-native-11nf',
+    publishedAt: '2025-05-16',
+  },
+  {
+    br: 'src/content/posts/br/modern-monolith-with-inertia.md',
+    en: 'src/content/posts/en/modern-monolith-with-inertia.md',
+    externalUrl: 'https://dev.to/proesc/construindo-um-monolito-moderno-com-inertiajs-1j1k',
+    publishedAt: '2025-01-03',
+  },
+  {
+    br: 'src/content/posts/br/data-migration-tradeoffs.md',
+    en: 'src/content/posts/en/data-migration-tradeoffs.md',
+    externalUrl: 'https://dev.to/lumamontes/migracao-de-dados-entre-servicos-estrategias-riscos-e-trade-offs-4p3c',
+    publishedAt: '2026-01-18',
+  },
 ];
 
 // Normalizes to a plain YYYY-MM-DD string — js-yaml round-trips an

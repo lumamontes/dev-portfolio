@@ -1,10 +1,23 @@
 ---
-title: "Monolito moderno com Inertia.js"
-publishedAt: 2025-09-15
-description: "Aprenda sobre Inertia.js, uma abordagem para facilitar o desenvolvimento de monolitos modernos, eliminando a necessidade de APIs tradicionais e integrando React/Vue com Laravel."
-isPublish: false
-lang: "br"
-tags: ["inertiajs", "laravel", "react", "vue", "monolith", "php", "fullstack", "modern-web-development", "tutorial"]
+title: Monolito moderno com Inertia.js
+publishedAt: 2025-01-03
+description: 'Aprenda sobre Inertia.js, uma abordagem para facilitar o desenvolvimento de monolitos modernos, eliminando a necessidade de APIs tradicionais e integrando React/Vue com Laravel.'
+isPublish: true
+lang: br
+tags:
+  - inertiajs
+  - laravel
+  - react
+  - vue
+  - monolith
+  - php
+  - fullstack
+  - modern-web-development
+  - tutorial
+isDraft: false
+editorialState: published-elsewhere
+visibility: public
+externalUrl: 'https://dev.to/proesc/construindo-um-monolito-moderno-com-inertiajs-1j1k'
 ---
 
 Recentemente tive uma experiência com Inertia Js em um projeto, e fiquei impressionada com a facilidade que foi o desenvolvimento! Neste artigo, vou falar um pouquinho sobre como o Inertia funciona e seus benefícios.

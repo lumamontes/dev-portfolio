@@ -1,10 +1,22 @@
 ---
-title: "Migração de dados: trade-offs e estratégias"
+title: 'Migração de dados: trade-offs e estratégias'
 publishedAt: 2026-01-18
-description: "Aprenda sobre os principais trade-offs e estratégias ao realizar migrações de dados, incluindo ETL, Jupyter Notebook vs CLI, e desafios práticos."
-isPublish: false
-lang: "br"
-tags: ["data-migration", "etl", "data-engineering", "jupyter-notebook", "cli", "database", "best-practices", "tutorial"]
+description: 'Aprenda sobre os principais trade-offs e estratégias ao realizar migrações de dados, incluindo ETL, Jupyter Notebook vs CLI, e desafios práticos.'
+isPublish: true
+lang: br
+tags:
+  - data-migration
+  - etl
+  - data-engineering
+  - jupyter-notebook
+  - cli
+  - database
+  - best-practices
+  - tutorial
+isDraft: false
+editorialState: published-elsewhere
+visibility: public
+externalUrl: 'https://dev.to/lumamontes/migracao-de-dados-entre-servicos-estrategias-riscos-e-trade-offs-4p3c'
 ---
 
 **Contexto**
