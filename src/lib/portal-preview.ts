@@ -1,6 +1,7 @@
 import type { EditorialState, EntryType } from './content-model';
+import { toSpotifyEmbedUrl } from './spotify-embed';
 
-export const previewModes = ['live-embed', 'native', 'link-card'] as const;
+export const previewModes = ['live-embed', 'spotify-embed', 'native', 'link-card'] as const;
 export type PreviewMode = (typeof previewModes)[number];
 
 export interface PreviewableEntry {
@@ -27,6 +28,14 @@ const nativeEntryTypes: EntryType[] = [
 
 export function resolveEntryPreview(entry: PreviewableEntry): { mode: PreviewMode } {
   if (entry.type === 'playlist') {
+    // Unlike the general project live-embed tier, this needs no manual
+    // `embeddable` verification: Spotify's /embed/ endpoint is a first-party
+    // surface built to be iframed, so it's safe to detect purely from the
+    // URL shape. Anything else (a non-Spotify playlist link) stays capped
+    // at link-card, per the ADR's "genuine third-party pointer" ceiling.
+    if (entry.externalUrl && toSpotifyEmbedUrl(entry.externalUrl)) {
+      return { mode: 'spotify-embed' };
+    }
     return { mode: 'link-card' };
   }
 

@@ -75,7 +75,8 @@ const Content = !isWordPressEntry && !isPlaylist ? (await entry.render()).Conten
 const playlistUrl = wordpressEntry?.externalUrl ?? entry?.data.externalUrl;
 const playlistNote = !isWordPressEntry ? entry?.data.note : undefined;
 const playlistCover = !isWordPressEntry ? entry?.data.cover : undefined;
-const spotifyEmbedUrl = isPlaylist && playlistUrl ? toSpotifyEmbedUrl(playlistUrl) : undefined;
+const playlistPreviewMode = isPlaylist ? resolveEntryPreview({ type: 'playlist', externalUrl: playlistUrl }).mode : undefined;
+const spotifyEmbedUrl = playlistPreviewMode === 'spotify-embed' && playlistUrl ? toSpotifyEmbedUrl(playlistUrl) : undefined;
 
 const previewMode = isProject && !isWordPressEntry
   ? resolveEntryPreview({
@@ -167,7 +168,7 @@ const currentSlug = wordpressEntry
                     width={image.width}
                     height={image.height}
                     loading="lazy"
-                    class="aspect-square w-full border-2 border-[#111111] zine-shadow object-cover"
+                    class="w-full border-2 border-[#111111] zine-shadow"
                   />
                 </a>
                 {(image.caption || image.credit) && (

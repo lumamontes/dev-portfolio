@@ -30,12 +30,27 @@ describe('resolveEntryPreview', () => {
     expect(result.mode).toBe('link-card');
   });
 
-  it('returns link-card for a playlist entry, even if embeddable is set', () => {
+  it('returns spotify-embed for a playlist entry with a Spotify URL, regardless of embeddable', () => {
+    const result = resolveEntryPreview({
+      type: 'playlist',
+      externalUrl: 'https://open.spotify.com/playlist/example',
+    });
+
+    expect(result.mode).toBe('spotify-embed');
+  });
+
+  it('returns link-card for a playlist entry with a non-Spotify URL, even if embeddable is set', () => {
     const result = resolveEntryPreview({
       type: 'playlist',
       embeddable: true,
-      externalUrl: 'https://open.spotify.com/playlist/example',
+      externalUrl: 'https://music.youtube.com/playlist?list=example',
     });
+
+    expect(result.mode).toBe('link-card');
+  });
+
+  it('returns link-card for a playlist entry with no external URL', () => {
+    const result = resolveEntryPreview({ type: 'playlist' });
 
     expect(result.mode).toBe('link-card');
   });

@@ -14,6 +14,12 @@ describe('toSpotifyEmbedUrl', () => {
     );
   });
 
+  it('converts a locale-prefixed share link (e.g. from the mobile share sheet)', () => {
+    expect(toSpotifyEmbedUrl('https://open.spotify.com/intl-pt/playlist/37i9dQZF1DXcBWIGoYBM5M')).toBe(
+      'https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M',
+    );
+  });
+
   it('converts a track URL', () => {
     expect(toSpotifyEmbedUrl('https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC')).toBe(
       'https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC',
