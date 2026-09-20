@@ -99,21 +99,62 @@ const currentSlug = wordpressEntry
 
 <Layout title={title} description={description}>
   <div class="flex flex-col lg:flex-row min-h-screen border-t-2 border-[#111111]">
-    <article class="flex-1 overflow-y-auto">
+    <aside class="w-full lg:w-[420px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-r-2 border-[#111111] p-6 order-2 lg:order-1">
+      <div class="lg:sticky lg:top-6">
+        <nav aria-label="Archive navigation">
+          <h3 class="mb-4 text-xs font-black uppercase tracking-wide">Navegar</h3>
+          <div class="lg:max-h-[80vh] space-y-6 lg:overflow-y-auto lg:pr-2 font-mono text-[11px]">
+            {sidebarGroups.map((group) => (
+              <div>
+                <p class="mb-2 border-b border-[#111111]/20 pb-1 text-[10px] font-bold uppercase tracking-wide opacity-70">{group.label}</p>
+                <ul>
+                  {group.entries.map((item) => {
+                    const isCurrent = item.type === type && item.slug === currentSlug;
+                    return (
+                      <li class="border-t border-dotted border-[#111111]/30 first:border-t-0">
+                        <a
+                          href={item.link}
+                          target={item.link.startsWith('http') ? '_blank' : '_self'}
+                          rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          aria-current={isCurrent ? 'page' : undefined}
+                          class:list={[
+                            'block truncate py-1.5',
+                            isCurrent ? 'font-bold underline' : 'opacity-80 hover:opacity-100 hover:underline',
+                          ]}
+                        >
+                          {item.title}{item.link.startsWith('http') ? ' ↗' : ''}
+                        </a>
+                        {isCurrent && (
+                          <div class="mb-3 pl-3 border-l-2 border-[#111111] text-[10px] normal-case opacity-80">
+                            {description}
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <article class="flex-1 min-w-0 overflow-y-auto order-1 lg:order-2">
       <div class="flex items-center justify-between border-b-2 border-[#111111] px-4 py-3 lg:px-10">
         <a href={`/${lang}/archive`} class="font-mono text-xs uppercase font-bold bg-[#111111] text-[#F4F4F0] px-2 py-1 inline-block">← INDEX</a>
         <p class="font-mono text-xs uppercase tracking-widest opacity-60">[{type}]</p>
       </div>
 
-      {/* PREVIEW — the actual content, given as much room as possible */}
+      {/* PREVIEW — compact, boxed, never the dominant element on the page */}
       <div class="px-4 py-8 lg:px-10">
         {isZine && !isWordPressEntry && entry.data.pdfUrl && (
-          <div class="border-2 border-[#111111] zine-shadow">
+          <div class="max-w-2xl border-2 border-[#111111] zine-shadow">
             <iframe
               src={entry.data.pdfUrl}
               title={`${title} — PDF`}
               loading="lazy"
-              class="h-[85vh] w-full border-0"
+              class="h-[70vh] w-full border-0"
             />
           </div>
         )}
@@ -124,8 +165,8 @@ const currentSlug = wordpressEntry
             title={`${title} — Spotify playlist`}
             loading="lazy"
             allow="encrypted-media"
-            class="w-full border-0"
-            style="height: 480px;"
+            class="w-full max-w-lg border-0"
+            style="height: 380px;"
           />
         )}
         {isPlaylist && !spotifyEmbedUrl && playlistUrl && (
@@ -158,7 +199,7 @@ const currentSlug = wordpressEntry
         )}
 
         {isPhoto && !isWordPressEntry && (
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="max-w-3xl grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {entry.data.images.map((image: { src: string; alt: string; caption?: string; credit?: string; width?: number; height?: number }) => (
               <figure class="m-0">
                 <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`Open full-size: ${image.alt}`}>
@@ -182,7 +223,7 @@ const currentSlug = wordpressEntry
         )}
 
         {previewMode === 'live-embed' && (
-          <div class="border-2 border-[#111111] zine-shadow">
+          <div class="max-w-2xl border-2 border-[#111111] zine-shadow">
             <div class="flex items-center justify-between bg-[#111111] px-3 py-2 font-mono text-[10px] uppercase text-[#F4F4F0]">
               <span>Live preview</span>
               <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline">
@@ -194,7 +235,7 @@ const currentSlug = wordpressEntry
               title={`Live preview of ${title}`}
               loading="lazy"
               referrerpolicy="no-referrer"
-              class="h-[80vh] w-full border-0"
+              class="aspect-video w-full border-0"
             />
           </div>
         )}
@@ -236,78 +277,36 @@ const currentSlug = wordpressEntry
           {isText && !isWordPressEntry && entry.data.publishedAt && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{formatDate(entry.data.publishedAt)}</span>}
           {isZine && !isWordPressEntry && <span class="bg-emerald-400 px-2 py-0.5 zine-border">BY {entry.data.authors.join(' & ')}</span>}
           {isPhoto && !isWordPressEntry && entry.data.place && <span class="bg-zinc-200 px-2 py-0.5 zine-border">LOC: {entry.data.place}</span>}
+          {isPhoto && !isWordPressEntry && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.images.length} {entry.data.images.length === 1 ? 'photo' : 'photos'}</span>}
           {isMusic && !isWordPressEntry && <span class="bg-yellow-400 px-2 py-0.5 zine-border">SOURCE: {entry.data.kind}</span>}
           {isProject && !isWordPressEntry && entry.data.role && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.role}</span>}
           {isProject && !isWordPressEntry && entry.data.period && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.period}</span>}
         </div>
-      </header>
-    </article>
-
-    <aside class="w-full lg:w-[340px] border-t-2 lg:border-t-0 lg:border-l-2 border-[#111111] bg-zinc-100 p-6">
-      <div class="sticky top-6">
-        <div class="space-y-6 font-mono text-[11px]">
-          {isPhoto && !isWordPressEntry && (
-            <p class="font-bold">{entry.data.images.length} {entry.data.images.length === 1 ? 'photo' : 'photos'}</p>
-          )}
+        {isProject && !isWordPressEntry && entry.data.stack.length > 0 && (
+          <ul class="mt-4 flex flex-wrap gap-2 font-mono text-[10px] uppercase">
+            {entry.data.stack.map((tech: string) => (
+              <li class="bg-zinc-200 px-2 py-0.5 zine-border">{tech}</li>
+            ))}
+          </ul>
+        )}
+        <div class="mt-6 font-mono text-[11px]">
           {isText && !isWordPressEntry && entry.data.externalUrl && (
-            <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+            <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 text-emerald-700 hover:bg-emerald-400/10">
               Originally published at {new URL(entry.data.externalUrl).hostname.replace(/^www\./, '')} ↗
             </a>
           )}
           {isZine && !isWordPressEntry && (
-            <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+            <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 text-emerald-700 hover:bg-emerald-400/10">
               Ler na Biblioteca de Zines ↗
             </a>
           )}
           {isMusic && !isWordPressEntry && (
-            <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 font-mono text-sm text-emerald-300 hover:bg-emerald-400/10">
+            <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="inline-flex rounded border border-emerald-400/50 px-4 py-3 text-emerald-700 hover:bg-emerald-400/10">
               Ver publicação original ↗
             </a>
           )}
-          {isProject && !isWordPressEntry && entry.data.stack.length > 0 && (
-            <div>
-              <p class="mb-2 opacity-50">STACK</p>
-              <ul class="flex flex-wrap gap-2">
-                {entry.data.stack.map((tech: string) => (
-                  <li class="bg-zinc-200 px-2 py-0.5 zine-border">{tech}</li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
-
-        <nav aria-label="Archive navigation" class="mt-8 border-t-2 border-[#111111] pt-6">
-          <h3 class="mb-4 text-xs font-black uppercase tracking-wide">Navegar</h3>
-          <div class="max-h-[70vh] space-y-5 overflow-y-auto pr-2 font-mono text-[11px]">
-            {sidebarGroups.map((group) => (
-              <div class="border-l-2 border-[#111111]/20 pl-3">
-                <p class="mb-2 text-[10px] font-bold uppercase tracking-wide opacity-70">{group.label}</p>
-                <ul class="space-y-2">
-                  {group.entries.map((item) => {
-                    const isCurrent = item.type === type && item.slug === currentSlug;
-                    return (
-                      <li class="block">
-                        <a
-                          href={item.link}
-                          target={item.link.startsWith('http') ? '_blank' : '_self'}
-                          rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          aria-current={isCurrent ? 'page' : undefined}
-                          class:list={[
-                            'block truncate hover:underline',
-                            isCurrent ? 'font-bold underline' : 'opacity-80',
-                          ]}
-                        >
-                          {item.title}{item.link.startsWith('http') ? ' ↗' : ''}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </nav>
-      </div>
-    </aside>
+      </header>
+    </article>
   </div>
 </Layout>
