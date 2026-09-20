@@ -1,0 +1,135 @@
+---
+import { languages } from '@/data/ui';
+import { getLangFromUrl } from '@/utils/lang';
+import Layout from '@/layouts/Layout.astro';
+import { experiences, profile } from '@/data/experience';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = getLangFromUrl(Astro.url);
+
+// This page's source data (career-engine) is English-only — see
+// scripts/import-career-engine.mjs. Chrome/labels are localized; the
+// experience content itself isn't fabricated into a translation.
+const labels = {
+  en: {
+    title: 'Work',
+    description: "Luma's employment and volunteer history.",
+    team: 'Team',
+    technologies: 'Technologies',
+    responsibilities: 'Responsibilities',
+    highlights: 'Highlights',
+    education: 'Education',
+    englishNote: null,
+  },
+  br: {
+    title: 'Trabalho',
+    description: 'Histórico profissional e voluntário de Luma.',
+    team: 'Time',
+    technologies: 'Tecnologias',
+    responsibilities: 'Responsabilidades',
+    highlights: 'Destaques',
+    education: 'Formação',
+    englishNote: 'O conteúdo desta página está em inglês, na língua original dos dados de origem.',
+  },
+}[lang];
+---
+
+<Layout title={labels.title} description={labels.description}>
+  <div class="mx-auto max-w-3xl">
+    <header class="mb-12 border-b-2 border-[#111111] pb-8">
+      <p class="mb-4 font-mono text-xs uppercase tracking-widest opacity-60">[work]</p>
+      <h1 class="mb-4 text-5xl font-black leading-[0.9] md:text-7xl">{labels.title}</h1>
+      {labels.englishNote && <p class="mb-4 font-mono text-xs opacity-60">{labels.englishNote}</p>}
+      {profile.summary && <p class="text-lg leading-relaxed">{profile.summary}</p>}
+      {profile.education.length > 0 && (
+        <div class="mt-6">
+          <p class="mb-2 font-mono text-xs uppercase opacity-50">{labels.education}</p>
+          <ul class="space-y-1 text-sm">
+            {profile.education.map((item) => (
+              <li class="block">{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </header>
+
+    <div class="space-y-6">
+      {experiences.map((exp) => (
+        <details class="group border-2 border-[#111111] zine-shadow">
+          <summary class="flex cursor-pointer flex-wrap items-baseline justify-between gap-2 p-4 hover:bg-zinc-100">
+            <span class="flex flex-wrap items-baseline gap-3">
+              <span class="text-lg font-black capitalize">{exp.company}</span>
+              <span class="font-mono text-xs opacity-60">{exp.roles[exp.roles.length - 1].title}</span>
+            </span>
+            <span class="font-mono text-xs opacity-60">{exp.period}</span>
+          </summary>
+
+          <div class="space-y-6 border-t-2 border-[#111111] p-4">
+            <p class="font-mono text-xs opacity-60">{exp.location}{exp.team ? ` · ${exp.team}` : ''}</p>
+
+            {exp.roles.length > 1 && (
+              <div>
+                <ul class="space-y-1">
+                  {exp.roles.map((role) => (
+                    <li class="block font-mono text-xs">
+                      <span class="font-bold">{role.title}</span> — {role.period}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {exp.scope && <p class="text-base leading-relaxed">{exp.scope}</p>}
+
+            {exp.responsibilities.length > 0 && (
+              <div>
+                <p class="mb-2 font-mono text-xs uppercase opacity-50">{labels.responsibilities}</p>
+                <ul class="list-disc space-y-1 pl-5 text-sm">
+                  {exp.responsibilities.map((item) => (
+                    <li class="block">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {exp.highlights.length > 0 && (
+              <div>
+                <p class="mb-2 font-mono text-xs uppercase opacity-50">{labels.highlights}</p>
+                <ul class="list-disc space-y-1 pl-5 text-sm">
+                  {exp.highlights.map((item) => (
+                    <li class="block">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {exp.technologies.length > 0 && (
+              <div>
+                <p class="mb-2 font-mono text-xs uppercase opacity-50">{labels.technologies}</p>
+                <ul class="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech) => (
+                    <li class="block bg-zinc-200 px-2 py-0.5 font-mono text-xs zine-border">{tech}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {exp.relatedProjectSlug && (
+              <a
+                href={`/${lang}/archive/project/${exp.relatedProjectSlug}`}
+                class="inline-flex border border-[#111111] px-4 py-2 font-mono text-xs uppercase hover:bg-zinc-100"
+              >
+                See the project ↗
+              </a>
+            )}
+
+            <p class="whitespace-pre-line text-sm leading-relaxed opacity-80">{exp.narrative}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Layout>
