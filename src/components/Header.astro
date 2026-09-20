@@ -1,6 +1,7 @@
 ---
 import removeTrailingSlash from '../utils/removeTrailingSlash';
 import LanguagePicker from './LanguagePicker.astro';
+import ListeningNow from './ListeningNow.astro';
 import { getLangFromUrl } from '../utils/lang';
 
 interface Props {
@@ -24,6 +25,7 @@ const homePath = `/${lang === 'br' ? '' : lang}`;
     )}
     
     <div class="header-right">
+      <ListeningNow />
       <LanguagePicker />
     </div>
   </nav>

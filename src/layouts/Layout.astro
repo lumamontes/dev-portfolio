@@ -1,4 +1,5 @@
 ---
+import SocialLinks from '@/components/SocialLinks.astro';
 import Header from '../components/Header.astro';
 import '../styles/post.css';
 import '../styles/tailwind.css';
@@ -6,9 +7,10 @@ import '../styles/tailwind.css';
 interface Props {
   title: string;
   description: string;
+  showNav?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, showNav = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -16,58 +18,64 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   </head>
   <body class="site-shell">
-    <!-- Header lives outside the container so its background can span full-width -->
-    <Header />
-    
-    <!-- All page content will now share this identical wrapper -->
+    <Header showNav={showNav} />
     <main class="site-main">
       <slot />
     </main>
+    <footer class="site-footer">
+      <SocialLinks />
+    </footer>
   </body>
 </html>
 
 <style is:global>
-  :root {
-    --accent: 223, 255, 0;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
   }
-
-  html {
-    font-family: system-ui, sans-serif;
-    background: #111210;
-    color: #e8e7df;
+  html, body {
+    background-color: #F4F4F0;
+    font-family: 'Azeret Mono', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #111111;
+    min-height: 100vh;
   }
-
-  code {
-    font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-      Bitstream Vera Sans Mono, Courier New, monospace;
+  .site-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
-
-  .site-shell { margin: 0; min-width: 320px; background: #111210; color: #e8e7df; }
-  .site-main { width: min(1180px, calc(100% - 3rem)); margin: 0 auto; }
-  a { transition: color .18s ease, border-color .18s ease, background-color .18s ease; }
-  :focus-visible { outline: 2px solid #dfff00; outline-offset: 4px; }
-  @media (max-width: 720px) { .site-main { width: min(100% - 2rem, 600px); } }
-
-  /* Reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+  .site-main {
+    flex: 1;
+    margin-top: 2rem;
+  }
+  .site-footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #111111;
+    display: flex;
+    gap: 1.5rem;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
   }
 </style>

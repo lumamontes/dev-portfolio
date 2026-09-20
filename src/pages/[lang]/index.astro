@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import { getLangFromUrl, useTranslations } from '../../utils/lang';
 import { languages } from '../../data/ui';
-import { about } from '@/data/about';
 import presentation from '@/data/presentation';
 import { Image } from 'astro:assets';
 import MeImg from '../../assets/images/me.jpg';
@@ -13,9 +12,12 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const a = useTranslations(lang, about);
 
-const socialLinks = presentation.socials;
+const quickLinks = [
+  { label: lang === 'br' ? 'Arquivo' : 'Archive', href: `/${lang}/archive` },
+  { label: lang === 'br' ? 'Trabalho' : 'Work', href: `/${lang}/experience` },
+  { label: 'Email', href: `mailto:${presentation.mail}` },
+];
 ---
 
 <Layout title={t('presentation.title')} description={t('presentation.description')} showNav={false}>
@@ -31,56 +33,14 @@ const socialLinks = presentation.socials;
         <a href={`/${lang}/archive`} class="archive-btn">Explorar Arquivo ↗</a>
       </div>
     </article>
-  </section>
 
-  <section class="identity-section">
-    <h2 class="section-label">// {t('about.title')}</h2>
-    <p class="identity-bio">{t('about.description')}</p>
-
-    <div class="skills-grid">
-      <div>
-        <p class="skills-heading">{a('skills.frontend')}</p>
-        <ul class="skills-list">
-          {about[lang]['frontend.skills'].map((skill) => <li>{skill}</li>)}
-        </ul>
-      </div>
-      <div>
-        <p class="skills-heading">{a('skills.backend')}</p>
-        <ul class="skills-list">
-          {about[lang]['backend.skills'].map((skill) => <li>{skill}</li>)}
-        </ul>
-      </div>
-    </div>
-
-    <a href={`/${lang}/experience`} class="inline-link">
-      {lang === 'br' ? 'Ver histórico profissional completo →' : 'See full work history →'}
-    </a>
-  </section>
-
-  <section class="contact-section">
-    <h2 class="section-label">// {t('nav.contact')}</h2>
-    <p class="identity-bio">{t('contact.description')}</p>
-
-    <dl class="contact-grid">
-      <div>
-        <dt>{t('contact.location')}</dt>
-        <dd>{t('contact.locationValue')}</dd>
-      </div>
-      <div>
-        <dt>{t('contact.availability')}</dt>
-        <dd>{t('contact.availabilityValue')}</dd>
-      </div>
-      <div>
-        <dt>Email</dt>
-        <dd><a href={`mailto:${presentation.mail}`}>{presentation.mail}</a></dd>
-      </div>
-    </dl>
-
-    <ul class="contact-links">
-      {socialLinks.filter((social) => social.label !== 'Email').map((social) => (
-        <li><a href={social.link} target="_blank" rel="noopener noreferrer">{social.label}</a></li>
+    <nav class="quick-links" aria-label="Quick links">
+      {quickLinks.map((link) => (
+        <a href={link.href} class="quick-link" target={link.href.startsWith('mailto:') ? undefined : '_self'}>
+          {link.label}
+        </a>
       ))}
-    </ul>
+    </nav>
   </section>
 </Layout>
 
@@ -139,88 +99,26 @@ const socialLinks = presentation.socials;
     color: #111111;
     text-decoration: none;
   }
-
-  .identity-section,
-  .contact-section {
-    max-width: 640px;
-    margin-top: 4rem;
-    padding-top: 2.5rem;
-    border-top: 2px solid #111111;
-  }
-  .section-label {
+  .quick-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
     font-family: 'Azeret Mono', monospace;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    opacity: 0.6;
-    margin-bottom: 1rem;
   }
-  .identity-bio {
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-  }
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  .skills-heading {
-    font-size: 0.75rem;
+  .quick-link {
+    font-size: 1.25rem;
     font-weight: 800;
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    opacity: 0.6;
+    letter-spacing: -0.01em;
   }
-  .skills-list {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .skills-list li {
-    font-size: 0.8rem;
-    padding: 0.15rem 0.5rem;
-    border: 1px solid #111111;
-  }
-  .inline-link {
-    font-weight: 700;
+  .quick-link:hover {
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-underline-offset: 4px;
   }
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    font-family: 'Azeret Mono', monospace;
-    font-size: 0.85rem;
-  }
-  .contact-grid dt {
-    opacity: 0.55;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    margin-bottom: 0.25rem;
-  }
-  .contact-grid dd {
-    font-weight: 700;
-  }
-  .contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    list-style: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-  }
-  .contact-links a:hover {
-    text-decoration: underline;
-  }
-  @media (max-width: 640px) {
-    .skills-grid {
-      grid-template-columns: 1fr;
+  @media (max-width: 1023px) {
+    .quick-links {
+      display: none;
     }
   }
 </style>
