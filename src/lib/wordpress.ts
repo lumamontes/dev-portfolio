@@ -54,8 +54,37 @@ type WordPressOptions = {
   fetcher?: typeof fetch;
 };
 
+// WordPress's REST API returns title/excerpt as HTML-escaped text (e.g. a
+// literal non-breaking space serializes as the entity "&nbsp;", not the
+// actual character) — decode the common named/numeric entities so they
+// don't leak into rendered plain text verbatim.
+const namedEntities: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: ' ',
+  '#8217': '’',
+  '#8216': '‘',
+  '#8220': '“',
+  '#8221': '”',
+  '#8211': '–',
+  '#8212': '—',
+  '#8230': '…',
+};
+
+function decodeHtmlEntities(value: string) {
+  return value.replace(/&(#\d+|#x[0-9a-fA-F]+|[a-zA-Z]+);/g, (match, code) => {
+    if (namedEntities[code] !== undefined) return namedEntities[code];
+    if (code.startsWith('#x')) return String.fromCodePoint(parseInt(code.slice(2), 16));
+    if (code.startsWith('#')) return String.fromCodePoint(parseInt(code.slice(1), 10));
+    return match;
+  });
+}
+
 function stripHtml(value: string) {
-  return value.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  return decodeHtmlEntities(value.replace(/<[^>]*>/g, '')).replace(/\s+/g, ' ').trim();
 }
 
 export async function getWordPressPosts({

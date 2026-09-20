@@ -287,28 +287,39 @@ export const playlistSchema = playlistFieldsSchema.transform((entry) => ({
   }),
 }));
 
-export const bookFieldsSchema = z.object({
+// A single "shelf" entry per language — favorite books, not book reviews.
+// One archive entry holds many books (cover/title/author/link each), rather
+// than one entry per book, per the explicit decision that a per-book index
+// entry doesn't scale and isn't the point (there's no review prose here).
+const favoriteBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().trim().min(1),
   cover: z.string().url().optional(),
+  externalUrl: z.string().url(),
+});
+
+export const bookFieldsSchema = z.object({
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  books: z.array(favoriteBookSchema).min(1),
   published: z.boolean().default(true),
 }).merge(optionalCanonicalFieldsSchema);
 
 export const bookSchemaForLanguage = (lang: Language) =>
-  bookFieldsSchema.transform((book) => {
+  bookFieldsSchema.transform((shelf) => {
     const fields = canonicalFields({
       type: 'book',
       lang,
-      editorialState: book.editorialState,
-      visibility: book.visibility,
-      fallbackEditorialState: book.published ? 'published-here' : 'draft',
-      fallbackVisibility: book.published ? 'public' : 'private',
-      category: book.category,
+      editorialState: shelf.editorialState,
+      visibility: shelf.visibility,
+      fallbackEditorialState: shelf.published ? 'published-here' : 'draft',
+      fallbackVisibility: shelf.published ? 'public' : 'private',
+      category: shelf.category,
       tags: [],
     });
 
     return {
-      ...book,
+      ...shelf,
       ...fields,
       published: fields.visibility === 'public',
     };

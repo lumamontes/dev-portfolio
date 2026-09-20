@@ -26,12 +26,15 @@ export function getCanonicalWordPressEntries(): Promise<WordPressArchiveEntry[]>
   if (!canonicalWordPressEntries) {
     canonicalWordPressEntries = getWordPressArchiveEntries().then((entries) =>
       entries
-        // `project` and `book` have their own canonical local content
-        // collections — a WordPress-tagged post of either type would
-        // otherwise duplicate it under a different (and possibly stale)
-        // title (see docs/adr commentary on the "Zine Library" / Clean
-        // Code overlaps).
-        .filter((e) => e.type !== 'project' && e.type !== 'book')
+        // `project`, `book`, and `text` all have their own canonical local
+        // content collections now (ticket 33 migrated every article Luma
+        // has written into the local `posts` collection) — a WordPress-
+        // tagged post of any of these types would otherwise duplicate a
+        // local entry under a stale/broken title (confirmed in practice:
+        // WordPress `text` posts here were literal duplicates of migrated
+        // local articles, with un-decoded `&nbsp;` entities in their
+        // titles and one with an empty title that fell back to its slug).
+        .filter((e) => e.type !== 'project' && e.type !== 'book' && e.type !== 'text')
         // The 5 existing playlists are hosted in WordPress tagged
         // entry:music (ticket 19, before playlist existed as its own
         // type). Reclassified here rather than by rewriting the live
@@ -86,12 +89,15 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
       lang,
       link: `/${lang}/archive/learning-note/${e.slug}`,
     })),
+    // Always link to the entry's own portal page, never straight out to
+    // externalUrl — that's where the zine's PDF/link-card actually renders;
+    // bypassing it here would skip the portal.
     ...zines.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'zine',
       slug: e.slug,
       lang,
-      link: e.data.externalUrl || `/${lang}/archive/zine/${e.slug}`,
+      link: `/${lang}/archive/zine/${e.slug}`,
     })),
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the live-embed/link-card tiers (ticket
@@ -126,13 +132,11 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     })),
   ];
 
-  // externalUrl is a link scraped from the post body's first <a href> —
-  // meaningful as "the" destination only for entry types that are
-  // inherently pointers (zine, project, playlist). For anything else
-  // (text, learning-note, photo, music, book) it's often just a link
-  // mentioned mid-article, and treating it as the entry's own link would
-  // send visitors somewhere unrelated instead of the entry's own page.
-  const pointerTypes = new Set(['zine', 'project', 'playlist']);
+  // Always link to the entry's own portal page, never straight out to
+  // externalUrl — every entry type now has its own portal rendering (zine
+  // PDF/link-card, playlist Spotify embed, etc.), so bypassing it here
+  // would skip the portal entirely, the same bug already fixed once for
+  // local zine/project entries above.
   const wordpressEntries: ArchiveEntry[] = wpEntriesExcludingProjects
     .filter((e) => e.lang === lang)
     .map((e) => {
@@ -145,7 +149,7 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
         type: e.type,
         slug: routeSlug,
         lang: e.lang,
-        link: (pointerTypes.has(e.type) && e.externalUrl) || `/${lang}/archive/${e.type}/${routeSlug}`,
+        link: `/${lang}/archive/${e.type}/${routeSlug}`,
       };
     });
 

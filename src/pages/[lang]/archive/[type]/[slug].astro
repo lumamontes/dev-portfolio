@@ -62,7 +62,7 @@ const isWordPressEntry = Boolean(wordpressEntry);
 const type = wordpressEntry?.type ?? entry.data.type;
 const lang = wordpressEntry?.lang ?? entry.data.lang;
 const title = wordpressEntry?.title ?? entry.data.title;
-const description = wordpressEntry?.description ?? (type === 'book' ? entry.data.author : entry.data.description);
+const description = wordpressEntry?.description ?? entry.data.description;
 const isBook = type === 'book';
 const isText = type === 'text';
 const isZine = type === 'zine';
@@ -70,7 +70,7 @@ const isProject = type === 'project';
 const isPhoto = type === 'photo';
 const isMusic = type === 'music';
 const isPlaylist = type === 'playlist';
-const Content = !isWordPressEntry && !isPlaylist ? (await entry.render()).Content : undefined;
+const Content = !isWordPressEntry && !isPlaylist && !isBook ? (await entry.render()).Content : undefined;
 const playlistUrl = wordpressEntry?.externalUrl ?? entry?.data.externalUrl;
 const playlistNote = !isWordPressEntry ? entry?.data.note : undefined;
 const playlistCover = !isWordPressEntry ? entry?.data.cover : undefined;
@@ -222,6 +222,31 @@ const currentSlug = wordpressEntry
           </div>
         )}
 
+        {isBook && !isWordPressEntry && (
+          <div class="max-w-3xl grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {entry.data.books.map((book: { title: string; author: string; cover?: string; externalUrl: string }) => (
+              <a
+                href={book.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-col border-2 border-[#111111] zine-shadow hover:bg-zinc-100"
+              >
+                {book.cover ? (
+                  <img src={book.cover} alt="" class="aspect-[2/3] w-full border-b-2 border-[#111111] object-cover" />
+                ) : (
+                  <div class="flex aspect-[2/3] w-full items-center justify-center border-b-2 border-[#111111] bg-zinc-200 font-mono text-[10px] uppercase opacity-60">
+                    No cover
+                  </div>
+                )}
+                <span class="p-3">
+                  <span class="block font-bold">{book.title}</span>
+                  <span class="block text-sm opacity-70">{book.author}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
+
         {previewMode === 'live-embed' && (
           <div class="border-2 border-[#111111] zine-shadow">
             <div class="flex items-center justify-between bg-[#111111] px-3 py-2 font-mono text-[10px] uppercase text-[#F4F4F0]">
@@ -262,7 +287,7 @@ const currentSlug = wordpressEntry
           </a>
         )}
 
-        {!isPlaylist && (
+        {!isPlaylist && !isBook && (
           <div class="prose prose-zinc max-w-3xl prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
             {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
           </div>
