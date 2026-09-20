@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { isPublicEntryInLanguage, type Language } from './content-model';
+import { isPublicEntry, isPublicEntryInLanguage, type Language } from './content-model';
 import { getWordPressArchiveEntries, type WordPressArchiveEntry } from './wordpress';
 import { useTranslations } from '../utils/lang';
 
@@ -103,13 +103,29 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the live-embed/link-card tiers (ticket
     // 29) actually render; bypassing it here would skip the portal.
-    ...projectEntries.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
-      title: e.data.title,
-      type: 'project',
-      slug: e.slug,
-      lang,
-      link: `/${lang}/archive/project/${e.slug}`,
-    })),
+    //
+    // Unlike posts, a project write-up isn't necessarily translated per
+    // language — most exist only in English — so projects show on BOTH
+    // archive language pages regardless of the file's own `lang`, linking
+    // to wherever the write-up actually lives. The one project that IS
+    // genuinely translated (Biblioteca de Zines, as biblioteca-de-zines.md
+    // / biblioteca-de-zines-en.md) is deduped by its base slug, preferring
+    // whichever version matches the current page's language.
+    ...(() => {
+      const byBaseSlug = new Map<string, (typeof projectEntries)[number]>();
+      for (const e of projectEntries.filter(isPublicEntry)) {
+        const baseSlug = e.slug.replace(/-en$/, '');
+        const existing = byBaseSlug.get(baseSlug);
+        if (!existing || e.data.lang === lang) byBaseSlug.set(baseSlug, e);
+      }
+      return Array.from(byBaseSlug.values()).map((e) => ({
+        title: e.data.title,
+        type: 'project',
+        slug: e.slug,
+        lang: e.data.lang,
+        link: `/${e.data.lang}/archive/project/${e.slug}`,
+      }));
+    })(),
     ...photos.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'photo',

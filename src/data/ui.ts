@@ -65,7 +65,7 @@ export const ui = {
     'archive.group.photos': 'Photos',
 
     // Archive portal (entry detail page)
-    'portal.index': '← INDEX',
+    'portal.index': 'Back to archive',
     'portal.navigate': 'Navigate',
     'portal.noCover': 'No cover',
     'portal.noPreview': 'No preview',
@@ -194,7 +194,7 @@ export const ui = {
     'archive.group.photos': 'Fotos',
 
     // Archive portal (entry detail page)
-    'portal.index': '← ÍNDICE',
+    'portal.index': 'Voltar ao arquivo',
     'portal.navigate': 'Navegar',
     'portal.noCover': 'Sem capa',
     'portal.noPreview': 'Sem preview',

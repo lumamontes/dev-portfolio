@@ -12,12 +12,15 @@ export async function GET(context) {
     ...(await getCollection('books-br')),
   ].filter(isPublicEntry);
 
+  // No pubDate: a book shelf has no per-book publish date (see
+  // bookFieldsSchema in content-model.ts) — it's a living list, not a
+  // dated post. @astrojs/rss treats pubDate as optional and omits it
+  // when absent, rather than emitting an invalid one.
   const items = shelves.flatMap((shelf) =>
     shelf.data.books.map((book) => ({
       title: `${book.title} — ${book.author}`,
       description: shelf.data.description,
       link: `/${shelf.data.lang}/archive/book/${shelf.slug}/`,
-      pubDate: shelf.data.publishedAt,
     })),
   );
 

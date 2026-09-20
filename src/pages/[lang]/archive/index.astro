@@ -17,7 +17,6 @@ const groups = groupArchiveEntries(entries, lang);
 <Layout title={t('archive.pageTitle')} description={t('archive.description')} showNav={true}>
   <div class="archive-header">
     <h1 class="archive-title">{t('nav.archive')}</h1>
-    <span class="archive-count">INDEX / 2026</span>
   </div>
 
   <div class="archive-grid">
@@ -40,9 +39,6 @@ const groups = groupArchiveEntries(entries, lang);
 
 <style>
   .archive-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
     padding-bottom: 1rem;
     border-bottom: 1px solid #111111;
     margin-bottom: 2.5rem;
@@ -52,10 +48,6 @@ const groups = groupArchiveEntries(entries, lang);
     font-weight: 800;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-  }
-  .archive-count {
-    font-size: 0.75rem;
-    opacity: 0.6;
   }
   .archive-grid {
     display: grid;

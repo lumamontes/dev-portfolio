@@ -143,9 +143,12 @@ const currentSlug = wordpressEntry
     </aside>
 
     <article class="flex-1 min-w-0 overflow-y-auto order-1">
-      <div class="flex items-center justify-between border-b-2 border-[#111111] px-4 py-3 lg:px-10">
-        <a href={`/${lang}/archive`} class="font-mono text-xs uppercase font-bold bg-[#111111] text-[#F4F4F0] px-2 py-1 inline-block">{t('portal.index')}</a>
-        <p class="font-mono text-xs uppercase tracking-widest opacity-60">[{type}]</p>
+      <div class="border-b-2 border-[#111111] px-4 py-3 lg:px-10">
+        <a href={`/${lang}/archive`} aria-label={t('portal.index')} class="inline-flex h-8 w-8 items-center justify-center hover:opacity-70">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+        </a>
       </div>
 
       {/* PREVIEW — the actual content is the point of clicking through, so it gets the dominant content column; the sidebar is a real but secondary lateral-nav aid. Sticky on desktop so it stays in view while the metadata below scrolls, matching the reference's fixed-position preview panel. */}
