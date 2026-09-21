@@ -314,13 +314,16 @@ const currentSlug = wordpressEntry
           {description}
           {' '}
           {isText && !isWordPressEntry && entry.data.externalUrl && (
-            <>{t('portal.originallyPublishedAt')} <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{new URL(entry.data.externalUrl).hostname.replace(/^www\./, '')}</a>.</>
+            <>{t('portal.originallyPublishedAt')}{' '}<a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{new URL(entry.data.externalUrl).hostname.replace(/^www\./, '')}</a>.</>
           )}
           {isZine && !isWordPressEntry && (
-            <>{t('portal.readTheFullZineAt')} <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">Biblioteca de Zines</a>.</>
+            <>{t('portal.readTheFullZineAt')}{' '}<a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">Biblioteca de Zines</a>.</>
           )}
           {isMusic && !isWordPressEntry && (
-            <>{t('portal.seeThe')} <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{t('portal.originalPost')}</a>.</>
+            <>{t('portal.seeThe')}{' '}<a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{t('portal.originalPost')}</a>.</>
+          )}
+          {isProject && !isWordPressEntry && entry.data.repoUrl && (
+            <>{' '}{t('portal.viewSourceOn')}{' '}<a href={entry.data.repoUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">GitHub</a>.</>
           )}
         </p>
         {(isText || isZine || isPhoto || isMusic || isProject) && !isWordPressEntry && (

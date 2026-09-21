@@ -2,7 +2,9 @@
 title: "amazine"
 description: "The site for the first independent zine fair in Macapá."
 stack: ["Astro"]
-externalUrl: "https://github.com/lumamontes/amazine"
+externalUrl: "https://feira-amazine.netlify.app/"
+repoUrl: "https://github.com/lumamontes/amazine"
+embeddable: true
 lang: "en"
 category: "Zines"
 tags: ["Community"]

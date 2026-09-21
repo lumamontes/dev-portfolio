@@ -184,6 +184,11 @@ const projectFieldsSchema = z.object({
   // Omitted entirely for private-repo projects with no safe public
   // destination to link to (see docs/adr/0002).
   externalUrl: z.string().url().optional(),
+  // The source repo, separate from externalUrl — for an open-source
+  // project with a live deployed site, externalUrl points at the live
+  // site (what gets embedded/linked as "the real thing"), and this is
+  // the secondary "view source" link so the repo doesn't get lost.
+  repoUrl: z.string().url().optional(),
   // Set only after manually verifying the destination sends no framing
   // restriction — never inferred. See docs/adr/0002.
   embeddable: z.boolean().default(false),

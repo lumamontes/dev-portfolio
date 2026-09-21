@@ -3,7 +3,9 @@ title: "pedrito"
 description: "A personal portfolio site built for a friend, Pedro Viana."
 role: "Developer"
 stack: ["Astro"]
-externalUrl: "https://github.com/lumamontes/pedrito"
+externalUrl: "https://pedroviana.netlify.app/"
+repoUrl: "https://github.com/lumamontes/pedrito"
+embeddable: true
 lang: "en"
 category: "Technology"
 tags: ["Web Design"]

@@ -2,7 +2,9 @@
 title: "focar"
 description: "A pomodoro timer with hand-drawn visual elements."
 stack: ["TypeScript"]
-externalUrl: "https://github.com/lumamontes/focar"
+externalUrl: "https://focar.netlify.app/"
+repoUrl: "https://github.com/lumamontes/focar"
+embeddable: true
 lang: "en"
 category: "Technology"
 tags: ["Personal", "Playful"]

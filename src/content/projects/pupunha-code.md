@@ -5,6 +5,7 @@ role: "Cofundadora e Organizadora de Comunidade"
 period: "2023 - Presente"
 stack: ["TypeScript", "Go", "Community Building"]
 externalUrl: "https://pupunhacode.com"
+repoUrl: "https://github.com/pupunha-code"
 embeddable: true
 lang: "br"
 category: "Technology"

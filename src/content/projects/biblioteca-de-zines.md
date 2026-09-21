@@ -5,6 +5,7 @@ role: "Líder Técnica e Desenvolvedora"
 period: "2025 - Presente"
 stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Playwright"]
 externalUrl: "https://www.biblioteca-de-zines.com.br/"
+repoUrl: "https://github.com/lumamontes/biblioteca-de-zines"
 embeddable: true
 lang: "br"
 category: "Zines"

@@ -2,7 +2,9 @@
 title: "caninoszine"
 description: "The site for \"Caninos,\" a zine by artists Luana Góes and Samuel Lucio Costa."
 stack: ["HTML", "CSS"]
-externalUrl: "https://github.com/lumamontes/caninoszine"
+externalUrl: "https://caninoszine.vercel.app/"
+repoUrl: "https://github.com/lumamontes/caninoszine"
+embeddable: true
 lang: "en"
 category: "Zines"
 tags: ["Community"]
