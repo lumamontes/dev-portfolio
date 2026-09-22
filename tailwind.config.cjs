@@ -17,14 +17,13 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['IBM Plex Sans', ...defaultTheme.fontFamily.sans],
-        mono: ['IBM Plex Mono', ...defaultTheme.fontFamily.mono],
-        display: ['Big Shoulders Display', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        mono: ['Azeret Mono', ...defaultTheme.fontFamily.mono],
+        display: ['Azeret Mono', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         paper: '#F2F1EA',
         ink: '#161513',
-        'riso-pink': '#FF3684',
       },
     },
   },
