@@ -33,9 +33,9 @@ const homePath = `/${lang === 'br' ? '' : lang}`;
 
 <style>
   .site-header {
-    background-color: #F2F1EA;
+    background-color: var(--color-paper);
     padding: 1rem 0;
-    border-bottom: 1px solid #161513;
+    border-bottom: 1px solid var(--color-ink);
   }
 
   .header-nav {
@@ -54,7 +54,7 @@ const homePath = `/${lang === 'br' ? '' : lang}`;
     font-family: var(--font-mono);
     font-size: 0.9rem;
     font-weight: 600;
-    color: #161513;
+    color: var(--color-ink);
     text-decoration: none;
     text-transform: lowercase;
   }

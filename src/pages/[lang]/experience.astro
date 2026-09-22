@@ -39,7 +39,7 @@ const labels = {
 
 <Layout title={labels.title} description={labels.description}>
   <div class="mx-auto max-w-3xl">
-    <header class="mb-12 border-b-2 border-[#161513] pb-8">
+    <header class="mb-12 border-b-2 border-ink pb-8">
       <p class="mb-4 font-mono text-xs uppercase tracking-widest opacity-60">[work]</p>
       <h1 class="mb-4 text-5xl font-black leading-[0.9] md:text-7xl">{labels.title}</h1>
       {labels.englishNote && <p class="mb-4 font-mono text-xs opacity-60">{labels.englishNote}</p>}
@@ -58,7 +58,7 @@ const labels = {
 
     <div class="space-y-6">
       {experiences.map((exp) => (
-        <details class="group border-2 border-[#161513] zine-shadow">
+        <details class="group border-2 border-ink zine-shadow">
           <summary class="flex cursor-pointer flex-wrap items-baseline justify-between gap-2 p-4 hover:bg-zinc-100">
             <span class="flex flex-wrap items-baseline gap-3">
               <span class="text-lg font-black capitalize">{exp.company}</span>
@@ -67,7 +67,7 @@ const labels = {
             <span class="font-mono text-xs opacity-60">{exp.period}</span>
           </summary>
 
-          <div class="space-y-6 border-t-2 border-[#161513] p-4">
+          <div class="space-y-6 border-t-2 border-ink p-4">
             <p class="font-mono text-xs opacity-60">{exp.location}{exp.team ? ` · ${exp.team}` : ''}</p>
 
             {exp.roles.length > 1 && (
@@ -120,7 +120,7 @@ const labels = {
             {exp.relatedProjectSlug && (
               <a
                 href={`/${lang}/archive/project/${exp.relatedProjectSlug}`}
-                class="inline-flex border border-[#161513] px-4 py-2 font-mono text-xs uppercase hover:bg-zinc-100"
+                class="inline-flex border border-ink px-4 py-2 font-mono text-xs uppercase hover:bg-zinc-100"
               >
                 See the project ↗
               </a>
