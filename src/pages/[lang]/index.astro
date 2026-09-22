@@ -14,8 +14,8 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const quickLinks = [
-  { label: lang === 'br' ? 'Arquivo' : 'Archive', href: `/${lang}/archive` },
-  { label: lang === 'br' ? 'Trabalho' : 'Work', href: `/${lang}/experience` },
+  { label: t('nav.archive'), href: `/${lang}/archive` },
+  { label: t('nav.experience'), href: `/${lang}/experience` },
   { label: 'Email', href: `mailto:${presentation.mail}` },
 ];
 ---
@@ -30,7 +30,7 @@ const quickLinks = [
       <p class="hero-bio">{t('presentation.description')}</p>
 
       <div class="hero-actions">
-        <a href={`/${lang}/archive`} class="archive-btn">Explorar Arquivo ↗</a>
+        <a href={`/${lang}/archive`} class="archive-btn">{t('home.exploreArchive')} ↗</a>
       </div>
     </article>
 
@@ -57,10 +57,10 @@ const quickLinks = [
   .img-frame {
     width: 220px;
     height: 220px;
-    border: 2px solid #111111;
+    border: 2px solid #161513;
     margin-bottom: 2rem;
     overflow: hidden;
-    box-shadow: 6px 6px 0px #111111;
+    box-shadow: 6px 6px 0px #161513;
     transform: rotate(-1deg);
   }
   .me-img {
@@ -85,18 +85,20 @@ const quickLinks = [
   .archive-btn {
     display: inline-block;
     padding: 1rem 1.5rem;
-    border: 2px solid #111111;
-    background-color: #111111;
-    color: #F4F4F0;
-    font-weight: 900;
-    font-size: 1rem;
+    border: 2px solid #161513;
+    background-color: #161513;
+    color: #F2F1EA;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
     text-transform: uppercase;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
     transition: all 0.1s steps(2);
   }
   .archive-btn:hover {
     background-color: transparent;
-    color: #111111;
+    color: #161513;
     text-decoration: none;
   }
   .quick-links {
@@ -104,7 +106,7 @@ const quickLinks = [
     flex-direction: column;
     align-items: flex-end;
     gap: 1rem;
-    font-family: 'Azeret Mono', monospace;
+    font-family: var(--font-mono);
   }
   .quick-link {
     font-size: 1.25rem;
