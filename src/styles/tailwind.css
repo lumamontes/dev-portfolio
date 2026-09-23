@@ -4,25 +4,25 @@
 
 @layer base {
   body {
-    @apply bg-[#F4F4F0] text-[#111111] selection:bg-emerald-400 selection:text-black;
+    @apply bg-paper text-ink selection:bg-ink selection:text-paper;
     font-feature-settings: "ss01", "ss02", "cv01", "tnum";
-  }
-
-  h1, h2, h3, h4 {
-    @apply uppercase font-black tracking-tighter;
   }
 }
 
 @layer components {
+  /* Minimal, archivist treatment: a plain hairline border, no
+     poster-style drop shadow. Kept as named utilities (rather than
+     renamed everywhere) since every archive/experience usage site
+     picks up this single definition. */
   .zine-border {
-    @apply border-2 border-[#111111];
+    @apply border border-ink;
   }
-  
+
   .zine-shadow {
-    @apply shadow-[4px_4px_0px_0px_rgba(17,17,17,1)];
+    box-shadow: none;
   }
 
   .panel-sidebar {
-    @apply border-l-2 border-[#111111] bg-white/50 backdrop-blur-sm p-6 overflow-y-auto;
+    @apply border-l border-ink bg-white/50 backdrop-blur-sm p-6 overflow-y-auto;
   }
 }

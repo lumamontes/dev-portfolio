@@ -99,11 +99,11 @@ const currentSlug = wordpressEntry
 ---
 
 <Layout title={title} description={description}>
-  <div class="flex flex-col lg:flex-row min-h-screen border-t-2 border-ink">
-    <aside class="w-full lg:w-[300px] lg:flex-shrink-0 border-b-2 lg:border-b-0 lg:border-l-2 border-ink p-6 order-2">
+  <div class="flex flex-col lg:flex-row min-h-screen border-t border-ink">
+    <aside class="w-full lg:w-[300px] lg:flex-shrink-0 border-b lg:border-b-0 lg:border-l border-ink p-6 order-2">
       <div class="lg:sticky lg:top-6">
         <nav aria-label="Archive navigation">
-          <h3 class="mb-4 text-xs font-black uppercase tracking-wide">{t('portal.navigate')}</h3>
+          <h3 class="mb-4 text-xs font-medium uppercase tracking-wide opacity-60">{t('portal.navigate')}</h3>
           <div class="lg:max-h-[80vh] space-y-6 lg:overflow-y-auto lg:pr-2 font-mono text-[11px]">
             {sidebarGroups.map((group) => (
               <div>
@@ -112,22 +112,21 @@ const currentSlug = wordpressEntry
                   {group.entries.map((item) => {
                     const isCurrent = item.type === type && item.slug === currentSlug;
                     return (
-                      <li class="relative block border-t border-dotted border-ink/30 first:border-t-0">
-                        {isCurrent && <span class="absolute -left-3 top-1.5 tracking-[-2px]" aria-hidden="true">—&gt;</span>}
+                      <li class="block border-t border-dotted border-ink/30 first:border-t-0">
                         <a
                           href={item.link}
                           target={item.link.startsWith('http') ? '_blank' : '_self'}
                           rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                           aria-current={isCurrent ? 'page' : undefined}
                           class:list={[
-                            'block truncate py-1.5 transition-[filter]',
-                            isCurrent ? 'font-bold underline' : 'opacity-80 blur-none hover:opacity-100 hover:blur-[1px]',
+                            'block truncate py-1.5',
+                            isCurrent ? 'font-bold underline' : 'opacity-80 hover:opacity-100 hover:underline',
                           ]}
                         >
                           {item.title}{item.link.startsWith('http') ? ' ↗' : ''}
                         </a>
                         {isCurrent && (
-                          <div class="mb-3 pl-3 border-l-2 border-ink text-[10px] normal-case opacity-80">
+                          <div class="mb-3 pl-3 border-l border-ink text-[10px] normal-case opacity-80">
                             {description}
                           </div>
                         )}
@@ -143,7 +142,7 @@ const currentSlug = wordpressEntry
     </aside>
 
     <article class="flex-1 min-w-0 overflow-y-auto order-1">
-      <div class="border-b-2 border-ink px-4 py-3 lg:px-10">
+      <div class="border-b border-ink px-4 py-3 lg:px-10">
         <a href={`/${lang}/archive`} aria-label={t('portal.index')} class="inline-flex h-8 w-8 items-center justify-center hover:opacity-70">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -154,7 +153,7 @@ const currentSlug = wordpressEntry
       {/* PREVIEW — the actual content is the point of clicking through, so it gets the dominant content column; the sidebar is a real but secondary lateral-nav aid. Sticky on desktop so it stays in view while the metadata below scrolls, matching the reference's fixed-position preview panel. */}
       <div class="px-4 py-8 lg:px-10 lg:sticky lg:top-0 lg:z-10 lg:bg-paper">
         {isZine && !isWordPressEntry && entry.data.pdfUrl && (
-          <div class="max-w-2xl border-2 border-ink zine-shadow">
+          <div class="max-w-2xl border border-ink zine-shadow">
             <iframe
               src={entry.data.pdfUrl}
               title={`${title} — PDF`}
@@ -179,7 +178,7 @@ const currentSlug = wordpressEntry
             href={playlistUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-4 border-2 border-ink p-4 zine-shadow hover:bg-zinc-100"
+            class="flex items-center gap-4 border border-ink p-4 zine-shadow hover:bg-zinc-100"
           >
             {playlistCover ? (
               <img src={playlistCover} alt="" class="h-16 w-16 flex-shrink-0 object-cover" />
@@ -214,7 +213,7 @@ const currentSlug = wordpressEntry
                     width={image.width}
                     height={image.height}
                     loading="lazy"
-                    class="w-full border-2 border-ink zine-shadow"
+                    class="w-full border border-ink zine-shadow"
                   />
                 </a>
                 {(image.caption || image.credit) && (
@@ -234,12 +233,12 @@ const currentSlug = wordpressEntry
                 href={book.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex flex-col border-2 border-ink zine-shadow hover:bg-zinc-100"
+                class="flex flex-col border border-ink zine-shadow hover:bg-zinc-100"
               >
                 {book.cover ? (
-                  <img src={book.cover} alt="" class="aspect-[2/3] w-full border-b-2 border-ink object-cover" />
+                  <img src={book.cover} alt="" class="aspect-[2/3] w-full border-b border-ink object-cover" />
                 ) : (
-                  <div class="flex aspect-[2/3] w-full items-center justify-center border-b-2 border-ink bg-zinc-200 font-mono text-[10px] uppercase opacity-60">
+                  <div class="flex aspect-[2/3] w-full items-center justify-center border-b border-ink bg-zinc-200 font-mono text-[10px] uppercase opacity-60">
                     {t('portal.noCover')}
                   </div>
                 )}
@@ -253,7 +252,7 @@ const currentSlug = wordpressEntry
         )}
 
         {previewMode === 'live-embed' && (
-          <div class="border-2 border-ink zine-shadow">
+          <div class="border border-ink zine-shadow">
             <div class="flex items-center justify-between bg-ink px-3 py-2 font-mono text-[10px] uppercase text-paper">
               <span>{t('portal.livePreview')}</span>
               <a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline">
@@ -275,7 +274,7 @@ const currentSlug = wordpressEntry
             href={entry.data.externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-4 border-2 border-ink p-4 zine-shadow hover:bg-zinc-100"
+            class="flex items-center gap-4 border border-ink p-4 zine-shadow hover:bg-zinc-100"
           >
             {entry.data.cover ? (
               <img src={entry.data.cover} alt="" class="h-16 w-16 flex-shrink-0 object-cover" />
@@ -296,19 +295,19 @@ const currentSlug = wordpressEntry
           <img
             src={entry.data.bannerImage}
             alt=""
-            class="mb-8 max-w-3xl w-full border-2 border-ink zine-shadow"
+            class="mb-8 max-w-3xl w-full border border-ink zine-shadow"
           />
         )}
 
         {!isPlaylist && !isBook && (
-          <div class="prose prose-zinc max-w-3xl prose-headings:uppercase prose-headings:font-black prose-img:zine-border prose-img:zine-shadow">
+          <div class="prose prose-zinc max-w-3xl prose-headings:font-medium prose-img:zine-border prose-img:zine-shadow">
             {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
           </div>
         )}
       </div>
 
       {/* METADATA — comes after the preview/content, not before it */}
-      <header class="max-w-3xl border-t-2 border-ink px-4 py-8 lg:px-10">
+      <header class="max-w-3xl border-t border-ink px-4 py-8 lg:px-10">
         <h1 class="text-3xl md:text-5xl leading-[0.95] mb-4 break-words">{title}</h1>
         <p class="text-lg md:text-xl font-medium leading-tight">
           {description}
@@ -330,7 +329,7 @@ const currentSlug = wordpressEntry
           <div class="mt-4 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase">
             <span class="opacity-50">{t('portal.filedUnder')}</span>
             {isText && entry.data.publishedAt && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{formatSeasonYear(entry.data.publishedAt, lang)}</span>}
-            {isZine && <span class="bg-emerald-400 px-2 py-0.5 zine-border">{t('portal.by')} {entry.data.authors.join(' & ')}</span>}
+            {isZine && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{t('portal.by')} {entry.data.authors.join(' & ')}</span>}
             {isPhoto && entry.data.place && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{t('portal.location')} {entry.data.place}</span>}
             {isPhoto && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.images.length} {entry.data.images.length === 1 ? t('portal.photo') : t('portal.photos')}</span>}
             {isMusic && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{t('portal.source')} {entry.data.kind}</span>}

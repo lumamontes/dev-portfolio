@@ -29,9 +29,7 @@ const quickLinks = [
       <h1 class="hero-title">{t('presentation.title')}</h1>
       <p class="hero-bio">{t('presentation.description')}</p>
 
-      <div class="hero-actions">
-        <a href={`/${lang}/archive`} class="archive-btn">{t('home.exploreArchive')} ↗</a>
-      </div>
+      <a href={`/${lang}/archive`} class="archive-link">{t('home.exploreArchive')} ↗</a>
     </article>
 
     <nav class="quick-links" aria-label="Quick links">
@@ -55,13 +53,10 @@ const quickLinks = [
     max-width: 580px;
   }
   .img-frame {
-    width: 220px;
-    height: 220px;
-    border: 2px solid var(--color-ink);
+    width: 180px;
+    height: 180px;
     margin-bottom: 2rem;
     overflow: hidden;
-    box-shadow: 6px 6px 0px var(--color-ink);
-    transform: rotate(-1deg);
   }
   .me-img {
     width: 100%;
@@ -69,11 +64,12 @@ const quickLinks = [
     object-fit: cover;
   }
   .hero-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 0.9;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.1;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.01em;
     text-transform: uppercase;
   }
   .hero-bio {
@@ -82,24 +78,16 @@ const quickLinks = [
     opacity: 0.9;
     margin-bottom: 2rem;
   }
-  .archive-btn {
+  .archive-link {
     display: inline-block;
-    padding: 1rem 1.5rem;
-    border: 2px solid var(--color-ink);
-    background-color: var(--color-ink);
-    color: var(--color-paper);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.25rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.95rem;
     letter-spacing: 0.01em;
-    text-transform: uppercase;
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-    transition: all 0.1s steps(2);
   }
-  .archive-btn:hover {
-    background-color: transparent;
-    color: var(--color-ink);
-    text-decoration: none;
+  .archive-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .quick-links {
     display: flex;
@@ -109,10 +97,8 @@ const quickLinks = [
     font-family: var(--font-mono);
   }
   .quick-link {
-    font-size: 1.25rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
+    font-size: 1rem;
+    font-weight: 500;
   }
   .quick-link:hover {
     text-decoration: underline;
