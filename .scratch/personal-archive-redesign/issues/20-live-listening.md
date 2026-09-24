@@ -15,7 +15,7 @@
 
 ## Blocker
 
-Production currently returns the intentional empty-state response. Confirm with an active Spotify playback session before marking the live data path verified.
+Production is still on Netlify, which can't run the Cloudflare Pages Function, so `/api/listening` has no live backend there yet. After ticket 18's cutover, open the site while playing something on Spotify to confirm the track and album cover show up. This is blocked by 18.
 
 ## Implementation Notes
 

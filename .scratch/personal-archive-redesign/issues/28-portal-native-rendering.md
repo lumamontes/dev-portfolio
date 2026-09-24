@@ -4,10 +4,14 @@
 
 **Blocked by:** 22 (Portal Preview Resolution Function).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Opening a text entry's canonical URL renders its full content in a main pane, using ticket 22's function to confirm native mode applies.
-- [ ] The URL remains real and shareable — back button, bookmarking, and direct navigation all work.
-- [ ] The page degrades gracefully (still readable, still accessible) without JavaScript.
-- [ ] Keyboard and assistive-technology navigation into and within the portal view works.
-- [ ] Verified on mobile.
+- [x] Opening a text entry's canonical URL renders its full content in a main pane, using ticket 22's function to confirm native mode applies.
+- [x] The URL remains real and shareable — back button, bookmarking, and direct navigation all work.
+- [x] The page degrades gracefully (still readable, still accessible) without JavaScript.
+- [x] Keyboard and assistive-technology navigation into and within the portal view works.
+- [x] Verified on mobile.
+
+## Comments
+
+- Verified 2026-09-24: text entries render natively in the portal main pane with real, shareable URLs.

@@ -4,10 +4,14 @@
 
 **Blocked by:** 28 (Entry Portal View: Native Rendering).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Opening a photo entry renders its image(s) in the portal's main pane.
-- [ ] A photo album (multiple images under one entry) renders as a browsable set, not a single flat image dump.
-- [ ] Captions, credit, and place/context metadata (where present) are shown alongside the images.
-- [ ] Images remain accessible (meaningful alt text, keyboard-navigable if any interaction is added).
-- [ ] Verified on mobile.
+- [x] Opening a photo entry renders its image(s) in the portal's main pane.
+- [x] A photo album (multiple images under one entry) renders as a browsable set, not a single flat image dump.
+- [x] Captions, credit, and place/context metadata (where present) are shown alongside the images.
+- [x] Images remain accessible (meaningful alt text, keyboard-navigable if any interaction is added).
+- [x] Verified on mobile.
+
+## Comments
+
+- Verified 2026-09-24: photo albums render every image with alt text, caption and credit.

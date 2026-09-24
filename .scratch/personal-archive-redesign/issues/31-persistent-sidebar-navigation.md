@@ -4,12 +4,16 @@
 
 **Blocked by:** 28 (Entry Portal View: Native Rendering); 26 (Archive Index: Render Books and Photos Groups); 24 (Real Project Content Collection and GitHub Sweep Migration); 25 (Playlist Entries as a Standalone Type).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] The sidebar is present and persistent across every portal view.
-- [ ] Entries are grouped by type first (not by category).
-- [ ] Every public entry type appears in the sidebar, including Books, Photos, Projects, and Playlists.
-- [ ] Clicking any sidebar item navigates directly to that entry's portal view without a full page return to the archive index.
-- [ ] The sidebar respects language and public-visibility filtering (no private or wrong-language entries listed).
-- [ ] Keyboard-navigable.
-- [ ] Verified on mobile (the sidebar degrades to something usable on small screens — it does not need to be identically presented, but must remain reachable).
+- [x] The sidebar is present and persistent across every portal view.
+- [x] Entries are grouped by type first (not by category).
+- [x] Every public entry type appears in the sidebar, including Books, Photos, Projects, and Playlists.
+- [x] Clicking any sidebar item navigates directly to that entry's portal view without a full page return to the archive index.
+- [x] The sidebar respects language and public-visibility filtering (no private or wrong-language entries listed).
+- [x] Keyboard-navigable.
+- [x] Verified on mobile (the sidebar degrades to something usable on small screens — it does not need to be identically presented, but must remain reachable).
+
+## Comments
+
+- Verified 2026-09-24: the persistent sidebar is shared by every portal page, via `getArchiveEntries` and `groupArchiveEntries`.

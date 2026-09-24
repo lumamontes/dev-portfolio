@@ -4,10 +4,14 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Given an entry pointing at one of Luma's own live apps with no framing restriction, the function returns live-embed mode.
-- [ ] Given an entry that is Luma's own writing migrated into the canonical system (`editorialState: published-elsewhere` with an external publication link, or `published-here`), the function returns native mode.
-- [ ] Given an entry that is a genuine third-party pointer (a playlist, or any destination Luma doesn't author), the function returns link-card mode.
-- [ ] The function never returns a mode that would require defeating a destination's CSP or framing restriction.
-- [ ] Covered by unit tests against representative entries for every type/state combination above — no rendering, network, or browser dependency in the tests.
+- [x] Given an entry pointing at one of Luma's own live apps with no framing restriction, the function returns live-embed mode.
+- [x] Given an entry that is Luma's own writing migrated into the canonical system (`editorialState: published-elsewhere` with an external publication link, or `published-here`), the function returns native mode.
+- [x] Given an entry that is a genuine third-party pointer (a playlist, or any destination Luma doesn't author), the function returns link-card mode.
+- [x] The function never returns a mode that would require defeating a destination's CSP or framing restriction.
+- [x] Covered by unit tests against representative entries for every type/state combination above — no rendering, network, or browser dependency in the tests.
+
+## Comments
+
+- Verified 2026-09-24: `resolveEntryPreview` in `src/lib/portal-preview.ts`, 11 unit tests in `portal-preview.test.ts`.

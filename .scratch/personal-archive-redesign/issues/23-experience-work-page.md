@@ -4,11 +4,15 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] A one-time, manually re-run import script reads `career-engine`'s `career/experiences/*.md`, `career/achievements/*.md`, and `master-cv/master-resume-en.md`, and writes the result into this repo as a typed data source (not a live build-time dependency on the other, private, local-only repo).
-- [ ] The Work/Experience page renders each role with organization, dates, title, scope, and responsibilities.
+- [x] A one-time, manually re-run import script reads `career-engine`'s `career/experiences/*.md`, `career/achievements/*.md`, and `master-cv/master-resume-en.md`, and writes the result into this repo as a typed data source (not a live build-time dependency on the other, private, local-only repo).
+- [x] The Work/Experience page renders each role with organization, dates, title, scope, and responsibilities.
 - [ ] A role that produced a notable open-source project links to that project's separate Archive entry rather than embedding or duplicating it.
-- [ ] Expanding an experience item does not lose the visitor's scroll position (no forced scroll-down-then-scroll-back-up), on any screen size.
-- [ ] Experience is not modeled as a canonical archive entry type — it has no editorial state or visibility field, consistent with `CONTEXT.md`.
-- [ ] The page remains usable on mobile.
+- [x] Expanding an experience item does not lose the visitor's scroll position (no forced scroll-down-then-scroll-back-up), on any screen size.
+- [x] Experience is not modeled as a canonical archive entry type — it has no editorial state or visibility field, consistent with `CONTEXT.md`.
+- [x] The page remains usable on mobile.
+
+## Comments
+
+- Closed 2026-09-24: page, import script and `<details>` expansion are done. Linking a role to its project entry (`relatedProjectSlug`, never set) moved to ticket 38.

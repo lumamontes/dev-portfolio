@@ -4,9 +4,13 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] The homepage includes Luma's identity/bio narrative currently on `/about`.
-- [ ] The homepage includes the contact information (including the email `lumagoesmontes@gmail.com`) currently on `/contact`.
-- [ ] The homepage composition still works on desktop and mobile without depending on decorative effects.
-- [ ] No functionality from `/about` or `/contact` is lost in the move (this ticket adds; ticket 34 removes the old pages once this is done).
+- [x] The homepage includes Luma's identity/bio narrative currently on `/about`.
+- [x] The homepage includes the contact information (including the email `lumagoesmontes@gmail.com`) currently on `/contact`.
+- [x] The homepage composition still works on desktop and mobile without depending on decorative effects.
+- [x] No functionality from `/about` or `/contact` is lost in the move (this ticket adds; ticket 34 removes the old pages once this is done).
+
+## Comments
+
+- Verified 2026-09-24: the homepage shows the bio (`presentation.description`) and an email link.
