@@ -1,4 +1,5 @@
 import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
 import {
   bookSchemaForLanguage,
   learningNoteSchema,
@@ -10,48 +11,53 @@ import {
   zineSchema,
 } from './lib/content-model';
 
+// Content Layer loader for a folder under src/content/. Both .md and .mdx
+// are picked up, so any entry can be converted to MDX on its own.
+const contentGlob = (directory: string) =>
+  glob({ pattern: '**/*.{md,mdx}', base: `./src/content/${directory}` });
+
 const posts = defineCollection({
-	type: 'content',
-	schema: postSchema,
+  loader: contentGlob('posts'),
+  schema: postSchema,
 });
 
 const booksEn = defineCollection({
-  type: 'content',
+  loader: contentGlob('books-en'),
   schema: bookSchemaForLanguage('en'),
 });
 
 const booksBr = defineCollection({
-  type: 'content',
+  loader: contentGlob('books-br'),
   schema: bookSchemaForLanguage('br'),
 });
 
 const learningNotes = defineCollection({
-  type: 'content',
+  loader: contentGlob('learning-notes'),
   schema: learningNoteSchema,
 });
 
 const zines = defineCollection({
-  type: 'content',
+  loader: contentGlob('zines'),
   schema: zineSchema,
 });
 
 const projects = defineCollection({
-  type: 'content',
+  loader: contentGlob('projects'),
   schema: projectSchema,
 });
 
 const photos = defineCollection({
-  type: 'content',
+  loader: contentGlob('photos'),
   schema: photoSchema,
 });
 
 const music = defineCollection({
-  type: 'content',
+  loader: contentGlob('music'),
   schema: musicSchema,
 });
 
 const playlists = defineCollection({
-  type: 'content',
+  loader: contentGlob('playlists'),
   schema: playlistSchema,
 });
 

@@ -20,7 +20,7 @@ export async function GET(context) {
     shelf.data.books.map((book) => ({
       title: `${book.title} — ${book.author}`,
       description: shelf.data.description,
-      link: `/${shelf.data.lang}/archive/book/${shelf.slug}/`,
+      link: `/${shelf.data.lang}/archive/book/${shelf.id}/`,
     })),
   );
 

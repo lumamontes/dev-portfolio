@@ -10,6 +10,11 @@ export interface ArchiveEntry {
   link: string;
 }
 
+// The Content Layer loader doesn't guarantee an order, so sort by id
+// (file path) to keep lists alphabetical by file, as they always were.
+const byId = <T extends { id: string }>(entries: T[]) =>
+  [...entries].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+
 /**
  * Every public entry across every content collection, flattened into one
  * uniform shape. Shared by the archive index and the portal's persistent
@@ -20,38 +25,38 @@ export interface ArchiveEntry {
 export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]> {
   const [posts, booksEn, booksBr, learningNotes, zines, projectEntries, photos, musicCollection, playlistEntries] =
     await Promise.all([
-      getCollection('posts'),
-      getCollection('books-en'),
-      getCollection('books-br'),
-      getCollection('learning-notes'),
-      getCollection('zines'),
-      getCollection('projects'),
-      getCollection('photos'),
-      getCollection('music'),
-      getCollection('playlists'),
+      getCollection('posts').then(byId),
+      getCollection('books-en').then(byId),
+      getCollection('books-br').then(byId),
+      getCollection('learning-notes').then(byId),
+      getCollection('zines').then(byId),
+      getCollection('projects').then(byId),
+      getCollection('photos').then(byId),
+      getCollection('music').then(byId),
+      getCollection('playlists').then(byId),
     ]);
 
   return [
     ...posts.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'text',
-      slug: e.slug.split('/').pop()!,
+      slug: e.id.split('/').pop()!,
       lang,
-      link: `/${lang}/archive/text/${e.slug.split('/').pop()}`,
+      link: `/${lang}/archive/text/${e.id.split('/').pop()}`,
     })),
     ...(lang === 'en' ? booksEn : booksBr).filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'book',
-      slug: e.slug,
+      slug: e.id,
       lang,
-      link: `/${lang}/archive/book/${e.slug}`,
+      link: `/${lang}/archive/book/${e.id}`,
     })),
     ...learningNotes.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'learning-note',
-      slug: routeSlug(e.slug),
+      slug: routeSlug(e.id),
       lang,
-      link: `/${lang}/archive/learning-note/${routeSlug(e.slug)}`,
+      link: `/${lang}/archive/learning-note/${routeSlug(e.id)}`,
     })),
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the zine's PDF/link-card actually renders;
@@ -59,9 +64,9 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     ...zines.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'zine',
-      slug: routeSlug(e.slug),
+      slug: routeSlug(e.id),
       lang,
-      link: `/${lang}/archive/zine/${routeSlug(e.slug)}`,
+      link: `/${lang}/archive/zine/${routeSlug(e.id)}`,
     })),
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the live-embed/link-card tiers (ticket
@@ -74,38 +79,38 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     ...(() => {
       const byBaseSlug = new Map<string, (typeof projectEntries)[number]>();
       for (const e of projectEntries.filter(isPublicEntry)) {
-        const baseSlug = routeSlug(e.slug);
+        const baseSlug = routeSlug(e.id);
         const existing = byBaseSlug.get(baseSlug);
         if (!existing || e.data.lang === lang) byBaseSlug.set(baseSlug, e);
       }
       return Array.from(byBaseSlug.values()).map((e) => ({
         title: e.data.title,
         type: 'project',
-        slug: routeSlug(e.slug),
+        slug: routeSlug(e.id),
         lang: e.data.lang,
-        link: `/${e.data.lang}/archive/project/${routeSlug(e.slug)}`,
+        link: `/${e.data.lang}/archive/project/${routeSlug(e.id)}`,
       }));
     })(),
     ...photos.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'photo',
-      slug: routeSlug(e.slug),
+      slug: routeSlug(e.id),
       lang,
-      link: `/${lang}/archive/photo/${routeSlug(e.slug)}`,
+      link: `/${lang}/archive/photo/${routeSlug(e.id)}`,
     })),
     ...musicCollection.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'music',
-      slug: routeSlug(e.slug),
+      slug: routeSlug(e.id),
       lang,
-      link: `/${lang}/archive/music/${routeSlug(e.slug)}`,
+      link: `/${lang}/archive/music/${routeSlug(e.id)}`,
     })),
     ...playlistEntries.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'playlist',
-      slug: routeSlug(e.slug),
+      slug: routeSlug(e.id),
       lang,
-      link: `/${lang}/archive/playlist/${routeSlug(e.slug)}`,
+      link: `/${lang}/archive/playlist/${routeSlug(e.id)}`,
     })),
   ];
 }
