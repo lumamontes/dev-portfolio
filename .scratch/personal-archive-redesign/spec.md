@@ -18,6 +18,8 @@ Experience (employment and volunteer history) becomes its own dedicated route, s
 
 WordPress.com remains the CMS; the problem here was always an incomplete migration, not a platform limitation, so the plan is to finish migrating the specifically identified missing content rather than switch platforms.
 
+> **Superseded (2026-09-24):** WordPress has since been removed; Markdown in the repository is the only content source. See `docs/adr/0003-remove-wordpress.md`.
+
 ## User Stories
 
 1. As a visitor, I want a single homepage that presents Luma's whole identity (professional and creative) at once, so that I don't have to choose which version of her to explore.

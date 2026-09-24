@@ -42,4 +42,4 @@ An entry may have one primary **category** and optional **tags**. The initial ca
 
 ## Publishing tools
 
-Markdown and VS Code are suitable starting points for writing. The initial free workflow uses Obsidian for local-first writing and WordPress.com for review and publishing, with Astro as the public frontend. WordPress.com can provide the initial free hosted backend; self-hosting is not required for the first phase. WordPress themes and WordPress frontend rendering are not part of the public experience.
+Markdown files in the repository are the only content source. Entries are written in any Markdown editor (VS Code, Obsidian) and published by committing them; Astro builds the public site from Astro content collections. There is no hosted CMS or backend. If an editing UI is ever wanted, it should be a git-based one that edits these same files, not a separate content store. See `docs/adr/0003-remove-wordpress.md`.

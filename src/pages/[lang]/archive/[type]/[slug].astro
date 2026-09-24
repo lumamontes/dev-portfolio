@@ -2,9 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import { isPublicEntryInLanguage, routeSlug } from '@/lib/content-model';
-import type { WordPressArchiveEntry } from '@/lib/wordpress';
 import { resolveEntryPreview } from '@/lib/portal-preview';
-import { getArchiveEntries, getCanonicalWordPressEntries, groupArchiveEntries } from '@/lib/archive-entries';
+import { getArchiveEntries, groupArchiveEntries } from '@/lib/archive-entries';
 import formatSeasonYear from '@/utils/formatSeasonYear';
 import { useTranslations } from '@/utils/lang';
 
@@ -21,26 +20,14 @@ export async function getStaticPaths() {
     getCollection('playlists'),
   ]);
 
-  // Shared with getArchiveEntries below (same underlying WordPress fetch,
-  // memoized) — the project/book exclusion and playlist reclassification
-  // live in exactly one place now, so path generation and the sidebar
-  // can't disagree about which entries exist.
-  const wordpressEntries = await getCanonicalWordPressEntries();
   // Computed once per language here (not per page) — every generated
-  // page shares the same sidebar, and getArchiveEntries hits the
-  // WordPress API, which would otherwise happen once per page instead
-  // of once per language.
+  // page shares the same sidebar.
   const sidebarGroupsByLang = {
     en: groupArchiveEntries(await getArchiveEntries('en'), 'en'),
     br: groupArchiveEntries(await getArchiveEntries('br'), 'br'),
   } as const;
 
-  const wordpressPaths = wordpressEntries.map((entry) => ({
-    params: { lang: entry.lang, type: entry.type, slug: routeSlug(entry.slug) },
-    props: { wordpressEntry: entry, sidebarGroups: sidebarGroupsByLang[entry.lang] },
-  }));
-  const wordpressKeys = new Set(wordpressPaths.map(({ params }) => `${params.lang}/${params.type}/${params.slug}`));
-  const localPaths = [
+  return [
     ...posts.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'text', slug: entry.slug.split('/').slice(1).join('/') }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
     ...booksEn.filter((entry) => isPublicEntryInLanguage(entry, 'en')).map((entry) => ({ params: { lang: 'en', type: 'book', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang.en } })),
     ...booksBr.filter((entry) => isPublicEntryInLanguage(entry, 'br')).map((entry) => ({ params: { lang: 'br', type: 'book', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang.br } })),
@@ -51,20 +38,17 @@ export async function getStaticPaths() {
     ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
     ...playlists.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'playlist', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
   ];
-  return [...wordpressPaths, ...localPaths.filter(({ params }) => !wordpressKeys.has(`${params.lang}/${params.type}/${params.slug}`))];
 }
 
-const { entry, wordpressEntry, sidebarGroups } = Astro.props as {
-  entry?: any;
-  wordpressEntry?: WordPressArchiveEntry;
+const { entry, sidebarGroups } = Astro.props as {
+  entry: any;
   sidebarGroups: ReturnType<typeof groupArchiveEntries>;
 };
-const isWordPressEntry = Boolean(wordpressEntry);
-const type = wordpressEntry?.type ?? entry.data.type;
-const lang = wordpressEntry?.lang ?? entry.data.lang;
+const type = entry.data.type;
+const lang = entry.data.lang;
 const t = useTranslations(lang);
-const title = wordpressEntry?.title ?? entry.data.title;
-const description = wordpressEntry?.description ?? entry.data.description;
+const title = entry.data.title;
+const description = entry.data.description;
 const isBook = type === 'book';
 const isText = type === 'text';
 const isZine = type === 'zine';
@@ -72,14 +56,14 @@ const isProject = type === 'project';
 const isPhoto = type === 'photo';
 const isMusic = type === 'music';
 const isPlaylist = type === 'playlist';
-const Content = !isWordPressEntry && !isPlaylist && !isBook ? (await entry.render()).Content : undefined;
-const playlistUrl = wordpressEntry?.externalUrl ?? entry?.data.externalUrl;
-const playlistNote = !isWordPressEntry ? entry?.data.note : undefined;
-const playlistCover = !isWordPressEntry ? entry?.data.cover : undefined;
+const Content = !isPlaylist && !isBook ? (await entry.render()).Content : undefined;
+const playlistUrl = entry.data.externalUrl;
+const playlistNote = entry.data.note;
+const playlistCover = entry.data.cover;
 const playlistPreview = isPlaylist ? resolveEntryPreview({ type: 'playlist', externalUrl: playlistUrl }) : undefined;
 const spotifyEmbedUrl = playlistPreview?.mode === 'spotify-embed' ? playlistPreview.embedUrl : undefined;
 
-const previewMode = isProject && !isWordPressEntry
+const previewMode = isProject
   ? resolveEntryPreview({
       type: 'project',
       externalUrl: entry.data.externalUrl,
@@ -89,14 +73,10 @@ const previewMode = isProject && !isWordPressEntry
 
 // Must match the slug shape getArchiveEntries/getStaticPaths use for this
 // same entry, or the sidebar can never mark the current page as current:
-// WordPress and translated local entries route with a trailing -en/-br
-// stripped, and text entries (nested under posts/<lang>/<slug>.md) use
-// only the final path segment.
-const currentSlug = wordpressEntry
-  ? routeSlug(wordpressEntry.slug)
-  : type === 'text'
-    ? entry.slug.split('/').pop()
-    : routeSlug(entry.slug);
+// translated entries route with a trailing -en/-br stripped, and text
+// entries (nested under posts/<lang>/<slug>.md) use only the final path
+// segment.
+const currentSlug = type === 'text' ? entry.slug.split('/').pop() : routeSlug(entry.slug);
 ---
 
 <Layout title={title} description={description}>
@@ -153,7 +133,7 @@ const currentSlug = wordpressEntry
 
       {/* PREVIEW — the actual content is the point of clicking through, so it gets the dominant content column; the sidebar is a real but secondary lateral-nav aid. Sticky on desktop so it stays in view while the metadata below scrolls, matching the reference's fixed-position preview panel. */}
       <div class="px-4 py-8 lg:px-10 lg:sticky lg:top-0 lg:z-10 lg:bg-paper">
-        {isZine && !isWordPressEntry && entry.data.pdfUrl && (
+        {isZine && entry.data.pdfUrl && (
           <div class="max-w-2xl border border-ink zine-shadow">
             <iframe
               src={entry.data.pdfUrl}
@@ -203,7 +183,7 @@ const currentSlug = wordpressEntry
           <p class="mt-6 max-w-3xl text-lg opacity-80">{playlistNote}</p>
         )}
 
-        {isPhoto && !isWordPressEntry && (
+        {isPhoto && (
           <div class="max-w-3xl grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {entry.data.images.map((image: { src: string; alt: string; caption?: string; credit?: string; width?: number; height?: number }) => (
               <figure class="m-0">
@@ -227,7 +207,7 @@ const currentSlug = wordpressEntry
           </div>
         )}
 
-        {isBook && !isWordPressEntry && (
+        {isBook && (
           <div class="max-w-3xl grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {entry.data.books.map((book: { title: string; author: string; cover?: string; externalUrl: string }) => (
               <a
@@ -292,7 +272,7 @@ const currentSlug = wordpressEntry
           </a>
         )}
 
-        {isText && !isWordPressEntry && entry.data.bannerImage && (
+        {isText && entry.data.bannerImage && (
           <img
             src={entry.data.bannerImage}
             alt=""
@@ -302,7 +282,7 @@ const currentSlug = wordpressEntry
 
         {!isPlaylist && !isBook && (
           <div class="prose prose-zinc max-w-3xl prose-headings:font-medium prose-img:zine-border prose-img:zine-shadow">
-            {wordpressEntry ? <div set:html={wordpressEntry.html} /> : Content && <Content />}
+            {Content && <Content />}
           </div>
         )}
       </div>
@@ -313,20 +293,20 @@ const currentSlug = wordpressEntry
         <p class="text-lg md:text-xl font-medium leading-tight">
           {description}
           {' '}
-          {isText && !isWordPressEntry && entry.data.externalUrl && (
+          {isText && entry.data.externalUrl && (
             <>{t('portal.originallyPublishedAt')}{' '}<a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{new URL(entry.data.externalUrl).hostname.replace(/^www\./, '')}</a>.</>
           )}
-          {isZine && !isWordPressEntry && (
+          {isZine && (
             <>{t('portal.readTheFullZineAt')}{' '}<a href={entry.data.externalUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">Biblioteca de Zines</a>.</>
           )}
-          {isMusic && !isWordPressEntry && (
+          {isMusic && (
             <>{t('portal.seeThe')}{' '}<a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">{t('portal.originalPost')}</a>.</>
           )}
-          {isProject && !isWordPressEntry && entry.data.repoUrl && (
+          {isProject && entry.data.repoUrl && (
             <>{' '}{t('portal.viewSourceOn')}{' '}<a href={entry.data.repoUrl} target="_blank" rel="noopener noreferrer" class="underline hover:no-underline">GitHub</a>.</>
           )}
         </p>
-        {(isText || isZine || isPhoto || isMusic || isProject) && !isWordPressEntry && (
+        {(isText || isZine || isPhoto || isMusic || isProject) && (
           <div class="mt-4 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase">
             <span class="opacity-50">{t('portal.filedUnder')}</span>
             {isText && entry.data.publishedAt && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{formatSeasonYear(entry.data.publishedAt, lang)}</span>}
@@ -338,7 +318,7 @@ const currentSlug = wordpressEntry
             {isProject && entry.data.period && <span class="bg-zinc-200 px-2 py-0.5 zine-border">{entry.data.period}</span>}
           </div>
         )}
-        {isProject && !isWordPressEntry && entry.data.stack.length > 0 && (
+        {isProject && entry.data.stack.length > 0 && (
           <ul class="mt-4 flex flex-wrap gap-2 font-mono text-[10px] uppercase">
             {entry.data.stack.map((tech: string) => (
               <li class="bg-zinc-200 px-2 py-0.5 zine-border">{tech}</li>
