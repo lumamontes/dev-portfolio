@@ -1,37 +1,37 @@
 ---
-title: "Module Federation with Rspack"
+title: "Module Federation com Rspack"
 publishedAt: 2025-11-22
-description: "Loading JavaScript applications from other applications at runtime, using Rspack's fast Rust-based bundler."
-lang: "en"
+description: "Carregando aplicações JavaScript a partir de outras aplicações em tempo de execução, usando o bundler rápido do Rspack, escrito em Rust."
+lang: "br"
 tags: ["module-federation","rspack"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/module-federation-with-rspack.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Module Federation is a powerful feature that allows JavaScript applications to dynamically load code from other applications at runtime. When combined with Rspack (a fast Rust-based web bundler), it enables building microfrontend architectures with excellent performance.
+Module Federation é um recurso poderoso que permite que aplicações JavaScript carreguem dinamicamente código de outras aplicações em tempo de execução. Combinado com o Rspack (um bundler web rápido escrito em Rust), ele permite construir arquiteturas de microfrontends com ótima performance.
 
-## What is Module Federation?
+## O que é Module Federation?
 
-Module Federation allows a JavaScript application to use modules from another application without bundling them together. This enables:
+O Module Federation permite que uma aplicação JavaScript use módulos de outra aplicação sem empacotar as duas juntas. Isso possibilita:
 
-- **Independent deployments**: Each application can be deployed separately
-- **Runtime code sharing**: Share code between applications at runtime
-- **Team autonomy**: Different teams can work on different parts independently
-- **Smaller bundles**: Only load what you need, when you need it
+- **Deploys independentes**: cada aplicação pode ser publicada separadamente
+- **Compartilhamento de código em tempo de execução**: aplicações compartilham código enquanto rodam
+- **Autonomia dos times**: times diferentes trabalham em partes diferentes de forma independente
+- **Bundles menores**: carregue só o que precisa, quando precisa
 
-## What is Rspack?
+## O que é Rspack?
 
-Rspack is a fast, Rust-based web bundler that's designed to be a drop-in replacement for webpack. It provides:
+O Rspack é um bundler web rápido, escrito em Rust, pensado para substituir o webpack diretamente. Ele oferece:
 
-- **Faster builds**: Significantly faster than webpack due to Rust implementation
-- **Webpack compatibility**: Supports most webpack plugins and loaders
-- **Better performance**: Optimized for large-scale applications
-- **Module Federation support**: Built-in support for Module Federation
+- **Builds mais rápidos**: bem mais rápido que o webpack por ser implementado em Rust
+- **Compatibilidade com webpack**: suporta a maioria dos plugins e loaders do webpack
+- **Mais performance**: otimizado para aplicações de grande porte
+- **Suporte a Module Federation**: suporte nativo a Module Federation
 
-## Basic Setup
+## Configuração básica
 
-### Rspack Configuration
+### Configuração do Rspack
 
 ```javascript
 // rspack.config.js
@@ -63,7 +63,7 @@ module.exports = {
 };
 ```
 
-### Remote Application Configuration
+### Configuração da aplicação remota
 
 ```javascript
 // rspack.config.js (Remote App)
@@ -96,9 +96,9 @@ module.exports = {
 };
 ```
 
-## Using Remote Modules
+## Usando módulos remotos
 
-### Dynamic Import
+### Import dinâmico
 
 ```javascript
 // In the host application
@@ -117,7 +117,7 @@ function App() {
 }
 ```
 
-### Direct Import (with proper setup)
+### Import direto (com a configuração certa)
 
 ```javascript
 // If configured correctly, you can import directly
@@ -132,9 +132,9 @@ function App() {
 }
 ```
 
-## Shared Dependencies
+## Dependências compartilhadas
 
-One of the key features is sharing dependencies to avoid loading them multiple times:
+Um dos recursos principais é compartilhar dependências para não carregá-las várias vezes:
 
 ```javascript
 shared: {
@@ -150,9 +150,9 @@ shared: {
 }
 ```
 
-## Advanced Configuration
+## Configuração avançada
 
-### Environment-Specific Remotes
+### Remotes por ambiente
 
 ```javascript
 const remotes = process.env.NODE_ENV === 'production'
@@ -174,9 +174,9 @@ module.exports = {
 };
 ```
 
-### TypeScript Support
+### Suporte a TypeScript
 
-For TypeScript, you'll need to declare remote modules:
+Com TypeScript, você vai precisar declarar os módulos remotos:
 
 ```typescript
 // types/remotes.d.ts
@@ -190,17 +190,17 @@ declare module 'remoteApp/Button' {
 }
 ```
 
-## Benefits of Rspack + Module Federation
+## Vantagens de Rspack + Module Federation
 
-1. **Fast builds**: Rspack's Rust implementation provides significantly faster build times
-2. **Better DX**: Faster feedback loop during development
-3. **Scalability**: Can handle large codebases efficiently
-4. **Compatibility**: Works with existing webpack ecosystem
-5. **Performance**: Optimized bundle splitting and code loading
+1. **Builds rápidos**: a implementação em Rust do Rspack deixa os builds bem mais rápidos
+2. **DX melhor**: ciclo de feedback mais rápido durante o desenvolvimento
+3. **Escalabilidade**: lida com bases de código grandes de forma eficiente
+4. **Compatibilidade**: funciona com o ecossistema do webpack que já existe
+5. **Performance**: divisão de bundles e carregamento de código otimizados
 
-## Common Patterns
+## Padrões comuns
 
-### Microfrontend Architecture
+### Arquitetura de microfrontends
 
 ```
 ┌─────────────┐
@@ -213,7 +213,7 @@ declare module 'remoteApp/Button' {
        └───► Remote App 3 (Checkout)
 ```
 
-### Shared Component Library
+### Biblioteca de componentes compartilhada
 
 ```javascript
 // Shared library exposes components
@@ -224,7 +224,7 @@ exposes: {
 }
 ```
 
-### Runtime Configuration
+### Configuração em tempo de execução
 
 ```javascript
 // Load remotes dynamically at runtime
@@ -233,31 +233,31 @@ const loadRemote = (remoteName, moduleName) => {
 };
 ```
 
-## Challenges & Solutions
+## Desafios e soluções
 
-### Version Conflicts
-- Use `singleton: true` for critical dependencies
-- Specify `requiredVersion` to enforce compatibility
-- Use `eager: true` for dependencies that must load immediately
+### Conflitos de versão
+- Use `singleton: true` para dependências críticas
+- Especifique `requiredVersion` para garantir compatibilidade
+- Use `eager: true` para dependências que precisam carregar imediatamente
 
-### Network Issues
-- Implement retry logic for remote loading
-- Provide fallback UI when remotes fail to load
-- Cache remote entries when possible
+### Problemas de rede
+- Implemente novas tentativas ao carregar remotes
+- Tenha uma interface de fallback quando um remote falhar
+- Guarde os remote entries em cache quando possível
 
-### Development Workflow
-- Run multiple dev servers (one per app)
-- Use tools like `concurrently` to manage multiple processes
-- Consider using a monorepo tool like Nx or Turborepo
+### Fluxo de desenvolvimento
+- Rode vários servidores de dev (um por app)
+- Use ferramentas como `concurrently` para gerenciar vários processos
+- Considere usar uma ferramenta de monorepo como Nx ou Turborepo
 
-## Best Practices
+## Boas práticas
 
-1. **Version your remotes**: Use semantic versioning for remote modules
-2. **Document exposed modules**: Clearly document what each remote exposes
-3. **Test integration**: Test how remotes work together
-4. **Error boundaries**: Wrap remote components in error boundaries
-5. **Loading states**: Always provide loading feedback
-6. **Shared dependencies**: Carefully manage shared dependencies to avoid conflicts
+1. **Versione seus remotes**: use versionamento semântico nos módulos remotos
+2. **Documente os módulos expostos**: deixe claro o que cada remote expõe
+3. **Teste a integração**: teste como os remotes funcionam juntos
+4. **Error boundaries**: envolva componentes remotos em error boundaries
+5. **Estados de carregamento**: sempre mostre um feedback de carregamento
+6. **Dependências compartilhadas**: gerencie com cuidado as dependências compartilhadas para evitar conflitos
 
 Links:
 
@@ -266,4 +266,4 @@ Links:
 - [Webpack Module Federation Guide](https://webpack.js.org/concepts/module-federation/)
 - [Micro Frontends (Martin Fowler)](https://martinfowler.com/articles/micro-frontends.html)
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/module-federation-with-rspack.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/module-federation-with-rspack.md).

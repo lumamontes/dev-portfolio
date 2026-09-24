@@ -1,20 +1,20 @@
 ---
-title: "SwiftUI basics"
+title: "O básico de SwiftUI"
 publishedAt: 2025-07-24
-description: "A few basics about getting started with SwiftUI."
-lang: "en"
+description: "Algumas noções básicas para começar com SwiftUI."
+lang: "br"
 tags: ["swiftui","ios"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-basics.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Some basics about SwiftUi:
-- You will need a mac and xcode. duh. i followed this https://www.swift.org/getting-started/swiftui/ docs and it was lovely.
-- NIL in swift UI means the absence of a value.
-- Swift comes with a bunch of default fundation elements for the UI, like `Circle` and `Text`.
-- We have things called <code>View modifiers</code> that we can apply to the UI elements to change their style and the way they look.
-For example:
+Algumas noções básicas de SwiftUI:
+- Você vai precisar de um mac e do xcode. óbvio. eu segui essa documentação https://www.swift.org/getting-started/swiftui/ e foi uma delícia.
+- NIL no swift UI significa a ausência de um valor.
+- O Swift vem com vários elementos básicos padrão para a interface, como `Circle` e `Text`.
+- Existem coisas chamadas <code>View modifiers</code> que podemos aplicar nos elementos da interface para mudar o estilo e a aparência deles.
+Por exemplo:
 
 ```
 var body: some View {
@@ -32,7 +32,7 @@ var body: some View {
 }
 ```
 
-- oh, we can nest stacks! very cool. using `VStack` for example.
+- ah, dá pra aninhar stacks! muito legal. usando `VStack`, por exemplo.
 
 ```
 VStack {
@@ -55,4 +55,4 @@ VStack {
 }
 ```
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-basics.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-basics.md).

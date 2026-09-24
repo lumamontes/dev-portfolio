@@ -1,46 +1,46 @@
 ---
-title: "Astro + Notion integration guide"
+title: "Guia de integração Astro + Notion"
 publishedAt: 2026-02-16
-description: "Notes on syncing a Notion TIL database into an Astro site to automatically pull and display content."
-lang: "en"
+description: "Anotações sobre sincronizar um banco de dados de TIL do Notion com um site Astro para puxar e exibir conteúdo automaticamente."
+lang: "br"
 tags: ["astro","notion"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/astro-notion-integration-guide.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-## Overview
-This guide shows how to integrate your Notion TIL database with your Astro portfolio website to automatically pull and display content.
+## Visão geral
+Este guia mostra como integrar seu banco de dados de TIL do Notion com seu site de portfólio em Astro para puxar e exibir o conteúdo automaticamente.
 
-## Prerequisites
-- Astro project set up
-- Notion database with TIL entries
-- Notion integration token
+## Pré-requisitos
+- Projeto Astro configurado
+- Banco de dados do Notion com as entradas de TIL
+- Token de integração do Notion
 
-## Step 1: Install Dependencies
+## Passo 1: instale as dependências
 
 ```bash
 pnpm add @notionhq/client
 pnpm add -D @types/node
 ```
 
-## Step 2: Environment Variables
+## Passo 2: variáveis de ambiente
 
-Create/update `.env` file:
+Crie/atualize o arquivo `.env`:
 ```env
 NOTION_TOKEN=your_notion_token_here
 NOTION_DATABASE_ID=your_database_id_here
 ```
 
-Add to `.env.example`:
+Adicione ao `.env.example`:
 ```env
 NOTION_TOKEN=
 NOTION_DATABASE_ID=
 ```
 
-## Step 3: Notion API Utility
+## Passo 3: utilitário da API do Notion
 
-Create `src/lib/notion.ts`:
+Crie `src/lib/notion.ts`:
 
 ```typescript
 import { Client } from '@notionhq/client';
@@ -122,9 +122,9 @@ export async function getTILEntry(slug: string): Promise<TILEntry | null> {
 }
 ```
 
-## Step 4: TIL Index Page
+## Passo 4: página de índice dos TILs
 
-Create `src/pages/til/index.astro`:
+Crie `src/pages/til/index.astro`:
 
 ```astro
 ---
@@ -174,9 +174,9 @@ const tilEntries = await getTILEntries();
 </Layout>
 ```
 
-## Step 5: Individual TIL Page
+## Passo 5: página individual de cada TIL
 
-Create `src/pages/til/[slug].astro`:
+Crie `src/pages/til/[slug].astro`:
 
 ```astro
 ---
@@ -237,9 +237,9 @@ if (!entry) {
 </Layout>
 ```
 
-## Step 6: Add to Navigation
+## Passo 6: adicione à navegação
 
-Add TIL link to your main navigation:
+Adicione o link dos TILs à navegação principal:
 
 ```astro
 <!-- In your navigation component -->
@@ -249,9 +249,9 @@ Add TIL link to your main navigation:
 </nav>
 ```
 
-## Step 7: RSS Feed (Optional)
+## Passo 7: feed RSS (opcional)
 
-Create `src/pages/til.xml.js`:
+Crie `src/pages/til.xml.js`:
 
 ```javascript
 import rss from '@astrojs/rss';
@@ -274,9 +274,9 @@ export async function GET(context) {
 }
 ```
 
-## Step 8: Build Configuration
+## Passo 8: configuração do build
 
-Update `astro.config.mjs` to include environment variables:
+Atualize o `astro.config.mjs` para incluir as variáveis de ambiente:
 
 ```javascript
 import { defineConfig } from 'astro/config';
@@ -292,45 +292,45 @@ export default defineConfig({
 });
 ```
 
-## Step 9: Deployment
+## Passo 9: deploy
 
-1. Add environment variables to your hosting platform (Vercel, Netlify, etc.)
-2. Deploy your site
+1. Adicione as variáveis de ambiente na sua plataforma de hospedagem (Vercel, Netlify etc.)
+2. Publique o site
 
-## Step 10: Automation (Optional)
+## Passo 10: automação (opcional)
 
-To automatically rebuild when you add new TIL entries:
+Para refazer o build automaticamente quando você adicionar novos TILs:
 
-### Option A: Webhook + Build Hook
-1. Set up a webhook in Notion (if available)
-2. Configure it to trigger your deployment build hook
+### Opção A: webhook + build hook
+1. Configure um webhook no Notion (se disponível)
+2. Faça ele disparar o build hook do seu deploy
 
-### Option B: Scheduled Builds
-1. Set up scheduled builds on your hosting platform
-2. Rebuild daily/weekly to pull new content
+### Opção B: builds agendados
+1. Configure builds agendados na sua plataforma de hospedagem
+2. Refaça o build diariamente/semanalmente para puxar o conteúdo novo
 
-## Usage
+## Como usar
 
-1. Write new TIL entries in Notion
-2. Mark them as "Published" when ready
-3. Your website will pull them automatically on next build
-4. For immediate updates, trigger a manual build
+1. Escreva novos TILs no Notion
+2. Marque como "Published" quando estiverem prontos
+3. O site vai puxá-los automaticamente no próximo build
+4. Para atualizar na hora, dispare um build manual
 
-## Styling Notes
+## Sobre o estilo
 
-The examples use Tailwind CSS classes. Adjust the styling to match your existing design system.
+Os exemplos usam classes do Tailwind CSS. Ajuste o estilo para combinar com o seu design system.
 
-## Troubleshooting
+## Resolução de problemas
 
-- **Build errors**: Ensure environment variables are set correctly
-- **No content**: Check that entries are marked as "Published" in Notion
-- **API errors**: Verify your Notion integration has access to the database
+- **Erros de build**: confira se as variáveis de ambiente estão configuradas corretamente
+- **Sem conteúdo**: verifique se as entradas estão marcadas como "Published" no Notion
+- **Erros na API**: confira se sua integração do Notion tem acesso ao banco de dados
 
-## Next Steps
+## Próximos passos
 
-- Add search functionality
-- Implement tag filtering
-- Add pagination for large numbers of entries
-- Create a Books section following the same pattern
+- Adicionar busca
+- Implementar filtro por tags
+- Adicionar paginação para muitas entradas
+- Criar uma seção de livros seguindo o mesmo padrão
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/astro-notion-integration-guide.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/astro-notion-integration-guide.md).

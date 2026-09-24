@@ -93,8 +93,8 @@ const lang = getLangFromUrl(Astro.url);
         if (statusDot) statusDot.classList.add('is-active');
 
         // Album Art Hub
-        if (albumCover && track.albumImageUrl) {
-          albumCover.src = track.albumImageUrl;
+        if (albumCover && track.image) {
+          albumCover.src = track.image;
           albumCover.alt = track.album || track.title;
           albumCover.classList.remove('is-hidden');
         }

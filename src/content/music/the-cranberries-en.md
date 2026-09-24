@@ -1,10 +1,10 @@
 ---
 title: "The Cranberries – Everybody Else Is Doing It, So Why Can’t We?"
 publishedAt: 2025-01-16
-description: "Primeira vez ouvindo este álbum; gosto muito da voz da Dolores."
+description: "First time listening to this album; I really love Dolores’s voice."
 kind: "authored"
 sourceUrl: "https://tururu61.wordpress.com/2025/01/16/the-cranberries-everybody-else-is-doing-it-so-why-cant-we/"
-lang: "br"
+lang: "en"
 category: "Music"
 tags: ["album", "The Cranberries"]
 editorialState: "published-elsewhere"
@@ -12,8 +12,8 @@ visibility: "public"
 ---
 
 **Everybody Else Is Doing It, So Why Can’t We?** – [The Cranberries](https://music.youtube.com/channel/UCE5eDJ9T05bGzDvJ5QYsdJQ)
-Álbum • 1993
+Album • 1993
 
-![Capa do álbum Everybody Else Is Doing It, So Why Can’t We?, da banda The Cranberries](/music/the-cranberries-everybody-else.png)
+![Cover of the album Everybody Else Is Doing It, So Why Can’t We? by The Cranberries](/music/the-cranberries-everybody-else.png)
 
-primeira vez ouvindo esse álbum, gosto muito da voz da Dolores
+first time listening to this album, I really love Dolores’s voice

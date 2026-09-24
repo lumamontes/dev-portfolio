@@ -1,17 +1,17 @@
 ---
-title: "TanStack Router data loading"
+title: "Carregamento de dados no TanStack Router"
 publishedAt: 2025-07-24
-description: "Data loading in TanStack Router turns out to be very simple."
-lang: "en"
+description: "Carregar dados no TanStack Router acaba sendo bem simples."
+lang: "br"
 tags: ["tanstack-router"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/tanstack-router-data-loading.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-TIL i learned that we can data loading in tanstack router in a very simple way.
+Hoje aprendi que dá pra carregar dados no tanstack router de um jeito bem simples.
 
-Given this route:
+Dada esta rota:
 
 ```
 export const Route = createFileRoute('/_authenticated/companies/')({
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_authenticated/companies/')({
 
 ```
 
-We can then add the property loader and make the data fetching request:
+Podemos adicionar a propriedade loader e fazer a requisição dos dados:
 
 ```
 export const Route = createFileRoute('/_authenticated/companies/')({
@@ -33,7 +33,7 @@ export const Route = createFileRoute('/_authenticated/companies/')({
 
 ```
 
-Then, in our RouteComponent, we can access the companies property with:
+Depois, no nosso RouteComponent, acessamos a propriedade companies com:
 
 ```
 function RouteComponent() {
@@ -42,4 +42,4 @@ function RouteComponent() {
 }
 ```
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/tanstack-router-data-loading.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/tanstack-router-data-loading.md).

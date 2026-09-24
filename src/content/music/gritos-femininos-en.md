@@ -1,14 +1,14 @@
 ---
-title: "Gritos femininos"
+title: "Female screams"
 publishedAt: 2025-07-23
-description: "Uma nota musical publicada no music-logger."
+description: "A music note published on music-logger."
 kind: "authored"
 sourceUrl: "https://tururu61.wordpress.com/2025/07/23/gritos-femininos/"
-lang: "br"
+lang: "en"
 category: "Music"
 tags: ["music-logger"]
 editorialState: "published-elsewhere"
 visibility: "private"
 ---
 
-Entrada autoral preservada do music-logger.
+An authored entry preserved from music-logger.

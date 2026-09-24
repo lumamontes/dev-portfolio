@@ -1,19 +1,19 @@
 ---
-title: "Docker multi-stage builds for Kotlin/Gradle projects"
+title: "Builds multi-stage no Docker para projetos Kotlin/Gradle"
 publishedAt: 2026-02-16
-description: "Setting up efficient Docker builds for Kotlin backend services with Gradle, learned while working on tarefitas-monorepo."
-lang: "en"
+description: "Configurando builds Docker eficientes para serviços backend em Kotlin com Gradle, aprendido trabalhando no tarefitas-monorepo."
+lang: "br"
 tags: ["docker","kotlin"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/docker-multi-stage-builds-kotlin-gradle.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Working on the tarefitas-monorepo, I learned how to set up efficient Docker builds for Kotlin backend services with Gradle.
+Trabalhando no tarefitas-monorepo, aprendi a configurar builds Docker eficientes para serviços backend em Kotlin com Gradle.
 
-## Multi-Stage Dockerfile Structure
+## Estrutura de um Dockerfile multi-stage
 
-Use separate stages for building and running to reduce image size:
+Use estágios separados para o build e para a execução, reduzindo o tamanho da imagem:
 
 ```dockerfile
 # Build stage
@@ -30,15 +30,15 @@ EXPOSE 8080
 CMD ["java", "-jar", "app.jar"]
 ```
 
-## Key Benefits
+## Principais vantagens
 
-- **Smaller images**: Runtime stage only contains JRE and built JAR
-- **Build caching**: Gradle dependencies cached in build layer
-- **Security**: No build tools in production image
+- **Imagens menores**: o estágio de execução só contém o JRE e o JAR gerado
+- **Cache de build**: as dependências do Gradle ficam em cache na camada de build
+- **Segurança**: nenhuma ferramenta de build na imagem de produção
 
-## Docker Compose Integration
+## Integração com Docker Compose
 
-Combine with Postgres and health checks:
+Combine com Postgres e health checks:
 
 ```yaml
 version: '3.8'
@@ -65,9 +65,9 @@ services:
       retries: 5
 ```
 
-## Gradle Build Optimization
+## Otimizando o build do Gradle
 
-Speed up builds by copying dependency info first:
+Acelere os builds copiando primeiro as informações de dependências:
 
 ```dockerfile
 # Copy gradle files for dependency resolution
@@ -80,6 +80,6 @@ COPY src src
 RUN gradle build --no-daemon
 ```
 
-This leverages Docker layer caching - dependencies only rebuild when gradle files change.
+Isso aproveita o cache de camadas do Docker — as dependências só são refeitas quando os arquivos do gradle mudam.
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/docker-multi-stage-builds-kotlin-gradle.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/docker-multi-stage-builds-kotlin-gradle.md).

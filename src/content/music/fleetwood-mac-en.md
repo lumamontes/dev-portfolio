@@ -1,21 +1,21 @@
 ---
 title: "Fleetwood Mac"
 publishedAt: 2025-01-21
-description: "Algumas músicas favoritas de Fleetwood Mac."
+description: "A few favorite Fleetwood Mac songs."
 kind: "authored"
 sourceUrl: "https://tururu61.wordpress.com/2025/01/21/fletwood-mac/"
-lang: "br"
+lang: "en"
 category: "Music"
 tags: ["Fleetwood Mac", "favorites"]
 editorialState: "published-elsewhere"
 visibility: "public"
 ---
 
-![Foto em preto e branco da banda Fleetwood Mac](/music/fleetwood-mac.png)
+![Black and white photo of the band Fleetwood Mac](/music/fleetwood-mac.png)
 
-Eu nunca escutei Fleetwood Mac até ano passado (!)
+I had never listened to Fleetwood Mac until last year (!)
 
-Músicas favoritas:
+Favorite songs:
 
 ### Storms
 

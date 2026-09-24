@@ -1,19 +1,19 @@
 ---
-title: "React Native conference app architecture"
+title: "Arquitetura de app de conferência em React Native"
 publishedAt: 2026-02-16
-description: "Patterns for structuring event/conference mobile apps, learned building the Pupunha Conf app."
-lang: "en"
+description: "Padrões para estruturar apps mobile de eventos/conferências, aprendidos construindo o app da Pupunha Conf."
+lang: "br"
 tags: ["react-native","expo"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/react-native-conference-app-architecture.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Building the pupunha-conf app taught me patterns for structuring event/conference mobile apps with React Native and Expo.
+Construir o app da pupunha-conf me ensinou padrões para estruturar apps mobile de eventos/conferências com React Native e Expo.
 
-## Core Features Architecture
+## Arquitetura das funcionalidades principais
 
-A conference app typically needs these core modules:
+Um app de conferência normalmente precisa destes módulos principais:
 
 ```
 /app
@@ -25,9 +25,9 @@ A conference app typically needs these core modules:
   /speakers     - Speaker profiles and bios
 ```
 
-## Data Structure Patterns
+## Padrões de estrutura de dados
 
-Organize event data with clear relationships:
+Organize os dados do evento com relacionamentos claros:
 
 ```typescript
 interface Conference {
@@ -47,9 +47,9 @@ interface Session {
 }
 ```
 
-## Session Bookmark Management
+## Gerenciando sessões salvas
 
-Use `useFocusEffect` to refresh bookmarked data when users navigate back:
+Use `useFocusEffect` para atualizar os dados salvos quando a pessoa volta para a tela:
 
 ```typescript
 import { useFocusEffect } from '@react-navigation/native';
@@ -65,9 +65,9 @@ const BookmarkedScreen = () => {
 }
 ```
 
-## Event Data Organization
+## Organizando os dados dos eventos
 
-Structure multi-year events with clear separation:
+Estruture eventos de vários anos com uma separação clara:
 
 ```typescript
 // events/pupunha-code-2025.ts
@@ -85,9 +85,9 @@ export const pupunhaCode2026 = {
 };
 ```
 
-## Feed and Social Features
+## Feed e funcionalidades sociais
 
-Implement post creation with image handling:
+Implemente a criação de posts com suporte a imagens:
 
 ```typescript
 const CreatePostModal = () => {
@@ -102,6 +102,6 @@ const CreatePostModal = () => {
 }
 ```
 
-This architecture scales well for multi-day conferences with complex scheduling needs.
+Essa arquitetura escala bem para conferências de vários dias com programação complexa.
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/react-native-conference-app-architecture.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/react-native-conference-app-architecture.md).

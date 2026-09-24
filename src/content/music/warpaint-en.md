@@ -1,17 +1,17 @@
 ---
 title: "Warpaint"
 publishedAt: 2025-06-27
-description: "Minha banda favorita e alguns dos meus lives preferidos."
+description: "My favorite band and a few of my favorite live shows."
 kind: "authored"
 sourceUrl: "https://tururu61.wordpress.com/2025/06/27/warpaint/"
-lang: "br"
+lang: "en"
 category: "Music"
 tags: ["Warpaint", "lives"]
 editorialState: "published-elsewhere"
 visibility: "public"
 ---
 
-minha banda favo! esses são alguns de meus lives preferidos.
+my fave band! these are some of my favorite live shows.
 
 <iframe src="https://www.youtube.com/embed/Y1SV1NqSZGQ" title="Warpaint — live 1" loading="lazy" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0"></iframe>
 

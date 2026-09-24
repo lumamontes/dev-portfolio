@@ -1,27 +1,27 @@
 ---
-title: "Kotlin with Spring Boot for API usage"
+title: "Kotlin com Spring Boot para APIs"
 publishedAt: 2025-11-22
-description: "Kotlin's interop with Java and Spring Boot makes for concise, modern REST API code."
-lang: "en"
+description: "A interoperabilidade do Kotlin com Java e Spring Boot resulta em código de API REST conciso e moderno."
+lang: "br"
 tags: ["kotlin","spring-boot"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/kotlin-with-spring-boot-for-api-usage.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Kotlin is a modern, statically-typed programming language that runs on the JVM and is fully interoperable with Java. When combined with Spring Boot, it provides a powerful and concise way to build REST APIs.
+Kotlin é uma linguagem de programação moderna, com tipagem estática, que roda na JVM e é totalmente interoperável com Java. Combinada com o Spring Boot, ela oferece um jeito poderoso e conciso de construir APIs REST.
 
-## Why Kotlin for APIs?
+## Por que Kotlin para APIs?
 
-- **Conciseness**: Less boilerplate code compared to Java
-- **Null safety**: Built-in null safety reduces NullPointerExceptions
-- **Coroutines**: Native support for asynchronous programming
-- **Interoperability**: Can use existing Java libraries seamlessly
-- **Modern syntax**: Data classes, extension functions, and more
+- **Concisão**: menos código boilerplate comparado ao Java
+- **Null safety**: a segurança contra nulos embutida reduz NullPointerExceptions
+- **Coroutines**: suporte nativo a programação assíncrona
+- **Interoperabilidade**: dá pra usar bibliotecas Java existentes sem atrito
+- **Sintaxe moderna**: data classes, extension functions e mais
 
-## Spring Boot + Kotlin Setup
+## Configurando Spring Boot + Kotlin
 
-### Dependencies
+### Dependências
 
 ```kotlin
 dependencies {
@@ -33,7 +33,7 @@ dependencies {
 }
 ```
 
-### Application Class
+### Classe da aplicação
 
 ```kotlin
 @SpringBootApplication
@@ -44,11 +44,11 @@ fun main(args: Array<String>) {
 }
 ```
 
-## Key Kotlin Features in Spring Boot
+## Principais recursos do Kotlin no Spring Boot
 
 ### Data Classes
 
-Perfect for DTOs and entities:
+Perfeitas para DTOs e entidades:
 
 ```kotlin
 @Entity
@@ -63,7 +63,7 @@ data class User(
 
 ### Null Safety
 
-Kotlin's null safety works great with Spring's optional values:
+A null safety do Kotlin funciona muito bem com os valores opcionais do Spring:
 
 ```kotlin
 @GetMapping("/users/{id}")
@@ -79,7 +79,7 @@ fun getUser(@PathVariable id: Long): ResponseEntity<User> {
 
 ### Extension Functions
 
-Add utility functions to existing classes:
+Adicione funções utilitárias a classes existentes:
 
 ```kotlin
 fun String.isValidEmail(): Boolean {
@@ -92,9 +92,9 @@ if (email.isValidEmail()) {
 }
 ```
 
-### Coroutines for Async Operations
+### Coroutines para operações assíncronas
 
-Kotlin coroutines provide a cleaner alternative to CompletableFuture:
+As coroutines do Kotlin são uma alternativa mais limpa ao CompletableFuture:
 
 ```kotlin
 @GetMapping("/users")
@@ -103,7 +103,7 @@ suspend fun getUsers(): List<User> {
 }
 ```
 
-## REST Controller Example
+## Exemplo de REST Controller
 
 ```kotlin
 @RestController
@@ -150,7 +150,7 @@ class UserController(
 }
 ```
 
-## Repository Pattern
+## Padrão Repository
 
 ```kotlin
 interface UserRepository : JpaRepository<User, Long> {
@@ -159,7 +159,7 @@ interface UserRepository : JpaRepository<User, Long> {
 }
 ```
 
-## Service Layer
+## Camada de serviço
 
 ```kotlin
 @Service
@@ -204,7 +204,7 @@ class UserService(
 }
 ```
 
-## Error Handling
+## Tratamento de erros
 
 ```kotlin
 @ControllerAdvice
@@ -228,13 +228,13 @@ class GlobalExceptionHandler {
 }
 ```
 
-## Benefits Over Java
+## Vantagens em relação ao Java
 
-1. **Less boilerplate**: Data classes eliminate getters/setters/constructors
-2. **Safer code**: Null safety prevents many runtime errors
-3. **More expressive**: Extension functions and higher-order functions
-4. **Better async**: Coroutines are more intuitive than CompletableFuture
-5. **Interoperable**: Can still use Java libraries and frameworks
+1. **Menos boilerplate**: data classes eliminam getters/setters/construtores
+2. **Código mais seguro**: a null safety evita muitos erros em tempo de execução
+3. **Mais expressivo**: extension functions e funções de ordem superior
+4. **Assíncrono melhor**: coroutines são mais intuitivas que CompletableFuture
+5. **Interoperável**: ainda dá pra usar bibliotecas e frameworks Java
 
 Links:
 
@@ -242,4 +242,4 @@ Links:
 - [Spring Boot with Kotlin Guide](https://spring.io/guides/tutorials/spring-boot-kotlin/)
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/kotlin-with-spring-boot-for-api-usage.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/kotlin-with-spring-boot-for-api-usage.md).

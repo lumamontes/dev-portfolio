@@ -1,15 +1,15 @@
 ---
-title: "Checking notification authorization in SwiftUI"
+title: "Verificando a permissão de notificações no SwiftUI"
 publishedAt: 2025-07-24
-description: "Creating a Notification class to check and request the user's notification authorization status."
-lang: "en"
+description: "Criando uma classe Notification para verificar e pedir a permissão de notificações do usuário."
+lang: "br"
 tags: ["swiftui","ios"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-check-authorization-notifications.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-We can create a new class called Notification, and inside a static function called checkAuthorization. This function will be responsible to getting the user notification center and check the status, if is authorized or not, or if we need to request because is yet to be determined.
+Podemos criar uma nova classe chamada Notification e, dentro dela, uma função estática chamada checkAuthorization. Essa função é responsável por pegar a central de notificações do usuário e verificar o status: se está autorizado ou não, ou se precisamos pedir a permissão porque ainda não foi definida.
 
 ```swift
 class PomodoroNotification {
@@ -31,7 +31,7 @@ class PomodoroNotification {
 ```
 
 
-After that, in our view we can use the scenePhase enviroment on change event to call our check autorization method
+Depois, na nossa view, usamos o evento de mudança do ambiente scenePhase para chamar o nosso método de verificar a autorização
 
 
 ```swift
@@ -71,4 +71,4 @@ struct Notificationdemo: View {
 }
 ```
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-check-authorization-notifications.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/swift-ui-check-authorization-notifications.md).

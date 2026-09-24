@@ -1,17 +1,17 @@
 ---
-title: "GraphQL Request: queries and mutations"
+title: "GraphQL Request: queries e mutations"
 publishedAt: 2025-07-24
-description: "Using graphql-request to make queries and mutations against a backend."
-lang: "en"
+description: "Usando graphql-request para fazer queries e mutations em um backend."
+lang: "br"
 tags: ["graphql"]
 sourceUrl: "https://github.com/lumamontes/today-i-learned/blob/main/graphql-request-queries-and-mutations.md"
 editorialState: "published-here"
 visibility: "public"
 ---
 
-Today i learned how to use graphql request to make queries and mutations to my backend.
+Hoje aprendi a usar o graphql request para fazer queries e mutations no meu backend.
 
-First, i created a <code>executeGraphql</code> method that i can reuse across my application frontend:
+Primeiro, criei um método <code>executeGraphql</code> que posso reutilizar em todo o frontend da aplicação:
 
 ```
 export async function executeGraphQL<T = any>(
@@ -27,7 +27,7 @@ export async function executeGraphQL<T = any>(
 
 ```
 
-Then, based on my backend graphql configuration, i create the query and mutation variables:
+Depois, com base na configuração graphql do meu backend, crio as variáveis da query e da mutation:
 
 ```
 const GET_COMPANIES_QUERY = `
@@ -54,7 +54,7 @@ const CREATE_COMPANY_MUTATION = `
 
 ```
 
-After that, i can just use the consts with the query and the mutation and pass it to my graphql client request.
+Aí é só usar as consts com a query e a mutation e passar para a requisição do meu cliente graphql.
 
 ```
 const data = await executeGraphQL<{ companies: Company[] }>(
@@ -68,4 +68,4 @@ CREATE_COMPANY_MUTATION,
 
 ```
 
-Originally written in my [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/graphql-request-queries-and-mutations.md) notes.
+Escrito originalmente (em inglês) nas minhas notas [today-i-learned](https://github.com/lumamontes/today-i-learned/blob/main/graphql-request-queries-and-mutations.md).
