@@ -229,6 +229,13 @@ export const ui = {
     'projects.others': 'Outros Projetos',
     'projects.inProgress': 'Em Desenvolvimento',
     'projects.all': 'Todos os projetos',
+    'skills.title': 'Habilidades',
+    'about.skills.frontend': 'Frontend',
+    'about.skills.backend': 'Backend',
+    'about.skills.mobile': 'Mobile',
+    'about.skills.tools': 'Ferramentas',
+    'skills.learning': 'Aprendendo',
+    'experience.subtitle': 'Experiência',
 
     'coffe.title': 'Um simples café.',
     'coffe.description': 'Um simples café.',

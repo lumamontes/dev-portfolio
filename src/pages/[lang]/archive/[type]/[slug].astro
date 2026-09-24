@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
-import { isPublicEntryInLanguage } from '@/lib/content-model';
+import { isPublicEntryInLanguage, routeSlug } from '@/lib/content-model';
 import type { WordPressArchiveEntry } from '@/lib/wordpress';
 import { resolveEntryPreview } from '@/lib/portal-preview';
 import { getArchiveEntries, getCanonicalWordPressEntries, groupArchiveEntries } from '@/lib/archive-entries';
@@ -36,7 +36,7 @@ export async function getStaticPaths() {
   } as const;
 
   const wordpressPaths = wordpressEntries.map((entry) => ({
-    params: { lang: entry.lang, type: entry.type, slug: entry.slug.replace(/-en$/, '') },
+    params: { lang: entry.lang, type: entry.type, slug: routeSlug(entry.slug) },
     props: { wordpressEntry: entry, sidebarGroups: sidebarGroupsByLang[entry.lang] },
   }));
   const wordpressKeys = new Set(wordpressPaths.map(({ params }) => `${params.lang}/${params.type}/${params.slug}`));
@@ -44,12 +44,12 @@ export async function getStaticPaths() {
     ...posts.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'text', slug: entry.slug.split('/').slice(1).join('/') }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
     ...booksEn.filter((entry) => isPublicEntryInLanguage(entry, 'en')).map((entry) => ({ params: { lang: 'en', type: 'book', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang.en } })),
     ...booksBr.filter((entry) => isPublicEntryInLanguage(entry, 'br')).map((entry) => ({ params: { lang: 'br', type: 'book', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang.br } })),
-    ...learningNotes.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'learning-note', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
-    ...zines.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'zine', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
-    ...projects.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'project', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
-    ...photos.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'photo', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
-    ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
-    ...playlists.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'playlist', slug: entry.slug }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...learningNotes.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'learning-note', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...zines.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'zine', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...projects.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'project', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...photos.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'photo', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...music.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'music', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
+    ...playlists.filter((entry) => isPublicEntryInLanguage(entry, entry.data.lang)).map((entry) => ({ params: { lang: entry.data.lang, type: 'playlist', slug: routeSlug(entry.slug) }, props: { entry, sidebarGroups: sidebarGroupsByLang[entry.data.lang] } })),
   ];
   return [...wordpressPaths, ...localPaths.filter(({ params }) => !wordpressKeys.has(`${params.lang}/${params.type}/${params.slug}`))];
 }
@@ -89,13 +89,14 @@ const previewMode = isProject && !isWordPressEntry
 
 // Must match the slug shape getArchiveEntries/getStaticPaths use for this
 // same entry, or the sidebar can never mark the current page as current:
-// WordPress entries route with a trailing -en stripped, and text entries
-// (nested under posts/<lang>/<slug>.md) use only the final path segment.
+// WordPress and translated local entries route with a trailing -en/-br
+// stripped, and text entries (nested under posts/<lang>/<slug>.md) use
+// only the final path segment.
 const currentSlug = wordpressEntry
-  ? wordpressEntry.slug.replace(/-en$/, '')
+  ? routeSlug(wordpressEntry.slug)
   : type === 'text'
     ? entry.slug.split('/').pop()
-    : entry.slug;
+    : routeSlug(entry.slug);
 ---
 
 <Layout title={title} description={description}>

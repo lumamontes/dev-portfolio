@@ -34,7 +34,7 @@ An entry has an **editorial state** describing where it is in Luma's process, su
 
 ## Languages
 
-English and Brazilian Portuguese are independent language versions. An entry may exist in only one language. Related versions can be linked when they are translations or adaptations, but one language is never assumed to be a translation of the other.
+English and Brazilian Portuguese carry the same content: every public entry exists in both languages. Either language can be the original — the other is a translation or adaptation, not a guarantee of word-for-word equivalence. In flat collections, the second version is stored as `<slug>-en.md` / `<slug>-br.md` and routes under the original's slug, so switching language keeps the reader on the same entry.
 
 ## Discovery
 

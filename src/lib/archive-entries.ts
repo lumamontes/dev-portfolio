@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { isPublicEntry, isPublicEntryInLanguage, type Language } from './content-model';
+import { isPublicEntry, isPublicEntryInLanguage, routeSlug, type Language } from './content-model';
 import { getWordPressArchiveEntries, type WordPressArchiveEntry } from './wordpress';
 import { useTranslations } from '../utils/lang';
 
@@ -86,9 +86,9 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     ...learningNotes.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'learning-note',
-      slug: e.slug,
+      slug: routeSlug(e.slug),
       lang,
-      link: `/${lang}/archive/learning-note/${e.slug}`,
+      link: `/${lang}/archive/learning-note/${routeSlug(e.slug)}`,
     })),
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the zine's PDF/link-card actually renders;
@@ -96,56 +96,53 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
     ...zines.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'zine',
-      slug: e.slug,
+      slug: routeSlug(e.slug),
       lang,
-      link: `/${lang}/archive/zine/${e.slug}`,
+      link: `/${lang}/archive/zine/${routeSlug(e.slug)}`,
     })),
     // Always link to the entry's own portal page, never straight out to
     // externalUrl — that's where the live-embed/link-card tiers (ticket
     // 29) actually render; bypassing it here would skip the portal.
     //
-    // Unlike posts, a project write-up isn't necessarily translated per
-    // language — most exist only in English — so projects show on BOTH
-    // archive language pages regardless of the file's own `lang`, linking
-    // to wherever the write-up actually lives. The one project that IS
-    // genuinely translated (Biblioteca de Zines, as biblioteca-de-zines.md
-    // / biblioteca-de-zines-en.md) is deduped by its base slug, preferring
-    // whichever version matches the current page's language.
+    // A project write-up that exists in only one language still shows on
+    // BOTH archive language pages, linking to wherever it actually lives.
+    // Translated pairs (e.g. biblioteca-de-zines.md / biblioteca-de-zines-en.md)
+    // are deduped by route slug, preferring the current page's language.
     ...(() => {
       const byBaseSlug = new Map<string, (typeof projectEntries)[number]>();
       for (const e of projectEntries.filter(isPublicEntry)) {
-        const baseSlug = e.slug.replace(/-en$/, '');
+        const baseSlug = routeSlug(e.slug);
         const existing = byBaseSlug.get(baseSlug);
         if (!existing || e.data.lang === lang) byBaseSlug.set(baseSlug, e);
       }
       return Array.from(byBaseSlug.values()).map((e) => ({
         title: e.data.title,
         type: 'project',
-        slug: e.slug,
+        slug: routeSlug(e.slug),
         lang: e.data.lang,
-        link: `/${e.data.lang}/archive/project/${e.slug}`,
+        link: `/${e.data.lang}/archive/project/${routeSlug(e.slug)}`,
       }));
     })(),
     ...photos.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'photo',
-      slug: e.slug,
+      slug: routeSlug(e.slug),
       lang,
-      link: `/${lang}/archive/photo/${e.slug}`,
+      link: `/${lang}/archive/photo/${routeSlug(e.slug)}`,
     })),
     ...musicCollection.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'music',
-      slug: e.slug,
+      slug: routeSlug(e.slug),
       lang,
-      link: `/${lang}/archive/music/${e.slug}`,
+      link: `/${lang}/archive/music/${routeSlug(e.slug)}`,
     })),
     ...playlistEntries.filter((e) => isPublicEntryInLanguage(e, lang)).map((e) => ({
       title: e.data.title,
       type: 'playlist',
-      slug: e.slug,
+      slug: routeSlug(e.slug),
       lang,
-      link: `/${lang}/archive/playlist/${e.slug}`,
+      link: `/${lang}/archive/playlist/${routeSlug(e.slug)}`,
     })),
   ];
 
@@ -157,16 +154,15 @@ export async function getArchiveEntries(lang: Language): Promise<ArchiveEntry[]>
   const wordpressEntries: ArchiveEntry[] = wpEntriesExcludingProjects
     .filter((e) => e.lang === lang)
     .map((e) => {
-      // The generated route strips a trailing -en (see getStaticPaths in
-      // [type]/[slug].astro) — the link built here must match exactly,
-      // or entries with such a slug 404 when clicked.
-      const routeSlug = e.slug.replace(/-en$/, '');
+      // Must match the route getStaticPaths in [type]/[slug].astro
+      // generates, or entries with a -en/-br slug 404 when clicked.
+      const slug = routeSlug(e.slug);
       return {
         title: e.title,
         type: e.type,
-        slug: routeSlug,
+        slug,
         lang: e.lang,
-        link: `/${lang}/archive/${e.type}/${routeSlug}`,
+        link: `/${lang}/archive/${e.type}/${slug}`,
       };
     });
 

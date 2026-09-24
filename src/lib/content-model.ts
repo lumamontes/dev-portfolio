@@ -355,6 +355,17 @@ export function isPublicEntry(entry: EntryWithPublicationMetadata) {
   );
 }
 
+/**
+ * The URL slug for an entry. A translation stored alongside its original
+ * as `<slug>-en.md` / `<slug>-br.md` (flat collections can't hold two files
+ * with the same name) routes under the original's slug, so the language
+ * picker — which only swaps the /<lang>/ prefix — lands on the paired
+ * version instead of a 404.
+ */
+export function routeSlug(slug: string) {
+  return slug.replace(/-(en|br)$/, '');
+}
+
 export function isPublicEntryInLanguage(
   entry: EntryWithPublicationMetadata,
   lang: Language,
