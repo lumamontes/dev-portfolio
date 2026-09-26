@@ -8,13 +8,33 @@ Configure the Cloudflare Pages project with:
 - Build command: `pnpm build`
 - Build output directory: `dist`
 - Node version: `20` or the version used by the repository's package manager
-- Production branch: `feature/personal-archive-redesign` until the redesign is merged
+- Production branch: `main` in the `portfolio-deploy` repository
 
-Cloudflare's Git integration provides preview deployments for pull requests and branch pushes. The project does not need a server runtime: Astro currently outputs a static site.
+Automatic preview deployments are disabled. A protected publishing action
+creates and prepares a publishing branch, and a separate deploy action triggers
+the production build after that branch is reviewed and merged into `main`.
+Astro itself remains a static site; the publishing control plane is a separate
+Cloudflare Worker or Pages Function.
 
 ## Environment values
 
 No secret is required for the build: all content lives in the repository. Never put Spotify client secrets in the frontend build.
+
+The publishing control plane uses encrypted server-side variables for the
+secret path, HTTP Basic Auth username and password, session-signing secret,
+server-side prepare and approval endpoints, their authorization token, and the
+Cloudflare Pages deploy hook. None of these values belong in Astro's public
+build variables. The endpoint contract is:
+
+- `PUBLISH_PREPARE_URL`: server-side operation that validates the authoring
+  vault and prepares `publish/current` in the deploy vault.
+- `PUBLISH_APPROVE_URL`: server-side operation that reviews and merges the
+  prepared branch.
+- `PUBLISH_DEPLOY_HOOK_URL`: Cloudflare Pages deploy hook for the merged
+  production branch.
+
+The GitHub App credentials belong to the server-side prepare and approval
+implementation, not to the browser-facing function.
 
 Spotify live listening must use a server-side token exchange or a separately protected integration. Playlist links and public embeds do not require listening permissions.
 

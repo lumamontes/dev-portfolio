@@ -42,4 +42,6 @@ An entry may have one primary **category** and optional **tags**. The initial ca
 
 ## Publishing tools
 
-Markdown files in the repository are the only content source. Entries are written in any Markdown editor (VS Code, Obsidian) and published by committing them; Astro builds the public site from Astro content collections. There is no hosted CMS or backend. If an editing UI is ever wanted, it should be a git-based one that edits these same files, not a separate content store. See `docs/adr/0003-remove-wordpress.md`.
+The **authoring vault** is a private Obsidian vault synchronized with Git. It holds drafts, private notes and source assets. The **deploy vault** is this repository, `portfolio-deploy`: it contains the Astro application and only the public content promoted from the authoring vault. Promotion copies entries whose visibility is `public` and editorial state is `published-here`; it also removes entries that were unpublished. The deploy vault is not a second editorial source.
+
+Promotion and production deployment are separate deliberate actions. A protected Cloudflare publishing page prepares a reviewed Git branch from the authoring vault, and a second action triggers the Cloudflare Pages build. The normal authoring flow does not require opening GitHub or using a terminal. See `docs/adr/0003-remove-wordpress.md` and `docs/adr/0004-two-vault-publishing.md`.
