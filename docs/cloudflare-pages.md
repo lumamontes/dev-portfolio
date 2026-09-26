@@ -30,8 +30,9 @@ build variables. The endpoint contract is:
   vault and prepares `publish/current` in the deploy vault.
 - `PUBLISH_APPROVE_URL`: server-side operation that reviews and merges the
   prepared branch.
-- `PUBLISH_DEPLOY_HOOK_URL`: Cloudflare Pages deploy hook for the merged
-  production branch.
+- `PUBLISH_DEPLOY_URL`: server-side operation that verifies the approved
+  publishing branch is merged into `main`, then calls the Cloudflare Pages
+  deploy hook.
 
 The GitHub App credentials belong to the server-side prepare and approval
 implementation, not to the browser-facing function.

@@ -20,10 +20,10 @@ for the publishing decision.
 
 ## Commands
 
-| Command | Action |
-| --- | --- |
-| `pnpm install` | Installs dependencies |
-| `pnpm dev` | Starts local dev server at `localhost:4321` |
-| `pnpm build` | Builds the production site to `./dist/` |
-| `pnpm preview` | Previews a production build locally |
-| `pnpm test` | Runs the focused unit tests |
+| Command        | Action                                      |
+| -------------- | ------------------------------------------- |
+| `pnpm install` | Installs dependencies                       |
+| `pnpm dev`     | Starts local dev server at `localhost:4321` |
+| `pnpm build`   | Builds the production site to `./dist/`     |
+| `pnpm preview` | Previews a production build locally         |
+| `pnpm test`    | Runs the focused unit tests                 |
