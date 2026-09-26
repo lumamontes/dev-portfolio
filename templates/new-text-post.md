@@ -1,6 +1,7 @@
 ---
 title: ""
-publishedAt: { { date:YYYY-MM-DD } }
+<!-- prettier-ignore -->
+publishedAt: {{date:YYYY-MM-DD}}
 description: ""
 isPublish: false
 isDraft: true

@@ -13,7 +13,7 @@ const entry = (
 
 const publicEntry = (body = "hello", image = "") =>
   entry(
-    `---\ntitle: Note\nlang: en\nvisibility: public\neditorialState: published-here${image ? `\nbannerImage: ${image}` : ""}\n---\n${body}`,
+    `---\ntitle: Note\nlang: en\npublishedAt: 2026-01-01\ndescription: A note\nvisibility: public\neditorialState: published-here${image ? `\nbannerImage: ${image}` : ""}\n---\n${body}`,
   );
 
 describe("planPromotion", () => {
@@ -37,7 +37,7 @@ describe("planPromotion", () => {
         manifest: {
           files: {
             "src/content/posts/en/note.md": {
-              hash: "45940a5e6a5aa95a58a83b8ecb81d35cfb7026a6ef7fcb583577c18e2c6c59e1",
+              hash: "c06dbda4fc1728b05186ef7c736040f4098934564b7d793bfb260e25fc19fae6",
               kind: "entry",
             },
           },
@@ -50,10 +50,10 @@ describe("planPromotion", () => {
     const result = await planPromotion({
       sourceFiles: [
         entry(
-          "---\ntitle: Secret\nlang: en\nvisibility: private\neditorialState: draft\n---\nsecret",
+          "---\ntitle: Secret\nlang: en\npublishedAt: 2026-01-01\ndescription: Secret\nvisibility: private\neditorialState: draft\n---\nsecret",
         ),
         entry(
-          "---\ntitle: External\nlang: en\nvisibility: public\neditorialState: published-elsewhere\n---\nexternal",
+          "---\ntitle: External\nlang: en\npublishedAt: 2026-01-01\ndescription: External\nvisibility: public\neditorialState: published-elsewhere\n---\nexternal",
           "src/content/posts/en/external.md",
         ),
       ],
@@ -72,7 +72,7 @@ describe("planPromotion", () => {
       sourceFiles: [
         publicEntry(),
         entry(
-          "---\ntitle: Broken\nlang: en\nvisibility: public\n---\nbroken",
+        "---\ntitle: Broken\nlang: en\npublishedAt: 2026-01-01\ndescription: Broken\nvisibility: public\n---\nbroken",
           "src/content/posts/en/broken.md",
         ),
       ],
@@ -82,9 +82,7 @@ describe("planPromotion", () => {
 
     expect(result).toEqual({
       ok: false,
-      errors: [
-        "src/content/posts/en/broken.md: visibility and editorialState must both be set",
-      ],
+      errors: ["src/content/posts/en/broken.md: editorialState is required"],
     });
   });
 
@@ -124,10 +122,10 @@ describe("planPromotion", () => {
     expect(
       result.plan.changes.map(({ path, kind }) => ({ path, kind })),
     ).toEqual([
-      { path: "src/content/posts/en/note.md", kind: "add" },
       { path: "public/photos/note.jpg", kind: "add" },
-      { path: "src/content/posts/en/old.md", kind: "delete" },
       { path: "public/photos/old.jpg", kind: "delete" },
+      { path: "src/content/posts/en/note.md", kind: "add" },
+      { path: "src/content/posts/en/old.md", kind: "delete" },
     ]);
   });
 
