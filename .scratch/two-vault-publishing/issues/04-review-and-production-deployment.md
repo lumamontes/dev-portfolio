@@ -4,7 +4,9 @@
 
 **Blocked by:** 02: Protected Prepare Publication Flow; 03: Safe Unpublishing and Conflict Handling
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: Obsidian Git pushes the website vault's `main` branch and Cloudflare Pages deploys it; no review/deploy control plane is needed.
 
 - [ ] GitHub access uses a narrowly scoped GitHub App installed only for the authoring and deploy repositories.
 - [ ] The protected interface can approve or merge the prepared publishing branch after review.

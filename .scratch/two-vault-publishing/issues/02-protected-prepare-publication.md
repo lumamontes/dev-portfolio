@@ -4,7 +4,9 @@
 
 **Blocked by:** 01: Public Snapshot Promotion
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: there is no protected publishing page or server-side prepare action.
 
 - [ ] The publishing control plane is available through a configurable secret path.
 - [ ] Requests without the secret path or valid HTTP Basic Auth are rejected.

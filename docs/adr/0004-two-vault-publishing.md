@@ -1,4 +1,4 @@
-# Two vaults separate authoring from deployment
+# Two local vaults separate drafts from the website
 
 ## Status
 
@@ -6,48 +6,36 @@ Accepted
 
 ## Context
 
-The site needs a comfortable local Obsidian workflow across devices without
-exposing drafts or private notes to the public build. Obsidian Git can sync a
-vault, but it should not be treated as a deployment system. The existing
-`dev-portfolio` repository already contains the Astro application and public
-content used by production.
+Luma wants to write in Obsidian across devices while keeping drafts and
+private material out of the public website. The website repository already
+contains the Astro application and public content. A second private Git
+repository and a server-side promotion service would add operational
+complexity without being necessary for a deliberately manual publishing step.
 
 ## Decision
 
-Keep two private Git repositories:
+Use two local Obsidian vaults:
 
-- `personal-vault` is the authoring vault. It contains drafts, private notes,
-  source material and unpublished assets.
-- `portfolio-deploy` is the deploy vault and remains this repository. It
-  contains Astro code and only promoted public content.
+- The **website vault** is this repository, `portfolio-deploy`. It contains
+  Astro and only public content. Obsidian Git synchronizes this vault with its
+  GitHub repository.
+- The **draft vault** is local-only. It contains drafts, private notes and
+  source assets. It is not synchronized to GitHub by this workflow.
 
-Obsidian Git synchronizes the authoring vault. A protected Cloudflare
-publishing page exposes two actions:
+When an entry is ready, Luma manually copies the approved Markdown and assets
+from the draft vault into the website vault. Obsidian Git commits and pushes
+the website vault's `main` branch. Cloudflare Pages builds `main`.
 
-1. **Prepare publication** asks a server-side workflow to validate the
-   authoring vault, copy entries with `visibility: public` and
-   `editorialState: published-here`, remove entries that are no longer
-   eligible, and create or update a publishing branch in the deploy vault.
-2. **Deploy production** triggers a Cloudflare Pages deploy hook after the
-   publishing branch has been reviewed and merged into `main`.
-
-The page uses a secret path plus HTTP Basic Auth and a short-lived secure
-session. GitHub access is performed by a narrowly-scoped GitHub App, so normal
-publishing does not require logging into GitHub. Automatic previews are
-disabled.
-
-Preparation fails without producing a partial branch when frontmatter is
-invalid or the deploy vault has unexpected manual changes. A preparation
-summary lists added, changed and removed files. Unpublishing removes the
-promoted content and assets from the deploy vault on the next preparation.
+Automatic previews remain disabled. No publishing URL, password page, GitHub
+App, promotion Worker, deploy hook or second repository is part of the normal
+workflow.
 
 ## Consequences
 
-The public build has a small, explicit input surface and cannot accidentally
-include private authoring material. Publishing requires two deliberate steps,
-but both can be initiated from an Obsidian button or the protected web page.
-The promotion service and GitHub App are operational infrastructure that must
-be configured separately from the static Astro site.
+The publishing boundary is a deliberate local copy rather than an automated
+promotion service. This is simpler to operate and avoids syncing private
+material, but the editor must copy the correct files and assets manually.
 
-The deploy vault is a generated public snapshot. Editorial changes must be
-made in the authoring vault, not directly in `portfolio-deploy`.
+The website vault is the public deploy source. Editorial work can happen in
+the draft vault, but approved content must be copied into the website vault
+before it can be published.

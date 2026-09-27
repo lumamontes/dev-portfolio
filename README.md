@@ -1,8 +1,8 @@
 # Portfolio and Deploy Vault
 
-This repository is the deploy vault for the portfolio. It contains the Astro
-application and the public Markdown snapshot promoted from the private
-Obsidian authoring vault. It is not the place for private drafts.
+This repository is the website vault for the portfolio. It contains the Astro
+application and public Markdown content synchronized with GitHub through
+Obsidian Git. Keep drafts and private notes in a separate local draft vault.
 
 Read [`docs/obsidian-vault.md`](docs/obsidian-vault.md) for the two-vault
 workflow and [`docs/adr/0004-two-vault-publishing.md`](docs/adr/0004-two-vault-publishing.md)

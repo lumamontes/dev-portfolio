@@ -4,7 +4,9 @@
 
 **Blocked by:** 01: Public Snapshot Promotion; 02: Protected Prepare Publication Flow
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: unpublishing is handled by editing or removing the copied public file in the website vault.
 
 - [ ] Changing a promoted entry to a non-public state produces a deletion in the next promotion plan.
 - [ ] The promoted-file manifest identifies which entries and assets the service owns.

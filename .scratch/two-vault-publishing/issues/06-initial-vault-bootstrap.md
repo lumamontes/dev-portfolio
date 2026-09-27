@@ -4,7 +4,9 @@
 
 **Blocked by:** 01: Public Snapshot Promotion; 04: Review and Production Deployment
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: only the local draft vault and the Git-synced website vault are required.
 
 - [ ] The existing public deploy-vault content and Git history remain available after bootstrap.
 - [ ] The private authoring vault is initialized as a separate repository.

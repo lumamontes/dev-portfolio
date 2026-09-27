@@ -10,32 +10,17 @@ Configure the Cloudflare Pages project with:
 - Node version: `20` or the version used by the repository's package manager
 - Production branch: `main` in the `portfolio-deploy` repository
 
-Automatic preview deployments are disabled. A protected publishing action
-creates and prepares a publishing branch, and a separate deploy action triggers
-the production build after that branch is reviewed and merged into `main`.
-Astro itself remains a static site; the publishing control plane is a separate
-Cloudflare Worker or Pages Function.
+Automatic preview deployments are disabled. Cloudflare Pages builds `main`
+after Obsidian Git pushes the website vault. Astro remains a static site and
+does not need a publishing control plane.
 
 ## Environment values
 
 No secret is required for the build: all content lives in the repository. Never put Spotify client secrets in the frontend build.
 
-The publishing control plane uses encrypted server-side variables for the
-secret path, HTTP Basic Auth username and password, session-signing secret,
-server-side prepare and approval endpoints, their authorization token, and the
-Cloudflare Pages deploy hook. None of these values belong in Astro's public
-build variables. The endpoint contract is:
-
-- `PUBLISH_PREPARE_URL`: server-side operation that validates the authoring
-  vault and prepares `publish/current` in the deploy vault.
-- `PUBLISH_APPROVE_URL`: server-side operation that reviews and merges the
-  prepared branch.
-- `PUBLISH_DEPLOY_URL`: server-side operation that verifies the approved
-  publishing branch is merged into `main`, then calls the Cloudflare Pages
-  deploy hook.
-
-The GitHub App credentials belong to the server-side prepare and approval
-implementation, not to the browser-facing function.
+No publishing-control-plane variables are required. The only content that
+Cloudflare can build is the content already committed to the website vault's
+GitHub repository.
 
 Spotify live listening must use a server-side token exchange or a separately protected integration. Playlist links and public embeds do not require listening permissions.
 

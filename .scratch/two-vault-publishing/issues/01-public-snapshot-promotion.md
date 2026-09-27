@@ -4,7 +4,9 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: publishing is a deliberate local copy from the draft vault into the website vault; no promotion service is needed.
 
 - [ ] The promotion boundary validates authoring entries using the canonical content model.
 - [ ] Private, draft, submitted, editing and externally published entries are excluded from the public snapshot.

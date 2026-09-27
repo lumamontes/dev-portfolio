@@ -1,4 +1,8 @@
-Status: ready-for-agent
+Status: wontfix
+
+This spec is superseded by the simpler two-local-vault decision in
+`docs/adr/0004-two-vault-publishing.md`. No separate private Git repository,
+promotion service or publishing control plane will be implemented.
 
 # Two-Vault Publishing and Cloudflare Deployment
 

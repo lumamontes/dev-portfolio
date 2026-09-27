@@ -4,7 +4,9 @@
 
 **Blocked by:** 02: Protected Prepare Publication Flow; 04: Review and Production Deployment
 
-**Status:** ready-for-agent
+**Status:** wontfix
+
+Superseded: the website vault is opened directly in Obsidian and synchronized with Obsidian Git.
 
 - [ ] The authoring vault contains a documented publishing entry point that opens the protected publishing URL.
 - [ ] The entry point works from Obsidian on supported authoring devices.

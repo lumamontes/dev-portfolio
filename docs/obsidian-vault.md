@@ -1,47 +1,40 @@
 # Obsidian Vault Workflow
 
-The publishing model uses two private Git repositories. Obsidian Git keeps
-the authoring vault synchronized; Cloudflare publishes a separate deploy vault.
+The workflow uses two local vaults with different responsibilities.
 
 ## Vaults
 
-- `personal-vault`: drafts, private notes and source assets. Open this folder
-  in Obsidian and sync it with the Obsidian Git plugin.
-- `portfolio-deploy`: this repository. It contains Astro and the public
-  content snapshot. Do not use it as an editorial workspace.
+- **Website vault:** this repository. Open the repository root in Obsidian.
+  Install Obsidian Git here and synchronize it with the website GitHub
+  repository. It contains Astro and public content only.
+- **Draft vault:** a separate local folder. Use it for drafts, private notes,
+  source material and unpublished assets. Do not configure Obsidian Git for it
+  as part of this workflow.
 
-The deploy vault is intentionally not a mirror of the authoring vault. Only
-entries with `visibility: public` and `editorialState: published-here` are
-promoted. Changing an entry back to private removes it from the next public
-snapshot.
+The draft vault is not a second deploy source. Cloudflare never reads it, and
+no private draft reaches production until it is deliberately copied into the
+website vault.
 
 ## Publishing
 
-The protected publishing page has two actions:
+1. Write and edit in the draft vault.
+2. When an entry is ready, copy its Markdown file and required assets into the
+   matching collection folder in the website vault.
+3. Confirm the entry has the public/published frontmatter required by the
+   collection schema.
+4. Open the website vault in Obsidian and use Obsidian Git to pull, commit and
+   push the change to `main`.
+5. Cloudflare Pages builds `main` and deploys the website.
 
-1. **Prepare publication** validates eligible content, copies it into a
-   publishing branch in `portfolio-deploy`, and shows added, changed and
-   removed files.
-2. **Deploy production** is available after the publishing branch is reviewed
-   and merged. It triggers the Cloudflare Pages build.
+Obsidian Git synchronizes the website vault only. It does not move files
+between vaults, so the copy from draft to website is the intentional editorial
+checkpoint.
 
-The page is reached through a secret path and protected with HTTP Basic Auth.
-An Obsidian button can open that page, so normal publishing does not require
-opening GitHub or using a terminal. Automatic previews are disabled.
+## Safety
 
-Install an Obsidian button/link community plugin in the private authoring vault
-and create a local note containing the publishing URL. Keep the real secret
-path in that local note only; do not commit it to either repository. The
-publishing page itself asks for the Basic Auth password and keeps a short-lived
-secure session.
+Keep the draft vault outside the website repository so private notes cannot be
+committed accidentally. Do not copy private drafts or unrelated source assets
+into the website vault. Pull the website vault before editing it on another
+device and resolve Git conflicts before pushing.
 
-Obsidian Git still needs to pull before editing and push after editing. Do not
-edit the same file on two devices at once; resolve sync conflicts before
-preparing a publication.
-
-## Content rule
-
-Use the existing collection folders under `src/content/` when working on the
-deploy vault or when shaping content for promotion. Astro ignores private and
-unpublished entries through the content model, but the promotion service must
-also filter them before they reach the deploy vault.
+Automatic previews and deployment-control pages are not part of this workflow.
