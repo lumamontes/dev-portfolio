@@ -6,15 +6,16 @@ import tailwind from '@astrojs/tailwind';
 import { rehypeHeadingIds,  } from '@astrojs/markdown-remark';
 import remarkToc from 'remark-toc';
 
+import icon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://lumamontes.com',
-	markdown: {
-		rehypePlugins: [
-			[rehypeHeadingIds, {
-			}]
-		],
-		remarkPlugins: [ [remarkToc, { heading: 'toc', maxDepth: 3 } ] ],
-	},
-	integrations: [mdx(), sitemap(), tailwind()],
+    site: 'https://lumamontes.com',
+    markdown: {
+        rehypePlugins: [
+            [rehypeHeadingIds, {
+            }]
+        ],
+        remarkPlugins: [ [remarkToc, { heading: 'toc', maxDepth: 3 } ] ],
+    },
+    integrations: [mdx(), sitemap(), tailwind(), icon()],
 });
